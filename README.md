@@ -1,12 +1,10 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
-A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation and support for 100+ languages.
 
 🌐 **Live site:** https://tirukkural.in
 
-![Version](https://img.shields.io/badge/version-1.5-blue)
+![Version](https://img.shields.io/badge/version-1.6-blue)
 ![Languages](https://img.shields.io/badge/navigation-14%20languages-green)
-![Translate](https://img.shields.io/badge/Google%20Translate-100%2B%20languages-orange)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
 ---
@@ -33,8 +31,33 @@ Every kural includes a carefully curated English translation assembled by resear
 - Every translation credited with the original translator's initials
 - Full methodology: https://kuraltranslations.blogspot.com
 
+Every kural is available in **5 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
+
+| Language | Translator / Source |
+|---|---|
+| 🇬🇧 English | N.V.K. Ashraf (curated from 25+ scholars) |
+| 🇮🇳 हिंदी (Hindi) | Classical Hindi translation |
+| 🇮🇳 മലയാളം (Malayalam) | V. V. Abdulla Sahib |
+| 🇮🇳 తెలుగు (Telugu) | Gurucharan |
+
+### 🔊 Audio Playback in 6 Languages
+Every kural includes an audio player powered by the device's native text-to-speech engine:
+
+| Language | TTS Code |
+|---|---|
+| தமிழ் (Tamil) | ta-IN |
+| English | en-IN / en-US |
+| हिंदी (Hindi) | hi-IN |
+| മലയാളം (Malayalam) | ml-IN |
+| ಕನ್ನಡ (Kannada) | kn-IN |
+| తెలుగు (Telugu) | te-IN |
+
+Audio buttons appear for Tamil always + the currently selected UI language. An **ⓘ help button** provides step-by-step voice download instructions for iPhone, Mac, Android and Windows.
+
+> **Tip:** English audio works on most devices without any setup. Other languages may require a one-time voice download in device settings.
+
 ### 🌍 100+ Language Support via Google Translate
-The site's defining feature — every kural's Tamil commentaries and English translation can be instantly translated into **100+ languages** with one click. Tamil diaspora worldwide and non-Tamil readers can access Valluvar's wisdom in their own language.
+Every kural's Tamil commentaries and English translation can be instantly translated into **100+ languages** with one click — giving Tamil diaspora worldwide and non-Tamil readers access to Valluvar's wisdom in their own language.
 
 ### 🗺️ 14-Language Navigation
 The entire site interface — menus, labels, chapter names, buttons — translates to:
@@ -46,14 +69,14 @@ The entire site interface — menus, labels, chapter names, buttons — translat
 | 🇮🇳 తెలుగు (Telugu) | 🇫🇷 Français (French) |
 | 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch (German) |
 | 🇮🇳 ಕನ್ನಡ (Kannada) | 🇨🇳 中文 (Chinese) |
-| 🇮🇳 বাংলা (Bengali) | 🇸🇦 العربية (Arabic) |
+| | 🇸🇦 العربية (Arabic) |
 | | 🇷🇺 Русский (Russian) |
 | | 🇯🇵 日本語 (Japanese) |
 
 ### ✨ Other Capabilities
-- 🔄 **Instant Language Switching** — No page reload required
+- 🔄 **Instant Language Switching** — No page reload; split translation files lazy-loaded on demand
 - 📱 **Responsive Design** — Optimised for mobile, tablet and desktop
-- ⚡ **Fast & Lightweight** — No frameworks, pure vanilla JS
+- ⚡ **Fast & Lightweight** — No frameworks, pure vanilla JS; initial load ~2MB (down from 3.5MB via JSON splitting)
 - 💾 **Persistent Preferences** — Language choice saved via cookies
 - 📊 **Visit Counter** — Real-time visitor count via GoatCounter
 - 💬 **Comments** — Disqus integration per chapter
@@ -108,23 +131,24 @@ The entire site interface — menus, labels, chapter names, buttons — translat
 
 ```
 tirukkural/
-├── index.html              # Homepage — three books + visit counter
+├── index.html              # Homepage — three books + visit counter + welcome modal
 ├── athikarams.html         # Chapter listing page (all 133 chapters)
-├── athikaram-view.html     # Single chapter view (10 kurals + commentaries)
-├── kural.html              # Single kural detailed view
+├── athikaram-view.html     # Single chapter view (10 kurals + commentaries + audio)
 ├── contributors.html       # Contributors & resources page
 ├── styles.css              # Global styles
 ├── language.js             # Language management system
-├── translations.json       # All UI translations (14 languages, 148KB)
+├── translations.json       # All UI translations (14 languages)
 ├── athikarams-data.js      # Chapter metadata (id, Tamil name, English name, range)
 ├── athikarams.js           # Chapter listing logic
-├── athikaram-view.js       # Chapter view logic + dynamic SEO updater
-├── kural.js                # Single kural view logic
-├── thirukkural.json        # Complete kural database (2.3MB)
+├── athikaram-view.js       # Chapter view logic + TTS audio + dynamic SEO updater
+├── thirukkural.json        # Core kural database — Tamil + English + commentaries (~2MB)
+├── translations-hi.json    # Hindi translations — lazy loaded (~300KB)
+├── translations-ml.json    # Malayalam translations — lazy loaded (~373KB)
+├── translations-kn.json    # Kannada translations — lazy loaded (~437KB)
+├── translations-te.json    # Telugu translations — lazy loaded (~255KB)
 ├── thiruvalluvar-logo.svg  # Logo
 ├── sitemap.xml             # 136-URL sitemap for Google/Bing
 ├── robots.txt              # Crawler instructions
-├── .htaccess               # Apache rewrite rules
 └── README.md               # This file
 ```
 
@@ -132,7 +156,7 @@ tirukkural/
 
 ## 📊 Data Schema
 
-### thirukkural.json
+### thirukkural.json (Core — ~2MB)
 Each kural object contains:
 
 ```json
@@ -142,15 +166,30 @@ Each kural object contains:
   "Line2": "ஆதி பகவன் முதற்றே உலகு",
   "transliteration1": "Agara mudala ezhuthellaam",
   "transliteration2": "Aadhi bagavan mudattre ulagu",
-  "mv": "மு. வரதராசனார் commentary text...",
-  "sp": "சாலமன் பாப்பையா commentary text...",
-  "mk": "கலைஞர் commentary text...",
+  "mv": "மு. வரதராசனார் commentary...",
+  "sp": "சாலமன் பாப்பையா commentary...",
+  "mk": "கலைஞர் commentary...",
   "ashraf": "With alpha begins all alphabets; And the world with the first Bagavan.",
-  "ashraf_attr": "KN, SI"
+  "ashraf_attr": "KN, SI",
+  "bharati_verse1": "English audio line 1...",
+  "bharati_verse2": "English audio line 2..."
 }
 ```
 
-### translations.json (148KB)
+### translations-{lang}.json (Lazy-loaded)
+Each split file contains only `Number` + the two translation fields for that language:
+
+```json
+{
+  "kural": [
+    { "Number": 1, "hindi1": "...", "hindi2": "..." }
+  ]
+}
+```
+
+Files: `translations-hi.json`, `translations-ml.json`, `translations-kn.json`, `translations-te.json`
+
+### translations.json
 - 14 languages × full UI translation
 - 665 athikaram name translations (Tamil + 5 Indian languages)
 - All labels, navigation, welcome modal, stat titles
@@ -168,17 +207,48 @@ Each kural object contains:
 1. **UI Translation** — All buttons, labels and navigation translate to the selected language
 2. **Chapter Names** — Tamil + 5 Indian languages show native translations; other languages show English
 3. **Commentary Translation** — One-click Google Translate opens any Tamil commentary in the user's chosen language
-4. **English Translation** — One-click translate sends Ashraf's English text to Google Translate in the user's language
-5. **Persistent State** — Language preference saved in cookies
+4. **Native Translation** — Hindi, Malayalam, Kannada and Telugu translations lazy-loaded on first language selection
+5. **English Translation** — Always loaded as part of the core dataset
+6. **Persistent State** — Language preference saved in cookies
 
-### Translation Coverage
-| Element | Coverage |
-|---|---|
-| UI labels & navigation | 100% — all 14 languages |
-| Chapter names (Tamil) | 100% — original Tamil |
-| Chapter names (English) | 100% — all 133 chapters |
-| Chapter names (Hindi, Telugu, Malayalam, Kannada, Bengali) | 100% — 133 chapters each |
-| Chapter names (other 8 languages) | English used |
+### Performance — Lazy Loading
+Translation files are split by language and fetched only when that language is first selected. Each file is cached in memory for instant subsequent switches.
+
+| File | Size | When Loaded |
+|---|---|---|
+| thirukkural.json | ~2MB | Always (page load) |
+| translations-hi.json | ~300KB | On Hindi selection |
+| translations-ml.json | ~373KB | On Malayalam selection |
+| translations-kn.json | ~437KB | On Kannada selection |
+| translations-te.json | ~255KB | On Telugu selection |
+
+---
+
+## 🔊 Audio System
+
+Audio uses the Web Speech API (SpeechSynthesis) — no server-side audio files required.
+
+### How It Works
+1. On page load, the current UI language's translation file is pre-fetched (if it's a split language) before first render — ensuring audio buttons appear correctly on arrival
+2. Audio buttons show Tamil always + the selected UI language (if supported)
+3. Falls back gracefully if TTS voice unavailable
+
+### Supported Languages & TTS Codes
+| Language | Primary Code | Fallback |
+|---|---|---|
+| Tamil | ta-IN | — |
+| English | en-IN | en-US |
+| Hindi | hi-IN | — |
+| Malayalam | ml-IN | — |
+| Kannada | kn-IN | — |
+| Telugu | te-IN | — |
+
+### Troubleshooting Audio
+If a language doesn't play, the **ⓘ** button next to the audio player provides step-by-step voice download instructions for each platform:
+- **iPhone/iPad** — Settings → Accessibility → Spoken Content → Voices
+- **Mac** — System Settings → Accessibility → Spoken Content → Manage Voices
+- **Android** — Settings → General Management → Text-to-Speech → Install voice data
+- **Windows** — Settings → Language & Region → Add language → Text-to-speech pack
 
 ---
 
@@ -194,37 +264,32 @@ Each page has unique, optimised meta tags:
 - **JSON-LD structured data** — `Book` on homepage, `Chapter` on chapter pages
 - **sitemap.xml** — All 136 URLs submitted to Google Search Console and Bing Webmaster Tools
 
-Dynamic SEO is updated by `updatePageSEO()` in `athikaram-view.js` on every chapter load and navigation.
-
 ---
 
-## 🌐 Adding a New Language
+## 🌐 Adding a New Navigation Language
 
 1. **Edit `translations.json`** — add language to `languages` array and add a full translation object:
 
 ```json
 {
   "languages": [
-    { "code": "pt", "name": "Portuguese", "native": "Português", "flag": "🇵🇹" }
+    { "code": "pt", "name": "Portuguese", "nativeName": "Português", "flag": "🇵🇹", "segment": "international" }
   ],
-  "translations": {
-    "pt": {
-      "home": "Início",
-      "chapters": "Capítulos",
-      "visits": "Visitas",
-      ...
-    }
-  },
-  "athikaram_names": {
-    "pt": {
-      "1": "O Louvor de Deus",
-      ...
-    }
+  "pt": {
+    "home": "Início",
+    "chapters": "Capítulos",
+    ...
   }
 }
 ```
 
 2. **No code changes needed** — the system detects and uses new languages automatically.
+
+### Adding a Native Kural Translation (New Language)
+1. Create `translations-{code}.json` with `Number` + two line fields per kural
+2. Add the language code to `SPLIT_LANGS` in `athikaram-view.js`
+3. Add a `TTS_LANGUAGES` entry if audio is supported
+4. Add rendering logic in `displayAthikaram()` in `athikaram-view.js`
 
 ---
 
@@ -234,13 +299,14 @@ Dynamic SEO is updated by `updatePageSEO()` in `athikaram-view.js` on every chap
 - Smart translate button — copies Tamil text to clipboard, then opens Google Translate
 - Responsive typography and navigation
 - HTTPS required for clipboard API (works on all modern mobile browsers)
+- Audio help modal with platform-specific instructions
 
 ---
 
 ## 🐛 Troubleshooting
 
 **Translations not loading**
-Check browser console for errors. Ensure `translations.json` is served with `Content-Type: application/json`.
+Check browser console for errors. Ensure all `.json` files are served with `Content-Type: application/json`.
 
 **Chapter names still in English after language switch**
 1. Upload the latest `translations.json`
@@ -253,22 +319,31 @@ The counter fetches from `https://tirukkural.goatcounter.com/counter/TOTAL.json`
 **Mobile translate not working**
 Requires HTTPS. Clipboard API unavailable on HTTP. Test on Chrome or Edge mobile.
 
+**Audio not playing for a language**
+Click the **ⓘ** button on any audio player for device-specific voice download instructions.
+
 ---
 
 ## 🏆 Version History
 
+### v1.6 — Native Translations, Audio Expansion & Performance (February 2026)
+- **5 native language translations** — Malayalam (V.V. Abdulla Sahib), Kannada (ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ / Madurai Kamaraj University), Telugu (Gurucharan), Hindi — all with full attribution in `contributors.html`
+- **JSON splitting** — `thirukkural.json` split into core (~2MB) + 4 lazy-loaded language files; initial page load reduced from 3.5MB to 2MB
+- **Audio in 6 languages** — Tamil, English, Hindi, Malayalam, Kannada, Telugu via Web Speech API
+- **Audio pre-loading fix** — Split translation file pre-fetched on init for the current UI language so audio buttons appear correctly on first load without requiring a language switch
+- **Audio help modal** — ⓘ button with step-by-step voice download instructions for iPhone, Mac, Android and Windows
+- Bengali hidden from language dropdown (data retained, re-enableable)
+- Welcome modal updated — 5 native translations, 6-language audio
+- `contributors.html` updated with Telugu and Kannada translation sections
+
 ### v1.5 — SEO, Ashraf Translations & Domain (February 2026)
-- New domain: **tirukkural.in** (aligns with Wikipedia's canonical spelling)
+- New domain: **tirukkural.in**
 - Replaced three legacy English translations with **N.V.K. Ashraf's curated best-of-25+ translations**
 - Every translation credited with original translator's initials
 - Added `contributors.html` — full acknowledgement of all translators and scholars
 - **Dynamic SEO per chapter** — unique title, meta description, canonical URL, Open Graph, Twitter Card and JSON-LD
-- `sitemap.xml` (136 URLs) + `robots.txt` submitted to Google Search Console and Bing
+- `sitemap.xml` (136 URLs) + `robots.txt` submitted to Google Search Console and Bing Webmaster Tools
 - GoatCounter visit counter updated to `tirukkural.goatcounter.com`
-- Real-time visit count via GoatCounter JSON API (matches site stat tile style)
-- Added Contributors & Resources tab to all pages
-- Spelling updated throughout: **Tirukkuṟaḷ** and **Tiruvaḷḷuvar** (scholarly diacritics)
-- All GoatCounter, meta and UI references updated to new domain
 - Listed on **Wikipedia** — Kural article external links
 
 ### v1.4 — Indian Language Translations
@@ -292,8 +367,6 @@ Requires HTTPS. Clipboard API unavailable on HTTP. Test on Chrome or Edge mobile
 
 ## 🤝 Contributing
 
-### Ways to Contribute
-
 1. **Add/Improve Translations** — Fork → edit `translations.json` → pull request
 2. **Report Bugs** — GitHub Issues with browser, OS, steps to reproduce
 3. **Suggest Features** — Open a GitHub Issue with "Feature:" prefix
@@ -315,6 +388,9 @@ Please credit:
 - **திருவள்ளுவர்** (Tiruvaḷḷuvar) — Original author
 - **N.V.K. Ashraf** — Curated English translations
 - **மு. வரதராசனார், சாலமன் பாப்பையா, கலைஞர்** — Tamil commentators
+- **V.V. Abdulla Sahib** — Malayalam translation
+- **ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ** — Kannada translation (Madurai Kamaraj University Press)
+- **Gurucharan** — Telugu translation
 
 ---
 
@@ -325,13 +401,16 @@ Please credit:
 - **மு. வரதராசனார்** — Scholarly classical commentary
 - **சாலமன் பாப்பையா** — Modern interpretation
 - **கலைஞர் எம். கருணாநிதி** — Contemporary humanist perspective
+- **V.V. Abdulla Sahib** — Malayalam translation
+- **ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ** — Kannada translation
+- **Gurucharan** — Telugu translation
 - All 25+ English translators whose work Ashraf compared — P.S. Sundaram, G.U. Pope, Rajaji, V.V.S. Aiyar and many more
 
 ---
 
 ## 🔮 Roadmap
 
-- [ ] Audio pronunciation for each kural
+- [x] Audio pronunciation for each kural *(completed v1.6)*
 - [ ] Search by keyword across all 1,330 kurals
 - [ ] Bookmark kurals (persistent)
 - [ ] Daily kural — email / push notification
@@ -339,6 +418,7 @@ Please credit:
 - [ ] PWA support (offline reading)
 - [ ] Social share card per kural
 - [ ] More navigation languages
+- [ ] More native translations
 
 ---
 
@@ -346,10 +426,11 @@ Please credit:
 
 - **Frontend** — Vanilla JavaScript (ES6+), no frameworks
 - **Styling** — CSS3 with CSS Variables
-- **Data** — JSON (thirukkural.json 2.3MB, translations.json 148KB)
+- **Data** — JSON (thirukkural.json ~2MB core + 4 lazy-loaded translation files, translations.json)
+- **Audio** — Web Speech API (SpeechSynthesis) — 6 languages, no server-side audio files
 - **Analytics** — GoatCounter (privacy-friendly, no cookies)
 - **Comments** — Disqus
-- **Total bundle** — ~3MB (2.3MB is the kural database)
+- **Total initial load** — ~2MB (split JSON reduces load from 3.5MB)
 
 ---
 

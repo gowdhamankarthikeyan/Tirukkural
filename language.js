@@ -165,7 +165,7 @@ function initializeLanguageDropdown() {
     // Indian Languages
     html += '<optgroup label="🇮🇳 Indian Languages">';
     Object.entries(languageData).forEach(([code, data]) => {
-        if (data.segment === 'indian') {
+        if (data.segment === 'indian' && code !== 'bn') {
             html += `<option value="${code}" ${currentLanguage === code ? 'selected' : ''}>${data.flag} ${data.nativeName}</option>`;
         }
     });

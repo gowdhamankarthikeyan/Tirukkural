@@ -2,14 +2,37 @@
 let kuralData = null;
 let currentAthikaramId = 1;
 
+// Languages that live in separate translation files (lazy-loaded)
+const SPLIT_LANGS = { hi: true, ml: true, kn: true, te: true };
+const _translationCache = {}; // tracks which langs have been loaded
+
+// Merge a split translation file's data into kuralData
+async function loadTranslationData(lang) {
+    if (!SPLIT_LANGS[lang]) return; // not a split lang
+    if (_translationCache[lang]) return; // already loaded
+    try {
+        const res = await fetch(`translations-${lang}.json`);
+        const data = await res.json();
+        data.kural.forEach(t => {
+            const kural = kuralData[t.Number - 1];
+            if (kural) Object.assign(kural, t);
+        });
+        _translationCache[lang] = true;
+    } catch (e) {
+        console.error(`Failed to load translations-${lang}.json`, e);
+    }
+}
+
 // ============================================================
 // TTS CONFIG
 // ============================================================
 const TTS_LANGUAGES = {
-    ta: { code: 'ta-IN',                    label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
-    en: { code: 'en-IN', fallback: 'en-US', label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
-    hi: { code: 'hi-IN',                    label: 'हिंदी',  fields: ['hindi1', 'hindi2'],                 audioPath: 'hi' },
-    ml: { code: 'ml-IN',                    label: 'മലയാളം', fields: ['malayalam1', 'malayalam2'],         audioPath: 'ml' },
+    ta: { code: 'ta-IN',                    label: 'தமிழ்',   fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
+    en: { code: 'en-IN', fallback: 'en-US', label: 'English',  fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
+    hi: { code: 'hi-IN',                    label: 'हिंदी',   fields: ['hindi1', 'hindi2'],                 audioPath: 'hi' },
+    ml: { code: 'ml-IN',                    label: 'മലയാളം',  fields: ['malayalam1', 'malayalam2'],         audioPath: 'ml' },
+    te: { code: 'te-IN',                    label: 'తెలుగు',  fields: ['telugu1', 'telugu2'],               audioPath: 'te' },
+    kn: { code: 'kn-IN',                    label: 'ಕನ್ನಡ',  fields: ['kannada1', 'kannada2'],             audioPath: 'kn' },
 };
 
 const AUDIO_BASE = '/audio';
@@ -112,7 +135,7 @@ function createAudioHTML(kural) {
             <span>${cfg.label}</span>
         </button>`;
     }).join('');
-    return `<div class="audio-section"><span class="audio-label">&#128266; Listen</span>${btns}</div>`;
+    return `<div class="audio-section"><span class="audio-label">&#128266; Listen</span>${btns}<button class="audio-info-btn" onclick="showAudioHelpModal(event)" title="Audio help">&#9432;</button></div>`;
 }
 
 function setupAudioButtonsForCard(card, kural) {
@@ -155,6 +178,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         return;
     }
 
+    // 4. Pre-load split file for current UI language so audio buttons appear on first render
+    const initialLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'ta';
+    if (SPLIT_LANGS[initialLang]) {
+        await loadTranslationData(initialLang);
+    }
+
     // Get athikaram ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const athikaramId = parseInt(urlParams.get('id')) || 1;
@@ -165,6 +194,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Setup navigation
     setupNavigation();
+
+    // Wrap changeLanguage to lazy-load split translation files before re-rendering
+    const _origChangeLanguage = window.changeLanguage;
+    window.changeLanguage = async function(langCode) {
+        if (SPLIT_LANGS[langCode] && kuralData) {
+            await loadTranslationData(langCode);
+        }
+        _origChangeLanguage(langCode);
+    };
 });
 
 // Wait for language.js to finish loading translations data
@@ -556,4 +594,69 @@ function updateNavigationButtons() {
     
     prevBtn.disabled = currentAthikaramId <= 1;
     nextBtn.disabled = currentAthikaramId >= 133;
+}
+
+// ── Audio Help Modal ──
+function showAudioHelpModal(e) {
+    e.stopPropagation();
+    let modal = document.getElementById('audioHelpModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'audioHelpModal';
+        modal.className = 'audio-help-overlay';
+        modal.innerHTML = `
+            <div class="audio-help-box">
+                <button class="audio-help-close" onclick="document.getElementById('audioHelpModal').classList.add('hidden')">&times;</button>
+                <h3 class="audio-help-title">&#128266; Audio Playback Help</h3>
+                <p class="audio-help-intro">This site uses your device's built-in text-to-speech engine. If a language doesn't play or sounds incorrect, follow the steps for your device:</p>
+
+                <div class="audio-help-section">
+                    <div class="audio-help-platform">&#63743; iPhone &amp; iPad (iOS)</div>
+                    <ol>
+                        <li>Open <strong>Settings → Accessibility → Spoken Content → Voices</strong></li>
+                        <li>Select the language (e.g. Tamil, Telugu, Kannada)</li>
+                        <li>Download the voice by tapping it — wait for download to complete</li>
+                        <li>Reload this page and try again</li>
+                    </ol>
+                </div>
+
+                <div class="audio-help-section">
+                    <div class="audio-help-platform">&#63743; Mac (Safari / Chrome)</div>
+                    <ol>
+                        <li>Open <strong>System Settings → Accessibility → Spoken Content</strong></li>
+                        <li>Click <strong>Manage Voices…</strong> and find your language</li>
+                        <li>Click the download icon next to the voice and wait</li>
+                        <li>Reload this page — Chrome may need a restart</li>
+                    </ol>
+                </div>
+
+                <div class="audio-help-section">
+                    <div class="audio-help-platform">&#9654; Android</div>
+                    <ol>
+                        <li>Open <strong>Settings → General Management → Language → Text-to-Speech</strong></li>
+                        <li>Under <strong>Google Text-to-Speech Engine</strong>, tap the gear icon</li>
+                        <li>Tap <strong>Install voice data</strong> and download your language</li>
+                        <li>Return here and reload the page</li>
+                    </ol>
+                </div>
+
+                <div class="audio-help-section">
+                    <div class="audio-help-platform">&#9112; Windows (Chrome / Edge)</div>
+                    <ol>
+                        <li>Open <strong>Settings → Time &amp; Language → Language &amp; Region</strong></li>
+                        <li>Click <strong>Add a language</strong> and add your language (e.g. Telugu)</li>
+                        <li>Click the language → <strong>Options</strong> → download the <strong>Text-to-speech</strong> pack</li>
+                        <li>Restart your browser and reload this page</li>
+                    </ol>
+                </div>
+
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi) may require a one-time voice download.</p>
+            </div>
+        `;
+        modal.addEventListener('click', function(ev) {
+            if (ev.target === modal) modal.classList.add('hidden');
+        });
+        document.body.appendChild(modal);
+    }
+    modal.classList.remove('hidden');
 }
