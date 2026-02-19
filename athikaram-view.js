@@ -14,20 +14,6 @@ const TTS_LANGUAGES = {
 
 const AUDIO_BASE = '/audio';
 
-(function injectAudioCSS() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .audio-section { display:flex; align-items:center; gap:10px; margin:12px 0 4px 0; flex-wrap:wrap; }
-        .audio-label { font-size:0.82rem; color:#595959; }
-        .audio-play-btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1.5px solid #d4380d; background:white; color:#d4380d; border-radius:50px; font-size:0.82rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.2s; }
-        .audio-play-btn:hover { background:#d4380d; color:white; }
-        .audio-play-btn.playing { background:#d4380d; color:white; animation:audio-pulse 1.5s ease-in-out infinite; }
-        .audio-play-btn:disabled { opacity:0.4; cursor:not-allowed; }
-        @keyframes audio-pulse { 0%{box-shadow:0 0 0 0 rgba(212,56,13,0.5)} 70%{box-shadow:0 0 0 6px rgba(212,56,13,0)} 100%{box-shadow:0 0 0 0 rgba(212,56,13,0)} }
-    `;
-    document.head.appendChild(style);
-})();
-
 let _currentAudio = null;
 let _currentBtn = null;
 let _currentUtterance = null;
@@ -75,12 +61,19 @@ function _ttsPlay(kuralNumber, lang, langConfig, btn) {
     _ttsStop();
     _currentBtn = btn;
     const audio = new Audio(`${AUDIO_BASE}/${langConfig.audioPath}/${kuralNumber}.mp3`);
+    let fallbackCalled = false;
+    const fallback = () => {
+        if (fallbackCalled) return;
+        fallbackCalled = true;
+        _currentAudio = null;
+        _ttsSpeakFallback(langConfig, btn);
+    };
     audio.onplay  = () => _ttsSetState(btn, 'playing');
     audio.onended = () => { _currentAudio = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
     audio.onpause = () => { if (!audio.ended) _ttsSetState(btn, 'idle'); };
-    audio.onerror = () => { _currentAudio = null; _ttsSpeakFallback(langConfig, btn); };
+    audio.onerror = fallback;
     _currentAudio = audio;
-    audio.play().catch(() => { _currentAudio = null; _ttsSpeakFallback(langConfig, btn); });
+    audio.play().catch(fallback);
 }
 
 function _ttsSpeakFallback(langConfig, btn) {
@@ -115,11 +108,11 @@ function createAudioHTML(kural) {
         const cfg = TTS_LANGUAGES[key];
         const text = _ttsBuildText(key, kural);
         return `<button class="audio-play-btn" data-lang="${key}" data-kuralnum="${kural.Number}" data-text="${text.replace(/"/g, '&quot;')}" title="Listen in ${cfg.label}">
-            <span class="audio-btn-icon">&#9654;</span>
+            <span class="audio-btn-icon" style="font-size:1.1rem">&#9654;</span>
             <span>${cfg.label}</span>
         </button>`;
     }).join('');
-    return `<div class="audio-section"><span class="audio-label">&#128266;</span>${btns}</div>`;
+    return `<div class="audio-section"><span class="audio-label">&#128266; Listen</span>${btns}</div>`;
 }
 
 function setupAudioButtonsForCard(card, kural) {
@@ -134,59 +127,62 @@ function setupAudioButtonsForCard(card, kural) {
 
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Wait for translations to be ready
+    // Show skeleton immediately so the page feels responsive
+    const kuralsContainer = document.getElementById('kurals-list');
+    if (kuralsContainer) {
+        kuralsContainer.innerHTML = '<div class="loading">குறள்கள் ஏற்றுகிறது…</div>';
+    }
+
+    // 1. Wait for language.js to finish loading translations
     await waitForTranslations();
-    
-    // Load athikarams metadata
-    const athikaramsScript = document.createElement('script');
-    athikaramsScript.src = 'athikarams-data.js';
-    document.head.appendChild(athikaramsScript);
-    
+
+    // 2. Load athikarams metadata
     await new Promise(resolve => {
-        athikaramsScript.onload = resolve;
+        const s = document.createElement('script');
+        s.src = 'athikarams-data.js';
+        s.onload = resolve;
+        document.head.appendChild(s);
     });
-    
-    // Load kural data
-    await loadKuralData();
-    
-    // Get athikaram ID from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const athikaramId = parseInt(urlParams.get('id')) || 1;
-    currentAthikaramId = athikaramId;
-    
-    // Display athikaram with all kurals
-    displayAthikaram(currentAthikaramId);
-    
-    // Setup navigation
-    setupNavigation();
-});
 
-// Wait for translations to be loaded
-function waitForTranslations() {
-    return new Promise(resolve => {
-        if (window.translations && window.getCurrentLanguage) {
-            resolve();
-        } else {
-            const checkInterval = setInterval(() => {
-                if (window.translations && window.getCurrentLanguage) {
-                    clearInterval(checkInterval);
-                    resolve();
-                }
-            }, 100);
-        }
-    });
-}
-
-async function loadKuralData() {
+    // 3. Load kural data
     try {
         const response = await fetch('thirukkural.json');
         const data = await response.json();
         kuralData = data.kural;
-    } catch (error) {
-        console.error('Error loading kural data:', error);
-        document.getElementById('kurals-list').innerHTML = 
+    } catch (e) {
+        if (kuralsContainer) kuralsContainer.innerHTML =
             '<div class="loading">தரவு ஏற்றுவதில் பிழை. பக்கத்தை மீண்டும் ஏற்றவும்.</div>';
+        return;
     }
+
+    // Get athikaram ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const athikaramId = parseInt(urlParams.get('id')) || 1;
+    currentAthikaramId = athikaramId;
+
+    // Display athikaram with all kurals
+    displayAthikaram(currentAthikaramId);
+
+    // Setup navigation
+    setupNavigation();
+});
+
+// Wait for language.js to finish loading translations data
+function waitForTranslations() {
+    return new Promise(resolve => {
+        // window.athikaram_names is set at the end of loadTranslations() in language.js
+        // — it's the most reliable signal that the translations fetch is complete
+        if (window.athikaram_names) {
+            resolve();
+        } else {
+            const checkInterval = setInterval(() => {
+                if (window.athikaram_names) {
+                    clearInterval(checkInterval);
+                    resolve();
+                }
+            }, 50);
+        }
+    });
 }
 
 function getAthikaramById(id) {
@@ -318,9 +314,8 @@ function createKuralCard(kural, athikaram) {
                 <span class="transliteration-line">${line1Display}</span>
                 <span class="transliteration-line">${line2Display}</span>
             </div>
+            ${createAudioHTML(kural)}
         </div>
-
-        ${createAudioHTML(kural)}
         
         <div class="explanations-section-compact">
             <div class="explanations-label">${explText}</div>
@@ -328,9 +323,9 @@ function createKuralCard(kural, athikaram) {
             <div class="explanation-item-compact">
                 <div class="explanation-header">
                     <div class="explanation-author-small">${scholarMV}</div>
-                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mv)}">${translateBtn}</button>
                 </div>
                 <div class="explanation-text-small">${kural.mv}</div>
+                <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mv)}">${translateBtn}</button>
             </div>
             ` : ''}
             
@@ -338,9 +333,9 @@ function createKuralCard(kural, athikaram) {
             <div class="explanation-item-compact">
                 <div class="explanation-header">
                     <div class="explanation-author-small">${scholarSP}</div>
-                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.sp)}">${translateBtn}</button>
                 </div>
                 <div class="explanation-text-small">${kural.sp}</div>
+                <button class="explanation-translate-btn" data-text="${escapeHtml(kural.sp)}">${translateBtn}</button>
             </div>
             ` : ''}
             
@@ -348,9 +343,9 @@ function createKuralCard(kural, athikaram) {
             <div class="explanation-item-compact">
                 <div class="explanation-header">
                     <div class="explanation-author-small">${scholarMK}</div>
-                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mk)}">${translateBtn}</button>
                 </div>
                 <div class="explanation-text-small">${kural.mk}</div>
+                <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mk)}">${translateBtn}</button>
             </div>
             ` : ''}
         </div>
@@ -359,13 +354,13 @@ function createKuralCard(kural, athikaram) {
         <div class="english-translation-section">
             <div class="english-translation-header">
                 <div class="english-translation-label">English</div>
-                <button class="english-translate-btn" data-text="${escapeHtml(kural.ashraf)}">${translateBtn}</button>
             </div>
             <div class="english-translation-text">${kural.ashraf}</div>
             <div class="english-attribution">
                 — ${kural.ashraf_attr || 'N.V.K. Ashraf'} · curated by
                 <a href="contributors.html" class="attribution-link" target="_blank">N.V.K. Ashraf</a>
             </div>
+            <button class="english-translate-btn" data-text="${escapeHtml(kural.ashraf)}">${translateBtn}</button>
         </div>
         ` : ''}
     `;

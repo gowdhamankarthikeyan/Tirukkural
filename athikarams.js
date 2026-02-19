@@ -23,19 +23,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     setupFilterTabs();
 });
 
-// Wait for translations to be loaded
+// Wait for language.js to finish loading translations data
 function waitForTranslations() {
     return new Promise(resolve => {
-        if (window.translations && window.getCurrentLanguage) {
+        if (window.athikaram_names) {
             resolve();
         } else {
-            // Check every 100ms
             const checkInterval = setInterval(() => {
-                if (window.translations && window.getCurrentLanguage) {
+                if (window.athikaram_names) {
                     clearInterval(checkInterval);
                     resolve();
                 }
-            }, 100);
+            }, 50);
         }
     });
 }

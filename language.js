@@ -98,14 +98,6 @@ function changeLanguage(langCode) {
     applyTranslations();
     updateLanguageDropdown();
     
-    // Update selected state in modal
-    document.querySelectorAll('.language-option').forEach(opt => {
-        opt.classList.remove('selected');
-        if (opt.dataset.lang === langCode) {
-            opt.classList.add('selected');
-        }
-    });
-    
     // Trigger re-render of dynamic content if functions exist
     if (typeof displayAthikarams === 'function') {
         // On athikarams page - re-render cards
@@ -137,58 +129,8 @@ function initializeWelcomeModal() {
         return;
     }
     
-    // Populate language grid in modal
-    populateModalLanguages();
-    
     // Show modal
     modal.classList.remove('hidden');
-}
-
-// Populate language options in modal
-function populateModalLanguages() {
-    const grid = document.getElementById('modalLanguageGrid');
-    if (!grid) return;
-    
-    // Group languages by segment
-    const indianLangs = [];
-    const intlLangs = [];
-    
-    Object.entries(languageData).forEach(([code, data]) => {
-        if (data.segment === 'indian') {
-            indianLangs.push({ code, ...data });
-        } else {
-            intlLangs.push({ code, ...data });
-        }
-    });
-    
-    // Create sections
-    let html = '<div style="grid-column: 1/-1; font-weight: 600; color: #d4380d; margin-top: 10px;">Indian Languages</div>';
-    
-    indianLangs.forEach(lang => {
-        html += `
-            <div class="language-option ${currentLanguage === lang.code ? 'selected' : ''}" 
-                 data-lang="${lang.code}" 
-                 onclick="changeLanguage('${lang.code}')">
-                <span class="flag">${lang.flag}</span>
-                <div>${lang.nativeName}</div>
-            </div>
-        `;
-    });
-    
-    html += '<div style="grid-column: 1/-1; font-weight: 600; color: #d4380d; margin-top: 20px;">International Languages</div>';
-    
-    intlLangs.forEach(lang => {
-        html += `
-            <div class="language-option ${currentLanguage === lang.code ? 'selected' : ''}" 
-                 data-lang="${lang.code}" 
-                 onclick="changeLanguage('${lang.code}')">
-                <span class="flag">${lang.flag}</span>
-                <div>${lang.nativeName}</div>
-            </div>
-        `;
-    });
-    
-    grid.innerHTML = html;
 }
 
 // Close welcome modal
@@ -210,7 +152,6 @@ function openWelcomeModal() {
     const modal = document.getElementById('welcomeModal');
     if (modal) {
         modal.classList.remove('hidden');
-        populateModalLanguages(); // Refresh language grid
     }
 }
 
@@ -292,4 +233,3 @@ window.closeWelcomeModal = closeWelcomeModal;
 window.openWelcomeModal = openWelcomeModal;
 window.t = t;
 window.getCurrentLanguage = getCurrentLanguage;
-window.translations = translations;
