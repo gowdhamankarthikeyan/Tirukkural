@@ -1,10 +1,13 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
+A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation, 5 native language translations, audio playback in 6 languages, and support for 100+ languages via Google Translate.
 
 🌐 **Live site:** https://tirukkural.in
 
 ![Version](https://img.shields.io/badge/version-1.6-blue)
 ![Languages](https://img.shields.io/badge/navigation-14%20languages-green)
+![Native Translations](https://img.shields.io/badge/native%20translations-5%20languages-orange)
+![Audio](https://img.shields.io/badge/audio-6%20languages-red)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
 ---
@@ -31,6 +34,7 @@ Every kural includes a carefully curated English translation assembled by resear
 - Every translation credited with the original translator's initials
 - Full methodology: https://kuraltranslations.blogspot.com
 
+### 🗣️ 5 Native Language Translations
 Every kural is available in **5 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
 
 | Language | Translator / Source |
@@ -38,6 +42,7 @@ Every kural is available in **5 native translations** alongside the Tamil origin
 | 🇬🇧 English | N.V.K. Ashraf (curated from 25+ scholars) |
 | 🇮🇳 हिंदी (Hindi) | Classical Hindi translation |
 | 🇮🇳 മലയാളം (Malayalam) | V. V. Abdulla Sahib |
+| 🇮🇳 ಕನ್ನಡ (Kannada) | ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ — Madurai Kamaraj University Press |
 | 🇮🇳 తెలుగు (Telugu) | Gurucharan |
 
 ### 🔊 Audio Playback in 6 Languages
