@@ -1,0 +1,564 @@
+// Global variables
+let kuralData = null;
+let currentAthikaramId = 1;
+
+// ============================================================
+// TTS CONFIG
+// ============================================================
+const TTS_LANGUAGES = {
+    ta: { code: 'ta-IN',                    label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
+    en: { code: 'en-IN', fallback: 'en-US', label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
+    hi: { code: 'hi-IN',                    label: 'हिंदी',  fields: ['hindi1', 'hindi2'],                 audioPath: 'hi' },
+    ml: { code: 'ml-IN',                    label: 'മലയാളം', fields: ['malayalam1', 'malayalam2'],         audioPath: 'ml' },
+};
+
+const AUDIO_BASE = '/audio';
+
+(function injectAudioCSS() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .audio-section { display:flex; align-items:center; gap:10px; margin:12px 0 4px 0; flex-wrap:wrap; }
+        .audio-label { font-size:0.82rem; color:#595959; }
+        .audio-play-btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1.5px solid #d4380d; background:white; color:#d4380d; border-radius:50px; font-size:0.82rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.2s; }
+        .audio-play-btn:hover { background:#d4380d; color:white; }
+        .audio-play-btn.playing { background:#d4380d; color:white; animation:audio-pulse 1.5s ease-in-out infinite; }
+        .audio-play-btn:disabled { opacity:0.4; cursor:not-allowed; }
+        @keyframes audio-pulse { 0%{box-shadow:0 0 0 0 rgba(212,56,13,0.5)} 70%{box-shadow:0 0 0 6px rgba(212,56,13,0)} 100%{box-shadow:0 0 0 0 rgba(212,56,13,0)} }
+    `;
+    document.head.appendChild(style);
+})();
+
+let _currentAudio = null;
+let _currentBtn = null;
+let _currentUtterance = null;
+
+function _ttsHasContent(lang, kural) {
+    const cfg = TTS_LANGUAGES[lang];
+    return cfg && cfg.fields.some(f => kural[f]);
+}
+
+function _ttsBuildText(lang, kural) {
+    const cfg = TTS_LANGUAGES[lang];
+    if (!cfg) return '';
+    return cfg.fields.map(f => kural[f] || '').join(' ').trim();
+}
+
+function _ttsGetLangs(kural) {
+    const uiLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'ta';
+    const langs = ['ta'];
+    if (uiLang !== 'ta' && TTS_LANGUAGES[uiLang] && _ttsHasContent(uiLang, kural)) {
+        langs.push(uiLang);
+    }
+    return langs.filter(l => _ttsHasContent(l, kural));
+}
+
+function _ttsSetState(btn, state) {
+    btn.classList.remove('playing');
+    if (state === 'playing') {
+        btn.classList.add('playing');
+        btn.querySelector('.audio-btn-icon').textContent = '⏹';
+    } else {
+        btn.querySelector('.audio-btn-icon').textContent = '▶';
+    }
+}
+
+function _ttsStop() {
+    if (_currentAudio) { _currentAudio.pause(); _currentAudio.currentTime = 0; _currentAudio = null; }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    _currentUtterance = null;
+    if (_currentBtn) _ttsSetState(_currentBtn, 'idle');
+    _currentBtn = null;
+}
+
+function _ttsPlay(kuralNumber, lang, langConfig, btn) {
+    if (btn.classList.contains('playing')) { _ttsStop(); return; }
+    _ttsStop();
+    _currentBtn = btn;
+    const audio = new Audio(`${AUDIO_BASE}/${langConfig.audioPath}/${kuralNumber}.mp3`);
+    audio.onplay  = () => _ttsSetState(btn, 'playing');
+    audio.onended = () => { _currentAudio = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
+    audio.onpause = () => { if (!audio.ended) _ttsSetState(btn, 'idle'); };
+    audio.onerror = () => { _currentAudio = null; _ttsSpeakFallback(langConfig, btn); };
+    _currentAudio = audio;
+    audio.play().catch(() => { _currentAudio = null; _ttsSpeakFallback(langConfig, btn); });
+}
+
+function _ttsSpeakFallback(langConfig, btn) {
+    if (!('speechSynthesis' in window)) { _ttsSetState(btn, 'idle'); return; }
+    const text = btn.getAttribute('data-text');
+    if (!text || !text.trim()) { _ttsSetState(btn, 'idle'); return; }
+    _currentBtn = btn;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = langConfig.code;
+    utterance.rate = 0.85;
+    const speak = () => {
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang === langConfig.code)
+            || (langConfig.fallback && voices.find(v => v.lang === langConfig.fallback))
+            || voices.find(v => v.lang.startsWith(langConfig.code.split('-')[0]));
+        if (voice) utterance.voice = voice;
+        utterance.onstart = () => _ttsSetState(btn, 'playing');
+        utterance.onend   = () => { _currentUtterance = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
+        utterance.onerror = () => { _currentUtterance = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
+        _currentUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+    };
+    if (window.speechSynthesis.getVoices().length === 0) {
+        window.speechSynthesis.onvoiceschanged = speak;
+    } else { speak(); }
+}
+
+function createAudioHTML(kural) {
+    const langs = _ttsGetLangs(kural);
+    if (langs.length === 0) return '';
+    const btns = langs.map(key => {
+        const cfg = TTS_LANGUAGES[key];
+        const text = _ttsBuildText(key, kural);
+        return `<button class="audio-play-btn" data-lang="${key}" data-kuralnum="${kural.Number}" data-text="${text.replace(/"/g, '&quot;')}" title="Listen in ${cfg.label}">
+            <span class="audio-btn-icon">&#9654;</span>
+            <span>${cfg.label}</span>
+        </button>`;
+    }).join('');
+    return `<div class="audio-section"><span class="audio-label">&#128266;</span>${btns}</div>`;
+}
+
+function setupAudioButtonsForCard(card, kural) {
+    card.querySelectorAll('.audio-play-btn').forEach(btn => {
+        const lang = btn.getAttribute('data-lang');
+        const cfg = TTS_LANGUAGES[lang];
+        if (!cfg) return;
+        btn.addEventListener('click', () => _ttsPlay(kural.Number, lang, cfg, btn));
+    });
+}
+
+
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // Wait for translations to be ready
+    await waitForTranslations();
+    
+    // Load athikarams metadata
+    const athikaramsScript = document.createElement('script');
+    athikaramsScript.src = 'athikarams-data.js';
+    document.head.appendChild(athikaramsScript);
+    
+    await new Promise(resolve => {
+        athikaramsScript.onload = resolve;
+    });
+    
+    // Load kural data
+    await loadKuralData();
+    
+    // Get athikaram ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const athikaramId = parseInt(urlParams.get('id')) || 1;
+    currentAthikaramId = athikaramId;
+    
+    // Display athikaram with all kurals
+    displayAthikaram(currentAthikaramId);
+    
+    // Setup navigation
+    setupNavigation();
+});
+
+// Wait for translations to be loaded
+function waitForTranslations() {
+    return new Promise(resolve => {
+        if (window.translations && window.getCurrentLanguage) {
+            resolve();
+        } else {
+            const checkInterval = setInterval(() => {
+                if (window.translations && window.getCurrentLanguage) {
+                    clearInterval(checkInterval);
+                    resolve();
+                }
+            }, 100);
+        }
+    });
+}
+
+async function loadKuralData() {
+    try {
+        const response = await fetch('thirukkural.json');
+        const data = await response.json();
+        kuralData = data.kural;
+    } catch (error) {
+        console.error('Error loading kural data:', error);
+        document.getElementById('kurals-list').innerHTML = 
+            '<div class="loading">தரவு ஏற்றுவதில் பிழை. பக்கத்தை மீண்டும் ஏற்றவும்.</div>';
+    }
+}
+
+function getAthikaramById(id) {
+    return ATHIKARAMS.find(a => a.id === id);
+}
+
+function displayAthikaram(athikaramId) {
+    if (!kuralData) {
+        return;
+    }
+    
+    const athikaram = getAthikaramById(athikaramId);
+    if (!athikaram) {
+        document.getElementById('kurals-list').innerHTML = 
+            '<div class="loading">அதிகாரம் கிடைக்கவில்லை</div>';
+        return;
+    }
+    
+    // Get translated text
+    const chapterText = window.t ? window.t('chapter') : 'அதிகாரம்';
+    const kuralText = window.t ? window.t('couplet') : 'குறள்';
+    
+    // Get translated athikaram name
+    let athikaramNameEn = athikaram.en;
+    const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'ta';
+    
+    if (window.athikaram_names && 
+        window.athikaram_names[currentLang] && 
+        window.athikaram_names[currentLang][athikaram.id.toString()]) {
+        athikaramNameEn = window.athikaram_names[currentLang][athikaram.id.toString()];
+    }
+    
+    // Display header
+    const headerContainer = document.getElementById('athikaram-header');
+    headerContainer.innerHTML = `
+        <div class="athikaram-header-box">
+            <div class="athikaram-number-large">${chapterText} ${athikaram.id}</div>
+            <h2 class="athikaram-title-large-ta">${athikaram.ta}</h2>
+            <p class="athikaram-title-large-en">${athikaramNameEn}</p>
+            <p class="athikaram-range-large">${kuralText} ${athikaram.start} - ${athikaram.end}</p>
+        </div>
+    `;
+    
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+    // Display all kurals in this athikaram
+    const kuralsContainer = document.getElementById('kurals-list');
+    kuralsContainer.innerHTML = '';
+    
+    for (let kuralNum = athikaram.start; kuralNum <= athikaram.end; kuralNum++) {
+        const kural = kuralData[kuralNum - 1];
+        if (kural) {
+            const kuralCard = createKuralCard(kural, athikaram);
+            kuralsContainer.appendChild(kuralCard);
+            setupAudioButtonsForCard(kuralCard, kural);
+        }
+    }
+    
+    // Setup translate buttons after all kurals are rendered
+    setupExplanationTranslateButtons();
+
+    // Update page SEO for this athikaram
+    const firstKural = kuralData[athikaram.start - 1];
+    updatePageSEO(athikaram, firstKural ? firstKural.ashraf : '');
+    
+    // Update URL
+    const url = new URL(window.location);
+    url.searchParams.set('id', athikaramId);
+    window.history.pushState({}, '', url);
+}
+
+function createKuralCard(kural, athikaram) {
+    const card = document.createElement('div');
+    card.className = 'kural-card';
+    
+    // Split kural into proper format
+    const line1Words = kural.Line1.trim().split(' ');
+    const line2Words = kural.Line2.trim().split(' ');
+    
+    // Format transliteration OR native language translation OR Bharati English verse
+    const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'ta';
+    let line1Display = kural.transliteration1 || '';
+    let line2Display = kural.transliteration2 || '';
+    let isBharatiVerse = false;
+
+    // For Indian languages with native translations, show those instead of transliteration
+    if (currentLang === 'en' && kural.bharati_verse1 && kural.bharati_verse2) {
+        // English selected: show Shuddhananda Bharatiar's poetic verse
+        line1Display = kural.bharati_verse1;
+        line2Display = kural.bharati_verse2;
+        isBharatiVerse = true;
+    } else if (currentLang === 'hi' && kural.hindi1 && kural.hindi2) {
+        line1Display = kural.hindi1;
+        line2Display = kural.hindi2;
+    } else if (currentLang === 'te' && kural.telugu1 && kural.telugu2) {
+        line1Display = kural.telugu1;
+        line2Display = kural.telugu2;
+    } else if (currentLang === 'ml' && kural.malayalam1 && kural.malayalam2) {
+        line1Display = kural.malayalam1;
+        line2Display = kural.malayalam2;
+    } else if (currentLang === 'kn' && kural.kannada1 && kural.kannada2) {
+        line1Display = kural.kannada1;
+        line2Display = kural.kannada2;
+    } else if (currentLang === 'bn' && kural.bengali1 && kural.bengali2) {
+        line1Display = kural.bengali1;
+        line2Display = kural.bengali2;
+    }
+    // Else: use transliteration (default for Tamil, Spanish, French, etc.)
+    
+    // Get translated text
+    const kuralText = window.t ? window.t('couplet') : 'குறள்';
+    const explText = window.t ? window.t('explanations') : 'விளக்கங்கள்';
+    const scholarMV = window.t ? window.t('scholar_mv') : 'மு. வரதராசனார்';
+    const scholarSP = window.t ? window.t('scholar_sp') : 'சாலமன் பாப்பையா';
+    const scholarMK = window.t ? window.t('scholar_mk') : 'கலைஞர்';
+    const translateBtn = window.t ? window.t('translate') : 'Translate';
+    
+    card.innerHTML = `
+        <div class="kural-card-header">
+            <div class="kural-number-small">${kuralText} ${kural.Number}</div>
+        </div>
+        
+        <div class="kural-text-section-compact">
+            <div class="kural-tamil-compact">
+                <span class="kural-line">${line1Words.join(' ')}</span>
+                <span class="kural-line">${line2Words.join(' ')}</span>
+            </div>
+            <div class="transliteration-compact${isBharatiVerse ? ' bharati-verse' : ''}">
+                <span class="transliteration-line">${line1Display}</span>
+                <span class="transliteration-line">${line2Display}</span>
+            </div>
+        </div>
+
+        ${createAudioHTML(kural)}
+        
+        <div class="explanations-section-compact">
+            <div class="explanations-label">${explText}</div>
+            ${kural.mv ? `
+            <div class="explanation-item-compact">
+                <div class="explanation-header">
+                    <div class="explanation-author-small">${scholarMV}</div>
+                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mv)}">${translateBtn}</button>
+                </div>
+                <div class="explanation-text-small">${kural.mv}</div>
+            </div>
+            ` : ''}
+            
+            ${kural.sp ? `
+            <div class="explanation-item-compact">
+                <div class="explanation-header">
+                    <div class="explanation-author-small">${scholarSP}</div>
+                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.sp)}">${translateBtn}</button>
+                </div>
+                <div class="explanation-text-small">${kural.sp}</div>
+            </div>
+            ` : ''}
+            
+            ${kural.mk ? `
+            <div class="explanation-item-compact">
+                <div class="explanation-header">
+                    <div class="explanation-author-small">${scholarMK}</div>
+                    <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mk)}">${translateBtn}</button>
+                </div>
+                <div class="explanation-text-small">${kural.mk}</div>
+            </div>
+            ` : ''}
+        </div>
+
+        ${kural.ashraf ? `
+        <div class="english-translation-section">
+            <div class="english-translation-header">
+                <div class="english-translation-label">English</div>
+                <button class="english-translate-btn" data-text="${escapeHtml(kural.ashraf)}">${translateBtn}</button>
+            </div>
+            <div class="english-translation-text">${kural.ashraf}</div>
+            <div class="english-attribution">
+                — ${kural.ashraf_attr || 'N.V.K. Ashraf'} · curated by
+                <a href="contributors.html" class="attribution-link" target="_blank">N.V.K. Ashraf</a>
+            </div>
+        </div>
+        ` : ''}
+    `;
+    
+    return card;
+}
+
+
+// ── Dynamic SEO — updates title, meta, OG and JSON-LD per athikaram ──
+function updatePageSEO(athikaram, firstKuralAshraf) {
+    const id     = athikaram.id;
+    const ta     = athikaram.ta;
+    const en     = athikaram.en;
+    const start  = athikaram.start;
+    const end    = athikaram.end;
+    const url    = `https://tirukkural.in/athikaram-view.html?id=${id}`;
+    const title  = `${ta} (${en}) — Chapter ${id} | Tirukkuṟaḷ`;
+    const desc   = firstKuralAshraf
+        ? `"${firstKuralAshraf}" — Kural ${start}–${end}: ${en} (Chapter ${id}) of Tirukkuṟaḷ by Tiruvaḷḷuvar.`
+        : `${en} — Couplets ${start}–${end} of Tirukkuṟaḷ. Tamil text, transliteration, scholar commentaries and English translation.`;
+
+    // <title>
+    document.title = title;
+
+    // <meta> tags
+    const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+    setMeta('meta[name="title"]',       title);
+    setMeta('meta[name="description"]', desc);
+
+    // Canonical
+    const canon = document.getElementById('canonical-url');
+    if (canon) canon.setAttribute('href', url);
+
+    // Open Graph
+    const setOg = (id, val) => { const el = document.getElementById(id); if (el) el.setAttribute('content', val); };
+    setOg('og-url',   url);
+    setOg('og-title', title);
+    setOg('og-desc',  desc);
+
+    // Twitter
+    setOg('tw-title', title);
+    setOg('tw-desc',  desc);
+
+    // JSON-LD — replace or insert
+    const existingLd = document.getElementById('chapter-ld');
+    if (existingLd) existingLd.remove();
+    const ld = document.createElement('script');
+    ld.type = 'application/ld+json';
+    ld.id   = 'chapter-ld';
+    ld.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Chapter",
+        "name": `${ta} — ${en}`,
+        "position": id,
+        "url": url,
+        "description": desc,
+        "inLanguage": "ta",
+        "isPartOf": {
+            "@type": "Book",
+            "name": "Tirukkuṟaḷ",
+            "author": { "@type": "Person", "name": "Tiruvaḷḷuvar" },
+            "url": "https://tirukkural.in"
+        }
+    });
+    document.head.appendChild(ld);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function setupExplanationTranslateButtons() {
+    // Tamil explanation buttons → translate Tamil → chosen language (default: English)
+    const translateBtns = document.querySelectorAll('.explanation-translate-btn');
+    
+    translateBtns.forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const text = this.getAttribute('data-text');
+            const encodedText = encodeURIComponent(text);
+
+            // Translate to chosen language; if Tamil or English is selected, default to English
+            const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'ta';
+            const tl = (lang === 'ta' || lang === 'en') ? 'en' : lang;
+            
+            // Check if device is mobile
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // On mobile: Try to copy first, then open translate
+                try {
+                    // Try copying to clipboard
+                    await navigator.clipboard.writeText(text);
+                    
+                    // Brief feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Opening...';
+                    this.style.background = 'linear-gradient(135deg, #34a853 0%, #34a853 100%)';
+                    
+                    // Open Google Translate after brief delay
+                    setTimeout(() => {
+                        const translateUrl = `https://translate.google.com/?sl=ta&tl=${tl}&text=${encodedText}&op=translate`;
+                        window.open(translateUrl, '_blank');
+                        
+                        // Reset button
+                        this.textContent = originalText;
+                        this.style.background = '';
+                    }, 500);
+                } catch (err) {
+                    // If clipboard fails, just open translate
+                    const translateUrl = `https://translate.google.com/?sl=ta&tl=${tl}&text=${encodedText}&op=translate`;
+                    window.open(translateUrl, '_blank');
+                }
+            } else {
+                // On desktop: Open Google Translate in new window
+                const translateUrl = `https://translate.google.com/?sl=ta&tl=${tl}&text=${encodedText}&op=translate`;
+                window.open(translateUrl, '_blank', 'width=900,height=700');
+            }
+        });
+    });
+
+    // English translation buttons → translate English → user's current language
+    const englishBtns = document.querySelectorAll('.english-translate-btn');
+
+    englishBtns.forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const text = this.getAttribute('data-text');
+            const encodedText = encodeURIComponent(text);
+
+            // Use current site language as target; fall back to 'ta'
+            const tl = (window.getCurrentLanguage && window.getCurrentLanguage() !== 'en')
+                ? window.getCurrentLanguage()
+                : 'ta';
+
+            const translateUrl = `https://translate.google.com/?sl=en&tl=${tl}&text=${encodedText}&op=translate`;
+
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                try {
+                    await navigator.clipboard.writeText(text);
+
+                    const originalText = this.textContent;
+                    this.textContent = 'Opening...';
+                    this.style.background = 'linear-gradient(135deg, #34a853 0%, #34a853 100%)';
+
+                    setTimeout(() => {
+                        window.open(translateUrl, '_blank');
+                        this.textContent = originalText;
+                        this.style.background = '';
+                    }, 500);
+                } catch (err) {
+                    window.open(translateUrl, '_blank');
+                }
+            } else {
+                window.open(translateUrl, '_blank', 'width=900,height=700');
+            }
+        });
+    });
+}
+
+function setupNavigation() {
+    const prevBtn = document.getElementById('prev-athikaram');
+    const nextBtn = document.getElementById('next-athikaram');
+    
+    prevBtn.addEventListener('click', function() {
+        if (currentAthikaramId > 1) {
+            currentAthikaramId--;
+            displayAthikaram(currentAthikaramId);
+            updateNavigationButtons();
+            window.scrollTo(0, 0);
+        }
+    });
+    
+    nextBtn.addEventListener('click', function() {
+        if (currentAthikaramId < 133) {
+            currentAthikaramId++;
+            displayAthikaram(currentAthikaramId);
+            updateNavigationButtons();
+            window.scrollTo(0, 0);
+        }
+    });
+    
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prev-athikaram');
+    const nextBtn = document.getElementById('next-athikaram');
+    
+    prevBtn.disabled = currentAthikaramId <= 1;
+    nextBtn.disabled = currentAthikaramId >= 133;
+}

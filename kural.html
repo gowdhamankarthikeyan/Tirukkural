@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>குறள் - திருக்குறள்</title>
+    <meta name="description" content="திருக்குறள் - திருவள்ளுவர் அருளியது">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="thiruvalluvar-logo.svg">
+    
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <link rel="stylesheet" href="styles.css?v=1.3">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="header-link">
+                    <img src="thiruvalluvar-logo.svg" alt="திருவள்ளுவர்" class="site-logo">
+                    <div class="header-text">
+                        <h1 class="site-title" id="siteTitle">திருக்குறள்</h1>
+                        <p class="site-tagline" id="siteTagline">உலகப் பொதுமறை, வாழ்வின் கலை</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <!-- Add this button inside .nav-container, before .nav-links -->
+            <button class="nav-hamburger" onclick="this.closest('.nav').querySelector('.nav-links').classList.toggle('open')">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-translate="home">முகப்பு</a>
+                <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
+            </div>
+            <div class="nav-controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <div id="kural-content">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="kural-navigation">
+            <button id="prev-kural" class="nav-button" data-translate="prev_kural">← முந்தைய குறள்</button>
+            <button id="next-kural" class="nav-button" data-translate="next_kural">அடுத்த குறள் →</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 திருக்குறள் - கௌதமன் கார்த்திகேயன்</p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter -->
+    <script data-goatcounter="https://tirukkural.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script src="kural.js?v=1.1"></script>
+    <script src="language.js?v=1.3"></script>
+</body>
+</html>

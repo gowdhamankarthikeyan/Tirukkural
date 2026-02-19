@@ -1,0 +1,1509 @@
+/* ============================================================
+   TIRUKKURAL — styles.css
+   ============================================================ */
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #d4380d;
+    --secondary-color: #fa8c16;
+    --dark-bg: #1f1f1f;
+    --light-bg: #ffffff;
+    --text-dark: #262626;
+    --text-light: #595959;
+    --border-color: #d9d9d9;
+    --hover-bg: #fff7e6;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', 'Noto Sans Tamil', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.8;
+    color: var(--text-dark);
+    background-color: #fafafa;
+}
+
+img, iframe, video {
+    max-width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.header-content > a,
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    text-decoration: none;
+    color: white;
+    flex-wrap: wrap;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.header-content > a:hover,
+.header-link:hover {
+    opacity: 0.85;
+}
+
+.header-link .site-title,
+.header-link .site-tagline,
+.header-link .site-subtitle {
+    color: white;
+}
+
+.site-logo {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.header-text {
+    text-align: center;
+}
+
+.site-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.site-tagline {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+    opacity: 0.95;
+}
+
+.site-subtitle {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+    background: var(--light-bg);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    gap: 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+}
+
+/* Hamburger — hidden on desktop */
+.nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-hamburger:hover {
+    background: var(--hover-bg);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.language-dropdown {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+    min-width: 150px;
+}
+
+.language-dropdown:hover {
+    border-color: var(--primary-color);
+}
+
+.language-dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(212, 56, 13, 0.1);
+}
+
+.welcome-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-btn:hover {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.main-content {
+    padding: 40px 20px;
+    min-height: calc(100vh - 400px);
+}
+
+/* ── Intro Section ── */
+.intro-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+}
+
+.intro-section h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    line-height: 2;
+    color: var(--text-light);
+}
+
+/* ── Thiruvalluvar Section ── */
+.thiruvalluvar-section {
+    margin-bottom: 40px;
+}
+
+.thiruvalluvar-card {
+    background: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    border-left: 6px solid var(--primary-color);
+}
+
+.thiruvalluvar-image {
+    flex-shrink: 0;
+}
+
+.thiruvalluvar-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: white;
+    padding: 15px;
+    box-shadow: 0 6px 20px rgba(212, 56, 13, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.thiruvalluvar-image img:hover {
+    transform: scale(1.05) rotate(5deg);
+}
+
+.thiruvalluvar-info {
+    flex: 1;
+}
+
+.thiruvalluvar-info h3 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.thiruvalluvar-title {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.thiruvalluvar-desc {
+    color: var(--text-dark);
+    line-height: 2;
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+}
+
+.thiruvalluvar-stats {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(212, 56, 13, 0.3);
+}
+
+/* ── Paal Section ── */
+.paal-section {
+    margin-bottom: 40px;
+}
+
+.paal-section h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.paal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.paal-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.paal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.paal-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.paal-card h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.paal-header-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.paal-header-link:hover h3 {
+    color: var(--secondary-color);
+}
+
+.paal-subtitle {
+    color: var(--text-light);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.paal-desc {
+    color: var(--text-light);
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.paal-count {
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.paal-link {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.paal-link:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* ── Stats Section ── */
+.stats-section {
+    padding: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-item {
+    padding: 20px;
+    background: white;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.stat-item--visitors {
+    background: linear-gradient(135deg, #fff7ed, #fff);
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 2px 12px rgba(185, 74, 0, 0.10);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+/* ── Filter Tabs ── */
+.filter-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 12px 24px;
+    border: 2px solid var(--border-color);
+    background: white;
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.filter-tab.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* ── Athikarams List ── */
+.athikarams-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.athikaram-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid var(--primary-color);
+}
+
+.athikaram-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.athikaram-number {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.athikaram-title-ta {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.athikaram-title-en {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.athikaram-range {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* ── Kural Display ── */
+.kural-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+.kural-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.kural-number {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.athikaram-name {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.kural-text-section {
+    background: #fff9f0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.kural-tamil {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: center;
+    white-space: pre-line;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.kural-line {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+
+.transliteration {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
+    margin-top: 5px;
+    line-height: 1.3;
+    white-space: pre-line;
+}
+
+.transliteration-line {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+
+.explanations-section {
+    margin-top: 30px;
+}
+
+.explanation-item {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.explanation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.explanation-author {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.explanation-translate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+}
+
+.explanation-translate-btn::before {
+    content: "🌐";
+    font-size: 1rem;
+}
+
+.explanation-translate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4);
+}
+
+.explanation-text {
+    color: var(--text-dark);
+    line-height: 2;
+    font-size: 1.05rem;
+}
+
+/* ── Kural Navigation Buttons ── */
+.kural-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.nav-button {
+    flex: 1;
+    padding: 15px 30px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    background: var(--secondary-color);
+    transform: scale(1.02);
+}
+
+.nav-button:disabled {
+    background: var(--border-color);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── Loading State ── */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+/* ============================================================
+   ATHIKARAM VIEW PAGE
+   ============================================================ */
+.athikaram-header-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    text-align: center;
+    border-left: 6px solid var(--primary-color);
+}
+
+.athikaram-number-large {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.athikaram-title-large-ta {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.athikaram-title-large-en {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.athikaram-range-large {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+/* ── Kurals List ── */
+.kurals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.kural-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.kural-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.kural-card-header {
+    margin-bottom: 15px;
+}
+
+.kural-number-small {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.kural-text-section-compact {
+    background: #fff9f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.kural-tamil-compact {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 6px;
+    text-align: center;
+    white-space: pre-line;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.transliteration-compact {
+    font-size: 1rem;
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
+    margin-top: 4px;
+    line-height: 1.3;
+    white-space: pre-line;
+}
+
+.explanations-section-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.explanation-item-compact {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.explanation-author-small {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.explanation-text-small {
+    color: var(--text-dark);
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+/* ── Athikaram Navigation ── */
+.athikaram-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.nav-button-link {
+    flex: 0 0 auto;
+    padding: 15px 30px;
+    background: var(--border-color);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.nav-button-link:hover {
+    background: var(--text-light);
+    color: white;
+}
+
+/* ============================================================
+   ENGLISH TRANSLATION SECTION (Ashraf)
+   ============================================================ */
+.explanations-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.english-section {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%);
+    border-left: 4px solid #2563eb;
+    border-radius: 0 10px 10px 0;
+}
+
+.english-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #2563eb;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.english-translate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+    margin-left: auto;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.english-translate-btn::before {
+    content: "🌐";
+    font-size: 1rem;
+}
+
+.english-translate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4);
+}
+
+.english-flag {
+    margin-right: 4px;
+}
+
+.english-translation-text {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: #1e293b;
+    font-style: italic;
+}
+
+.english-attribution {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.attribution-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.attribution-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal-container {
+    background: linear-gradient(135deg, #ffffff 0%, #fff9f0 100%);
+    border-radius: 24px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(212, 56, 13, 0.3);
+    position: relative;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 28px;
+    color: var(--primary-color);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.modal-hero {
+    text-align: center;
+    padding: 50px 40px 30px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border-radius: 24px 24px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1);   opacity: 0.3; }
+    50%       { transform: scale(1.1); opacity: 0.5; }
+}
+
+.modal-logo-large {
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-logo-large img {
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0);    }
+    50%       { transform: translateY(-10px); }
+}
+
+.modal-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.modal-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.95;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-body {
+    padding: 40px;
+}
+
+.usp-section {
+    margin-bottom: 35px;
+    padding: 25px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-left: 5px solid transparent;
+}
+
+.usp-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(212, 56, 13, 0.15);
+    border-left-color: var(--primary-color);
+}
+
+.usp-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0);    }
+    50%       { transform: translateY(-10px); }
+}
+
+.usp-section h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.usp-section p {
+    color: var(--text-light);
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.usp-section strong {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.scholars-list {
+    margin: 15px 0 0 20px;
+    padding: 0;
+}
+
+.scholars-list li {
+    margin-bottom: 8px;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.scholars-list strong {
+    color: var(--primary-color);
+}
+
+.modal-language-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+    border-radius: 16px;
+    border: 2px solid var(--secondary-color);
+}
+
+.modal-language-section h3 {
+    color: var(--primary-color);
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.modal-language-section p {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+.language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.language-option {
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.language-option:hover {
+    background: var(--hover-bg);
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.language-option.selected {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.language-option .flag {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.modal-footer {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px dashed #e0e0e0;
+    text-align: center;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-light);
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.modal-cta {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(212, 56, 13, 0.3);
+}
+
+.modal-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(212, 56, 13, 0.4);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+    background: var(--dark-bg);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 60px;
+}
+
+.footer p {
+    opacity: 0.9;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (≤768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+    /* Header */
+    .site-title    { font-size: 2rem; }
+    .site-tagline  { font-size: 1rem; }
+    .site-logo     { width: 60px; height: 60px; }
+    .header-content { gap: 20px; }
+
+    /* Nav — hamburger menu */
+    .nav-container {
+        position: relative;
+        flex-wrap: nowrap;
+        padding: 10px 16px;
+        padding-right: 52px; /* space for absolute hamburger */
+        gap: 10px;
+    }
+
+    .nav-hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        display: none !important;
+        flex-direction: column;
+        gap: 4px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        z-index: 200;
+    }
+
+    .nav-links.open {
+        display: flex !important;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+
+    .nav-controls {
+        margin-left: 0;
+        gap: 8px;
+    }
+
+    .language-dropdown {
+        min-width: 0;
+        max-width: 140px;
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    /* Thiruvalluvar card */
+    .thiruvalluvar-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+        gap: 20px;
+    }
+
+    .thiruvalluvar-image img  { width: 120px; height: 120px; }
+    .thiruvalluvar-info h3    { font-size: 1.6rem; }
+    .thiruvalluvar-stats      { justify-content: center; }
+
+    /* Grids → single column */
+    .paal-grid        { grid-template-columns: 1fr; }
+    .athikarams-list  { grid-template-columns: 1fr; }
+
+    /* Kural */
+    .kural-container  { padding: 20px 16px; }
+    .kural-header     { margin-bottom: 24px; }
+    .kural-tamil      { font-size: 1.4rem; }
+    .kural-navigation { flex-direction: column; }
+
+    /* Filter tabs — 2-column wrap instead of full-width stack */
+    .filter-tabs { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .filter-tab  { width: auto; flex: 1 1 calc(50% - 8px); text-align: center; padding: 10px 12px; font-size: 0.95rem; }
+
+    /* Athikaram view */
+    .athikaram-title-large-ta { font-size: 1.6rem; }
+    .athikaram-title-large-en { font-size: 1.1rem; }
+    .kural-tamil-compact      { font-size: 1.3rem; }
+    .athikaram-navigation     { flex-direction: column; }
+    .nav-button-link          { width: 100%; text-align: center; }
+    .athikaram-navigation .nav-button { width: 100%; }
+
+    /* Stats */
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .stat-number { font-size: 2rem; }
+    .stat-label  { font-size: 1rem; }
+
+    /* Explanation translate button */
+    .explanation-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .explanation-translate-btn,
+    .english-translate-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        margin-left: 0;
+    }
+
+    .english-section-label { flex-wrap: wrap; }
+
+    /* Modal */
+    .modal-container { margin: 10px; max-height: 95vh; }
+    .modal-hero      { padding: 40px 20px 20px; }
+    .modal-title     { font-size: 2rem; }
+    .modal-subtitle  { font-size: 1.1rem; }
+    .modal-body      { padding: 20px; }
+    .usp-section     { padding: 20px; }
+    .usp-icon        { font-size: 2.5rem; }
+    .language-grid   { grid-template-columns: repeat(2, 1fr); }
+    .modal-cta       { padding: 16px 40px; font-size: 1.1rem; }
+}
+
+/* ============================================================
+   RESPONSIVE — PHONE (≤480px)
+   ============================================================ */
+@media (max-width: 480px) {
+
+    /* Container & layout */
+    .container    { padding: 0 12px; }
+    .main-content { padding: 20px 12px; }
+
+    /* Header */
+    .header         { padding: 24px 16px; }
+    .site-title     { font-size: 1.8rem; }
+    .site-tagline   { font-size: 0.95rem; }
+    .site-subtitle  { font-size: 0.85rem; }
+    .site-logo      { width: 52px; height: 52px; }
+    .header-content { gap: 12px; }
+
+    /* Thiruvalluvar */
+    .thiruvalluvar-card     { padding: 20px 16px; }
+    .thiruvalluvar-info h3  { font-size: 1.4rem; }
+    .thiruvalluvar-image img { width: 100px; height: 100px; }
+    .stat-badge             { font-size: 0.8rem; padding: 6px 12px; }
+
+    /* Paal cards */
+    .paal-card    { padding: 20px 16px; }
+    .paal-card h3 { font-size: 1.5rem; }
+
+    /* Athikaram cards */
+    .athikaram-card     { padding: 14px; }
+    .athikaram-title-ta { font-size: 1.15rem; }
+
+    /* Intro */
+    .intro-section    { padding: 20px 16px; }
+    .intro-section h2 { font-size: 1.5rem; }
+    .intro-text       { font-size: 1rem; }
+
+    /* Athikaram nav buttons */
+    .athikaram-navigation { gap: 10px; }
+    .nav-button-link      { padding: 12px 16px; font-size: 0.95rem; }
+
+    /* Modal */
+    .modal-overlay  { padding: 10px; align-items: flex-start; padding-top: 20px; }
+    .modal-container { margin: 0; border-radius: 16px; max-height: 92vh; }
+    .modal-hero      { padding: 36px 16px 20px; }
+    .modal-title     { font-size: 1.7rem; }
+    .modal-logo-large img { width: 70px; height: 70px; }
+    .modal-body      { padding: 16px; }
+    .usp-section     { padding: 16px; }
+    .language-grid   { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .language-option { padding: 10px 8px; font-size: 0.85rem; }
+    .modal-cta       { width: 100%; padding: 16px; font-size: 1rem; }
+}
+
+
+/* ── English translation section: match Tamil commentary UX ── */
+.english-translation-section {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.english-translation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.english-translation-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.english-translation-text {
+    color: var(--text-dark);
+    line-height: 1.8;
+    font-size: 0.95rem;
+    font-style: normal;
+}
+
+.english-attribution {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--text-light);
+}
+
+/* Mobile: translate buttons full width, below text */
+@media (max-width: 600px) {
+    .english-translation-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .english-translate-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

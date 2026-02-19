@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>அதிகாரம் - திருக்குறள்</title>
+    <meta name="description" content="திருக்குறள் அதிகாரம்">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="thiruvalluvar-logo.svg">
+    
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- SEO base — updated dynamically per chapter by athikaram-view.js -->
+    <meta name="title" content="Tirukkuṟaḷ Chapter | திருக்குறள் அதிகாரம்">
+    <meta name="description" content="Read Tirukkuṟaḷ couplets with Tamil text, transliteration, three scholar commentaries and curated English translation.">
+    <meta name="keywords" content="tirukkural, thirukkural, kural in english, tiruvalluvar, tamil literature">
+    <link rel="canonical" id="canonical-url" href="https://tirukkural.in/athikaram-view.html">
+
+    <!-- Open Graph — updated dynamically -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" id="og-url" content="https://tirukkural.in/athikaram-view.html">
+    <meta property="og:title" id="og-title" content="Tirukkuṟaḷ Chapter">
+    <meta property="og:description" id="og-desc" content="Read Tirukkuṟaḷ couplets with Tamil text and English translation.">
+    <meta property="og:image" content="https://tirukkural.in/thiruvalluvar-logo.svg">
+    <meta property="og:site_name" content="Tirukkuṟaḷ">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" id="tw-title" content="Tirukkuṟaḷ Chapter">
+    <meta name="twitter:description" id="tw-desc" content="Read Tirukkuṟaḷ couplets with Tamil text and English translation.">
+    <meta name="twitter:image" content="https://tirukkural.in/thiruvalluvar-logo.svg">
+    <link rel="stylesheet" href="styles.css?v=1.4">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="header-link">
+                    <img src="thiruvalluvar-logo.svg" alt="திருவள்ளுவர்" class="site-logo">
+                    <div class="header-text">
+                        <h1 class="site-title" id="siteTitle">திருக்குறள்</h1>
+                        <p class="site-tagline" id="siteTagline">உலகப் பொதுமறை, வாழ்வின் கலை</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <!-- Add this button inside .nav-container, before .nav-links -->
+            <button class="nav-hamburger" onclick="this.closest('.nav').querySelector('.nav-links').classList.toggle('open')">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-translate="home">முகப்பு</a>
+                <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
+                <a href="contributors.html" class="nav-link" data-translate="contributors_title">பங்களிப்பாளர்கள் & ஆதாரங்கள்</a>
+            </div>
+            <div class="nav-controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <div id="athikaram-header">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div id="kurals-list" class="kurals-list">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="athikaram-navigation">
+            <button id="prev-athikaram" class="nav-button" data-translate="prev_chapter">← முந்தைய அதிகாரம்</button>
+            <a href="athikarams.html" class="nav-button-link" data-translate="chapters_list">அதிகாரங்கள் பட்டியல்</a>
+            <button id="next-athikaram" class="nav-button" data-translate="next_chapter">அடுத்த அதிகாரம் →</button>
+        </div>
+
+        <!-- Discussion Section -->
+        <div class="discussion-section">
+            <h3 class="discussion-title">💬 கலந்துரையாடல் (Discussion)</h3>
+            <div id="disqus_thread"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 திருக்குறள் - கௌதமன் கார்த்திகேயன்</p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter: tracks every page visit, filters bots automatically -->
+    <script data-goatcounter="https://tirukkural.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Disqus: loaded once, then reset on athikaram navigation -->
+    <script>
+        var disqus_config = function () {
+            this.page.url = window.location.href;
+            this.page.identifier = 'athikaram-1';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://thirukkural.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+    <script src="athikaram-view.js?v=1.3"></script>
+    <script src="language.js?v=1.3"></script>
+</body>
+</html>

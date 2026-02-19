@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributors & Resources | Tirukkuṟaḷ</title>
+    <meta name="description" content="Acknowledgements to the scholars, translators and contributors who made this Tirukkuṟaḷ resource possible.">
+    <link rel="canonical" href="https://tirukkural.in/contributors.html">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Contributors page specific styles ── */
+
+        /* Section heading */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-color);
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .section-heading .section-icon {
+            font-size: 2rem;
+        }
+
+        .contributors-section {
+            margin-bottom: 50px;
+        }
+
+        /* Contributor card */
+        .contributor-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 28px 30px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .contributor-card.secondary {
+            border-left-color: var(--secondary-color);
+        }
+
+        .contributor-card.blue {
+            border-left-color: #2563eb;
+        }
+
+        .contributor-card.green {
+            border-left-color: #16a34a;
+        }
+
+        .contributor-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .contributor-name-secondary {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .contributor-role {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .contributor-role.orange { background: var(--secondary-color); }
+        .contributor-role.blue   { background: #2563eb; }
+        .contributor-role.green  { background: #16a34a; }
+        .contributor-role.purple { background: #7c3aed; }
+
+        .contributor-desc {
+            color: var(--text-dark);
+            line-height: 1.85;
+            font-size: 1rem;
+        }
+
+        .contributor-desc strong {
+            color: var(--primary-color);
+        }
+
+        .contributor-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .contributor-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Special callout — featured contributor */
+        .callout-card {
+            background: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+            border: 2px solid var(--secondary-color);
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(212, 56, 13, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .callout-card::before {
+            content: '⭐';
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 1.6rem;
+            opacity: 0.4;
+        }
+
+        .callout-card .contributor-role {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        /* Malayalam special callout */
+        .callout-card.malayalam {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-color: #16a34a;
+            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.12);
+        }
+
+        .callout-card.malayalam::before {
+            content: '🌿';
+        }
+
+        .callout-card.malayalam .contributor-role {
+            background: #16a34a;
+        }
+
+        /* Translators grid */
+        .translators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .translator-item {
+            background: white;
+            border-radius: 10px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+            border-top: 3px solid var(--secondary-color);
+        }
+
+        .translator-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .translator-initials {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-family: monospace;
+        }
+
+        .translator-note {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Info box */
+        .info-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%);
+            border-left: 4px solid #2563eb;
+            border-radius: 0 10px 10px 0;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            font-size: 0.97rem;
+            color: #1e293b;
+            line-height: 1.75;
+        }
+
+        .info-box strong {
+            color: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .section-heading  { font-size: 1.4rem; }
+            .contributor-card { padding: 20px 18px; }
+            .translators-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .callout-card { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="header-link">
+                <img src="thiruvalluvar-logo.svg" alt="Tiruvaḷḷuvar" class="site-logo">
+                <div class="header-text">
+                    <div class="site-title">திருக்குறள்</div>
+                    <div class="site-tagline">உலகப் பொதுமறை, வாழ்வின் கலை</div>
+                    <div class="site-subtitle">திருவள்ளுவர் அருளியது</div>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-translate="home">முகப்பு</a>
+                <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
+                <a href="contributors.html" class="nav-link active" data-translate="contributors_title">Contributors</a>
+            </div>
+            <div class="nav-controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                </select>
+                <button class="welcome-btn" onclick="openWelcomeModal()" title="Welcome Guide">ℹ️</button>
+            </div>
+            <!-- Hamburger: mobile only, always stays right via absolute positioning in CSS -->
+            <button class="nav-hamburger"
+                    onclick="this.closest('.nav').querySelector('.nav-links').classList.toggle('open')"
+                    aria-label="Toggle menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+
+            <div class="intro-section">
+                <h2>🙏 Contributors &amp; Resources</h2>
+                <p class="intro-text">This site stands on the shoulders of scholars, translators, and researchers who devoted years — sometimes lifetimes — to preserving and sharing the wisdom of Tiruvaḷḷuvar.</p>
+            </div>
+
+            <!-- ── Section 1: The Author ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">✍️</span> The Author
+                </h2>
+
+                <div class="contributor-card">
+                    <div class="contributor-name">திருவள்ளுவர் — Tiruvaḷḷuvar</div>
+                    <div class="contributor-name-secondary">Author of Tirukkuṟaḷ</div>
+                    <span class="contributor-role">Original Author</span>
+                    <p class="contributor-desc">
+                        Tiruvaḷḷuvar was a celebrated Tamil poet and philosopher whose exact dates remain a subject of scholarly debate — most place him between <strong>31 BCE and 1 CE</strong>. His masterwork, Tirukkuṟaḷ, comprises 1,330 couplets organised into 133 chapters across three books — Virtue (அறம்), Wealth (பொருள்), and Love (காமம்). Written in the highly compressed <em>kuṟaḷ veṇpā</em> meter, each couplet conveys profound wisdom in just seven words. The work transcends religion, caste, and culture, which is why it has been called the <em>உலகப் பொதுமறை</em> — the universal scripture of the world. It has been translated into over 80 languages and remains one of the most translated works of classical literature.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── Section 2: Tamil Commentators ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">📖</span> Tamil Commentators
+                </h2>
+
+                <p style="color: var(--text-light); margin-bottom: 24px; font-size: 1rem; line-height: 1.8;">
+                    Every kural on this site is accompanied by explanations from three revered Tamil scholars, each offering a distinct perspective — classical, contemporary, and rationalist.
+                </p>
+
+                <div class="contributor-card">
+                    <div class="contributor-name">மு. வரதராசனார் — Mu. Varadarasanar</div>
+                    <span class="contributor-role">Classical Commentary</span>
+                    <p class="contributor-desc">
+                        One of the foremost Tamil scholars of the 20th century, Mu. Varadarasanar's commentary is widely regarded as the definitive classical interpretation of Tirukkuṟaḷ. His explanations situate each couplet within the deep grammatical and literary traditions of classical Tamil (செம்மொழி), unpacking Valluvar's compressed verse with scholarly rigour and fidelity to the original meaning. His work remains the gold standard reference in Tamil universities and literary circles.
+                    </p>
+                </div>
+
+                <div class="contributor-card secondary">
+                    <div class="contributor-name">சாலமன் பாப்பையா — Solomon Pappaiah</div>
+                    <span class="contributor-role orange">Contemporary Commentary</span>
+                    <p class="contributor-desc">
+                        A beloved Tamil scholar and orator, Solomon Pappaiah's commentary brings Tirukkuṟaḷ to everyday readers with clarity and warmth. His explanations emphasise practical application — how Valluvar's wisdom applies to modern life, relationships, and governance. Pappaiah's accessible prose made the Tirukkuṟaḷ widely readable for a generation of Tamil speakers who found classical commentaries dense, and his lectures drew millions of listeners across Tamil Nadu.
+                    </p>
+                </div>
+
+                <div class="contributor-card secondary">
+                    <div class="contributor-name">கலைஞர் எம். கருணாநிதி — Kalaignar M. Karunanidhi</div>
+                    <span class="contributor-role orange">Modern Rationalist Commentary</span>
+                    <p class="contributor-desc">
+                        Five-time Chief Minister of Tamil Nadu and one of the towering figures of 20th-century Tamil politics and literature, Kalaignar Karunanidhi's commentary reads Tirukkuṟaḷ through a humanist and rationalist lens. His interpretations emphasise social justice, secular ethics, and democratic values — revealing how Valluvar's ancient wisdom resonates with modern progressive thought. Written in his characteristically vivid and poetic Tamil prose, these commentaries remain a landmark of contemporary Tamil literature.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── Section 3: English Translation ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">🇬🇧</span> English Translation — N.V.K. Ashraf
+                </h2>
+
+                <div class="callout-card">
+                    <div class="contributor-name">N.V.K. Ashraf</div>
+                    <div class="contributor-name-secondary">Researcher &amp; Curator of English Translations</div>
+                    <span class="contributor-role">Curated English Translation</span>
+                    <p class="contributor-desc">
+                        The English translations on this site are the result of an extraordinary 18-year research project by N.V.K. Ashraf, who systematically compared <strong>25+ scholarly English translations</strong> of Tirukkuṟaḷ to hand-pick the finest rendering of each of the 1,330 couplets. His selection criterion was faithfulness — which translation best captures Valluvar's legendary brevity, wordplay, and spirit in English. The result is a curated best-of anthology rather than a single translator's voice.
+                    </p>
+                    <p class="contributor-desc" style="margin-top: 12px;">
+                        Roughly <strong>33% of translations come from P.S. Sundaram</strong> (Penguin Classics, 1990) — widely considered the closest to Valluvar's terseness in English. Approximately <strong>15% are original translations by Ashraf himself</strong>. The remaining 50%+ are drawn from over 15 other translators, each credited with their initials alongside the translation.
+                    </p>
+                    <a class="contributor-link" href="https://kuraltranslations.blogspot.com" target="_blank" rel="noopener">
+                        🔗 Full methodology — kuraltranslations.blogspot.com
+                    </a>
+                </div>
+
+                <h3 style="color: var(--text-dark); font-size: 1.1rem; margin-bottom: 16px; margin-top: 30px;">Translators whose work Ashraf compared &amp; selected from:</h3>
+
+                <div class="info-box">
+                    Each translation on this site is credited with the original translator's initials in the attribution line. <strong>PS</strong> = P.S. Sundaram · <strong>GUP</strong> = G.U. Pope · <strong>RJ</strong> = Rajaji · <strong>VVS</strong> = V.V.S. Aiyar · <strong>NVKA</strong> = N.V.K. Ashraf (original) · and 15+ others.
+                </div>
+
+                <div class="translators-grid">
+                    <div class="translator-item">
+                        <div class="translator-name">P.S. Sundaram</div>
+                        <span class="translator-initials">PS</span>
+                        <p class="translator-note">Penguin Classics edition (1990). Ashraf's most-selected translator — praised for terseness and fidelity to Valluvar's brevity. Accounts for ~33% of the curated translations.</p>
+                    </div>
+                    <div class="translator-item">
+                        <div class="translator-name">Rev. G.U. Pope</div>
+                        <span class="translator-initials">GUP</span>
+                        <p class="translator-note">The pioneering 19th-century missionary scholar whose 1886 translation brought Tirukkuṟaḷ to the English-speaking world. Scholarly and meticulous, with extensive notes.</p>
+                    </div>
+                    <div class="translator-item">
+                        <div class="translator-name">C. Rajagopalachari (Rajaji)</div>
+                        <span class="translator-initials">RJ</span>
+                        <p class="translator-note">India's last Governor-General and a statesman-scholar, Rajaji's translations are elegant and readable, penned with a deep understanding of both Tamil and English literary traditions.</p>
+                    </div>
+                    <div class="translator-item">
+                        <div class="translator-name">V.V.S. Aiyar</div>
+                        <span class="translator-initials">VVS</span>
+                        <p class="translator-note">Revolutionary freedom fighter and Tamil scholar, Aiyar's translation captures the ethical force of Valluvar's verse with a directness that reflects his own principled character.</p>
+                    </div>
+                    <div class="translator-item">
+                        <div class="translator-name">N.V.K. Ashraf</div>
+                        <span class="translator-initials">NVKA</span>
+                        <p class="translator-note">Where no existing translation satisfied, Ashraf produced his own — accounting for approximately 15% of the curated set. These are original renderings developed through deep comparative study.</p>
+                    </div>
+                    <div class="translator-item">
+                        <div class="translator-name">15+ Other Translators</div>
+                        <span class="translator-initials">Various</span>
+                        <p class="translator-note">Including W.H. Drew, John Lazarus, K.M. Balasubramaniam, and others — each contributing select renderings where their version best captured Valluvar's original intent.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Section 4: Malayalam Translation ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">🌿</span> Malayalam Translation
+                </h2>
+
+                <div class="callout-card malayalam">
+                    <div class="contributor-name">V. V. Abdulla Sahib</div>
+                    <div class="contributor-name-secondary">വി. വി. അബ്ദുള്ള സാഹിബ്</div>
+                    <span class="contributor-role green">Malayalam Translation</span>
+                    <p class="contributor-desc">
+                        V. V. Abdulla Sahib is a Kerala-based scholar and linguist who undertook the significant work of translating Tirukkuṟaḷ's 1,330 couplets into Malayalam — bringing Valluvar's universal wisdom to one of India's richest literary traditions. Malayalam and Tamil share deep Dravidian roots, yet each has its own distinct literary character; rendering Valluvar's highly compressed <em>kuṟaḷ veṇpā</em> meter into Malayalam without losing its precision and depth requires both deep familiarity with classical Tamil and a refined command of Malayalam's own poetic sensibility.
+                    </p>
+                    <p class="contributor-desc" style="margin-top: 12px;">
+                        Abdulla Sahib's translation is notable for its faithfulness to the ethical and philosophical dimensions of the original — preserving the secular, universal spirit of Tirukkuṟaḷ for Malayalam readers across Kerala and the global Malayalam diaspora. His contribution makes this site one of the few platforms where Tirukkuṟaḷ is accessible in Malayalam with site-wide navigation support.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── Section 5: Site Development ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">💻</span> Site Development
+                </h2>
+
+                <div class="contributor-card blue">
+                    <div class="contributor-name">Gowdhaman Karthikeyan</div>
+                    <div class="contributor-name-secondary">கௌதமன் கார்த்திகேயன்</div>
+                    <span class="contributor-role blue">Developer &amp; Maintainer</span>
+                    <p class="contributor-desc">
+                        Built and maintains this free, ad-free web application dedicated to making Tirukkuṟaḷ accessible to readers worldwide. The site is built with <strong>pure vanilla JavaScript</strong> — no frameworks — keeping it fast and lightweight. Features include 14-language navigation, one-click Google Translate for 100+ languages, three Tamil commentaries per kural, N.V.K. Ashraf's curated English translations, dynamic SEO, and a fully responsive design for mobile, tablet, and desktop. All 1,330 kurals are available free, without ads or paywalls.
+                    </p>
+                    <a class="contributor-link" href="https://github.com/gowdhamankarthikeyan/Tirukkural" target="_blank" rel="noopener">
+                        🔗 Source code — github.com/gowdhamankarthikeyan/Tirukkural
+                    </a>
+                </div>
+            </div>
+
+            <!-- ── Section 6: Contribute ── -->
+            <div class="contributors-section">
+                <h2 class="section-heading">
+                    <span class="section-icon">🤝</span> Want to Contribute?
+                </h2>
+
+                <div class="contributor-card" style="border-left-color: #7c3aed;">
+                    <p class="contributor-desc">
+                        This is an open, community resource. Contributions are welcome in several ways:
+                    </p>
+                    <ul style="margin: 14px 0 0 20px; color: var(--text-dark); line-height: 2; font-size: 1rem;">
+                        <li><strong>Improve translations</strong> — If you find a better English rendering for any kural, open a GitHub issue with the kural number, current text, and suggested alternative with source.</li>
+                        <li><strong>Add a language</strong> — Fork the repo, add your language to <code>translations.json</code>, and submit a pull request. No code changes required.</li>
+                        <li><strong>Report bugs</strong> — Open a GitHub issue with your browser, OS, and steps to reproduce.</li>
+                        <li><strong>Suggest features</strong> — Open a GitHub issue with the prefix "Feature:"</li>
+                    </ul>
+                    <a class="contributor-link" href="https://github.com/gowdhamankarthikeyan/Tirukkural/issues" target="_blank" rel="noopener">
+                        🔗 Open an issue on GitHub
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 திருக்குறள் — கௌதமன் கார்த்திகேயன்</p>
+    </footer>
+
+    <script src="language.js"></script>
+</body>
+</html>
