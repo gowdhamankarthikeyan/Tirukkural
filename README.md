@@ -34,7 +34,7 @@ Every kural includes a carefully curated English translation assembled by resear
 - Every translation credited with the original translator's initials
 - Full methodology: https://kuraltranslations.blogspot.com
 
-### 🗣️ 5 Native Language Translations
+### 🗣️ 7 Native Language Translations
 Every kural is available in **7 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
 
 | Language | Translator / Source |
@@ -47,7 +47,7 @@ Every kural is available in **7 native translations** alongside the Tamil origin
 | 🇫🇷 Français (French) | Gnanou Diagou (Pondichery, 1942; Asian Educational Services reprint) |
 | 🇹🇼 中文 (Chinese) | Dr. Yu Hsi / 洪清宇 (Taipei, 2010; Tamil Nadu Govt reprint 2014) |
 
-### 🔊 Audio Playback in 6 Languages
+### 🔊 Audio Playback in 8 Languages
 Every kural includes an audio player powered by the device's native text-to-speech engine:
 
 | Language | TTS Code |
@@ -59,6 +59,7 @@ Every kural includes an audio player powered by the device's native text-to-spee
 | ಕನ್ನಡ (Kannada) | kn-IN |
 | తెలుగు (Telugu) | te-IN |
 | Français (French) | fr-FR |
+| 中文 (Chinese) | zh-CN |
 
 Audio buttons appear for Tamil always + the currently selected UI language. An **ⓘ help button** provides step-by-step voice download instructions for iPhone, Mac, Android and Windows.
 
