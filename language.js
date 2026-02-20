@@ -11,15 +11,32 @@ document.addEventListener('DOMContentLoaded', async function() {
     initializeLanguageDropdown();
 });
 
-// Load translations from JSON
+// Load translations — localStorage first (instant), fallback to fetch + cache
 async function loadTranslations() {
+    const CACHE_KEY = 'tirukkural_translations_v1';
     try {
+        // Try localStorage first — available synchronously on return visits
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const data = JSON.parse(cached);
+            translations = data.translations;
+            languageData = data.languages;
+            window.athikaram_names = data.athikaram_names;
+            // Refresh cache silently in background for future visits
+            fetch('translations.json')
+                .then(r => r.json())
+                .then(fresh => localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)))
+                .catch(() => {});
+            return;
+        }
+        // First visit — fetch, apply, then cache
         const response = await fetch('translations.json');
         const data = await response.json();
         translations = data.translations;
         languageData = data.languages;
-        // Store athikaram_names at window level for access by other scripts
         window.athikaram_names = data.athikaram_names;
+        // Cache for all future visits (happens while user reads welcome modal)
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
     } catch (error) {
         console.error('Error loading translations:', error);
     }

@@ -8,9 +8,27 @@ const _translationCache = {}; // tracks which langs have been loaded
 
 // Merge a split translation file's data into kuralData
 async function loadTranslationData(lang) {
-    if (!SPLIT_LANGS[lang]) return; // not a split lang
-    if (_translationCache[lang]) return; // already loaded
+    if (!SPLIT_LANGS[lang]) return;
+    if (_translationCache[lang]) return; // already merged this session
+    const CACHE_KEY = `tirukkural_trans_${lang}_v1`;
     try {
+        // Try localStorage first
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const data = JSON.parse(cached);
+            data.kural.forEach(t => {
+                const kural = kuralData[t.Number - 1];
+                if (kural) Object.assign(kural, t);
+            });
+            _translationCache[lang] = true;
+            // Refresh in background
+            fetch(`translations-${lang}.json`)
+                .then(r => r.json())
+                .then(fresh => localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)))
+                .catch(() => {});
+            return;
+        }
+        // Not cached yet — fetch, merge, then cache
         const res = await fetch(`translations-${lang}.json`);
         const data = await res.json();
         data.kural.forEach(t => {
@@ -18,6 +36,7 @@ async function loadTranslationData(lang) {
             if (kural) Object.assign(kural, t);
         });
         _translationCache[lang] = true;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
     } catch (e) {
         console.error(`Failed to load translations-${lang}.json`, e);
     }
@@ -153,11 +172,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Show skeleton immediately so the page feels responsive
     const kuralsContainer = document.getElementById('kurals-list');
     if (kuralsContainer) {
-        kuralsContainer.innerHTML = '<div class="loading">குறள்கள் ஏற்றுகிறது…</div>';
+        kuralsContainer.innerHTML = '<div class="loading">Loading…</div>';
     }
 
     // 1. Wait for language.js to finish loading translations
     await waitForTranslations();
+
+    // Now translations are ready — update loading text to the correct language
+    if (kuralsContainer && kuralsContainer.querySelector('.loading')) {
+        kuralsContainer.querySelector('.loading').textContent = window.t ? window.t('loading_kurals') : 'Loading…';
+    }
 
     // 2. Load athikarams metadata
     await new Promise(resolve => {
@@ -167,11 +191,23 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.head.appendChild(s);
     });
 
-    // 3. Load kural data
+    // 3. Load kural data — localStorage first for instant load on return visits
     try {
-        const response = await fetch('thirukkural.json');
-        const data = await response.json();
-        kuralData = data.kural;
+        const KURAL_CACHE_KEY = 'tirukkural_kural_data_v1';
+        const cached = localStorage.getItem(KURAL_CACHE_KEY);
+        if (cached) {
+            kuralData = JSON.parse(cached);
+            // Refresh in background silently
+            fetch('thirukkural.json')
+                .then(r => r.json())
+                .then(fresh => localStorage.setItem(KURAL_CACHE_KEY, JSON.stringify(fresh.kural)))
+                .catch(() => {});
+        } else {
+            const response = await fetch('thirukkural.json');
+            const data = await response.json();
+            kuralData = data.kural;
+            try { localStorage.setItem(KURAL_CACHE_KEY, JSON.stringify(data.kural)); } catch(e) {}
+        }
     } catch (e) {
         if (kuralsContainer) kuralsContainer.innerHTML =
             '<div class="loading">தரவு ஏற்றுவதில் பிழை. பக்கத்தை மீண்டும் ஏற்றவும்.</div>';
