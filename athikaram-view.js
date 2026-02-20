@@ -13,7 +13,8 @@ const SPLIT_LANGS = {
     te: { fields: ['telugu1',   'telugu2'],   ttsCode: 'te-IN', ttsLabel: 'తెలుగు'   },
     fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'    },
     zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'    },
-    ru: { fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU', ttsLabel: 'Pусский' },
+    ru: { fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU', ttsLabel: 'Русский' },
+    de: { fields: ['german1',  'german2'],  ttsCode: 'de-DE', ttsLabel: 'Deutsch' },
 };
 const _translationCache = {}; // tracks which langs have been loaded
 
