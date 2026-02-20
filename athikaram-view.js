@@ -7,12 +7,13 @@ let currentAthikaramId = 1;
 // To add a new language: add one entry here only — audio is registered automatically.
 // ttsCode: BCP-47 tag for Web Speech API (omit if no TTS support for that language)
 const SPLIT_LANGS = {
-    hi: { fields: ['hindi1',    'hindi2'],    ttsCode: 'hi-IN', ttsLabel: 'हिंदी'    },
-    ml: { fields: ['malayalam1','malayalam2'], ttsCode: 'ml-IN', ttsLabel: 'മലയാളം'   },
-    kn: { fields: ['kannada1',  'kannada2'],  ttsCode: 'kn-IN', ttsLabel: 'ಕನ್ನಡ'    },
+    hi: { fields: ['hindi1',    'hindi2'],    ttsCode: 'hi-IN', ttsLabel: 'हिंदी'     },
+    ml: { fields: ['malayalam1','malayalam2'], ttsCode: 'ml-IN', ttsLabel: 'മലയാളം'     },
+    kn: { fields: ['kannada1',  'kannada2'],  ttsCode: 'kn-IN', ttsLabel: 'ಕನ್ನಡ'     },
     te: { fields: ['telugu1',   'telugu2'],   ttsCode: 'te-IN', ttsLabel: 'తెలుగు'   },
-    fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'  },
-    zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'       },
+    fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'    },
+    zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'    },
+    ru: { fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU', ttsLabel: 'Pусский' },
 };
 const _translationCache = {}; // tracks which langs have been loaded
 
