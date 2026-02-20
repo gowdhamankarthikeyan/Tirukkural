@@ -12,6 +12,7 @@ const SPLIT_LANGS = {
     kn: { fields: ['kannada1',  'kannada2'],  ttsCode: 'kn-IN', ttsLabel: 'ಕನ್ನಡ'    },
     te: { fields: ['telugu1',   'telugu2'],   ttsCode: 'te-IN', ttsLabel: 'తెలుగు'   },
     fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'  },
+    zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'       },
 };
 const _translationCache = {}; // tracks which langs have been loaded
 
@@ -694,7 +695,7 @@ function showAudioHelpModal(e) {
                     </ol>
                 </div>
 
-                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi, French) may require a one-time voice download.</p>
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi, French, Chinese) may require a one-time voice download.</p>
             </div>
         `;
         modal.addEventListener('click', function(ev) {
