@@ -2,8 +2,17 @@
 let kuralData = null;
 let currentAthikaramId = 1;
 
-// Languages that live in separate translation files (lazy-loaded)
-const SPLIT_LANGS = { hi: true, ml: true, kn: true, te: true };
+// Languages that live in separate thirukkural-{lang}.json files (lazy-loaded)
+// fields: the two field names inside each kural object for that language
+// To add a new language: add one entry here only — audio is registered automatically.
+// ttsCode: BCP-47 tag for Web Speech API (omit if no TTS support for that language)
+const SPLIT_LANGS = {
+    hi: { fields: ['hindi1',    'hindi2'],    ttsCode: 'hi-IN', ttsLabel: 'हिंदी'    },
+    ml: { fields: ['malayalam1','malayalam2'], ttsCode: 'ml-IN', ttsLabel: 'മലയാളം'   },
+    kn: { fields: ['kannada1',  'kannada2'],  ttsCode: 'kn-IN', ttsLabel: 'ಕನ್ನಡ'    },
+    te: { fields: ['telugu1',   'telugu2'],   ttsCode: 'te-IN', ttsLabel: 'తెలుగు'   },
+    fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'  },
+};
 const _translationCache = {}; // tracks which langs have been loaded
 
 // Merge a split translation file's data into kuralData
@@ -22,14 +31,14 @@ async function loadTranslationData(lang) {
             });
             _translationCache[lang] = true;
             // Refresh in background
-            fetch(`translations-${lang}.json`)
+            fetch(`thirukkural-${lang}.json`)
                 .then(r => r.json())
                 .then(fresh => localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)))
                 .catch(() => {});
             return;
         }
         // Not cached yet — fetch, merge, then cache
-        const res = await fetch(`translations-${lang}.json`);
+        const res = await fetch(`thirukkural-${lang}.json`);
         const data = await res.json();
         data.kural.forEach(t => {
             const kural = kuralData[t.Number - 1];
@@ -38,21 +47,23 @@ async function loadTranslationData(lang) {
         _translationCache[lang] = true;
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
     } catch (e) {
-        console.error(`Failed to load translations-${lang}.json`, e);
+        console.error(`Failed to load thirukkural-${lang}.json`, e);
     }
 }
 
 // ============================================================
-// TTS CONFIG
+// TTS CONFIG — Tamil + English always present.
+// All SPLIT_LANGS entries with a ttsCode are registered automatically.
 // ============================================================
 const TTS_LANGUAGES = {
-    ta: { code: 'ta-IN',                    label: 'தமிழ்',   fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
-    en: { code: 'en-IN', fallback: 'en-US', label: 'English',  fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
-    hi: { code: 'hi-IN',                    label: 'हिंदी',   fields: ['hindi1', 'hindi2'],                 audioPath: 'hi' },
-    ml: { code: 'ml-IN',                    label: 'മലയാളം',  fields: ['malayalam1', 'malayalam2'],         audioPath: 'ml' },
-    te: { code: 'te-IN',                    label: 'తెలుగు',  fields: ['telugu1', 'telugu2'],               audioPath: 'te' },
-    kn: { code: 'kn-IN',                    label: 'ಕನ್ನಡ',  fields: ['kannada1', 'kannada2'],             audioPath: 'kn' },
+    ta: { code: 'ta-IN',                     label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
+    en: { code: 'en-IN', fallback: 'en-US',  label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
 };
+Object.entries(SPLIT_LANGS).forEach(([lang, cfg]) => {
+    if (cfg.ttsCode) {
+        TTS_LANGUAGES[lang] = { code: cfg.ttsCode, label: cfg.ttsLabel, fields: cfg.fields, audioPath: lang };
+    }
+});
 
 const AUDIO_BASE = '/audio';
 
@@ -342,29 +353,26 @@ function createKuralCard(kural, athikaram) {
     let line2Display = kural.transliteration2 || '';
     let isBharatiVerse = false;
 
-    // For Indian languages with native translations, show those instead of transliteration
     if (currentLang === 'en' && kural.bharati_verse1 && kural.bharati_verse2) {
-        // English selected: show Shuddhananda Bharatiar's poetic verse
+        // English: show Shuddhananda Bharatiar's poetic verse
         line1Display = kural.bharati_verse1;
         line2Display = kural.bharati_verse2;
         isBharatiVerse = true;
-    } else if (currentLang === 'hi' && kural.hindi1 && kural.hindi2) {
-        line1Display = kural.hindi1;
-        line2Display = kural.hindi2;
-    } else if (currentLang === 'te' && kural.telugu1 && kural.telugu2) {
-        line1Display = kural.telugu1;
-        line2Display = kural.telugu2;
-    } else if (currentLang === 'ml' && kural.malayalam1 && kural.malayalam2) {
-        line1Display = kural.malayalam1;
-        line2Display = kural.malayalam2;
-    } else if (currentLang === 'kn' && kural.kannada1 && kural.kannada2) {
-        line1Display = kural.kannada1;
-        line2Display = kural.kannada2;
-    } else if (currentLang === 'bn' && kural.bengali1 && kural.bengali2) {
-        line1Display = kural.bengali1;
-        line2Display = kural.bengali2;
+    } else if (SPLIT_LANGS[currentLang]) {
+        // Any language with a thirukkural-{lang}.json file — use its fields if loaded,
+        // otherwise fall back to English transliteration
+        const [f1, f2] = SPLIT_LANGS[currentLang].fields;
+        if (kural[f1] && kural[f2]) {
+            line1Display = kural[f1];
+            line2Display = kural[f2];
+        } else if (kural.bharati_verse1 && kural.bharati_verse2) {
+            // Translation file not yet loaded — fall back to English
+            line1Display = kural.bharati_verse1;
+            line2Display = kural.bharati_verse2;
+            isBharatiVerse = true;
+        }
     }
-    // Else: use transliteration (default for Tamil, Spanish, French, etc.)
+    // All other languages (ta, es, de, zh, ar, ru, ja…): use transliteration
     
     // Get translated text
     const kuralText = window.t ? window.t('couplet') : 'குறள்';
