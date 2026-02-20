@@ -256,6 +256,7 @@ Audio uses the Web Speech API (SpeechSynthesis) — no server-side audio files r
 | Kannada | kn-IN | — |
 | Telugu | te-IN | — |
 | French | fr-FR | — |
+| Chinese | zh-CN | — |
 
 ### Troubleshooting Audio
 If a language doesn't play, the **ⓘ** button next to the audio player provides step-by-step voice download instructions for each platform:
