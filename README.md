@@ -1,13 +1,13 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
-A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation, 5 native language translations, audio playback in 6 languages, and support for 100+ languages via Google Translate.
+A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation, 6 native language translations, audio playback in 7 languages, and support for 100+ languages via Google Translate.
 
 🌐 **Live site:** https://tirukkural.in
 
 ![Version](https://img.shields.io/badge/version-1.6-blue)
 ![Languages](https://img.shields.io/badge/navigation-14%20languages-green)
-![Native Translations](https://img.shields.io/badge/native%20translations-5%20languages-orange)
-![Audio](https://img.shields.io/badge/audio-6%20languages-red)
+![Native Translations](https://img.shields.io/badge/native%20translations-6%20languages-orange)
+![Audio](https://img.shields.io/badge/audio-7%20languages-red)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
 ---
@@ -35,15 +35,16 @@ Every kural includes a carefully curated English translation assembled by resear
 - Full methodology: https://kuraltranslations.blogspot.com
 
 ### 🗣️ 5 Native Language Translations
-Every kural is available in **5 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
+Every kural is available in **6 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
 
 | Language | Translator / Source |
 |---|---|
 | 🇬🇧 English | N.V.K. Ashraf (curated from 25+ scholars) |
-| 🇮🇳 हिंदी (Hindi) | Classical Hindi translation |
+| 🇮🇳 हिंदी (Hindi) | Shri Rama Sharma |
 | 🇮🇳 മലയാളം (Malayalam) | V. V. Abdulla Sahib |
 | 🇮🇳 ಕನ್ನಡ (Kannada) | ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ — Madurai Kamaraj University Press |
 | 🇮🇳 తెలుగు (Telugu) | Gurucharan |
+| 🇫🇷 Français (French) | Gnanou Diagou (Pondichery, 1942; Asian Educational Services reprint) |
 
 ### 🔊 Audio Playback in 6 Languages
 Every kural includes an audio player powered by the device's native text-to-speech engine:
@@ -56,10 +57,11 @@ Every kural includes an audio player powered by the device's native text-to-spee
 | മലയാളം (Malayalam) | ml-IN |
 | ಕನ್ನಡ (Kannada) | kn-IN |
 | తెలుగు (Telugu) | te-IN |
+| Français (French) | fr-FR |
 
 Audio buttons appear for Tamil always + the currently selected UI language. An **ⓘ help button** provides step-by-step voice download instructions for iPhone, Mac, Android and Windows.
 
-> **Tip:** English audio works on most devices without any setup. Other languages may require a one-time voice download in device settings.
+> **Tip:** English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French) may require a one-time voice download in device settings.
 
 ### 🌍 100+ Language Support via Google Translate
 Every kural's Tamil commentaries and English translation can be instantly translated into **100+ languages** with one click — giving Tamil diaspora worldwide and non-Tamil readers access to Valluvar's wisdom in their own language.
@@ -147,10 +149,11 @@ tirukkural/
 ├── athikarams.js           # Chapter listing logic
 ├── athikaram-view.js       # Chapter view logic + TTS audio + dynamic SEO updater
 ├── thirukkural.json        # Core kural database — Tamil + English + commentaries (~2MB)
-├── translations-hi.json    # Hindi translations — lazy loaded (~300KB)
-├── translations-ml.json    # Malayalam translations — lazy loaded (~373KB)
-├── translations-kn.json    # Kannada translations — lazy loaded (~437KB)
-├── translations-te.json    # Telugu translations — lazy loaded (~255KB)
+├── thirukkural-hi.json     # Hindi translations — lazy loaded (~300KB)
+├── thirukkural-ml.json     # Malayalam translations — lazy loaded (~373KB)
+├── thirukkural-kn.json     # Kannada translations — lazy loaded (~437KB)
+├── thirukkural-te.json     # Telugu translations — lazy loaded (~255KB)
+├── thirukkural-fr.json     # French translations — lazy loaded (~310KB)
 ├── thiruvalluvar-logo.svg  # Logo
 ├── sitemap.xml             # 136-URL sitemap for Google/Bing
 ├── robots.txt              # Crawler instructions
@@ -212,7 +215,7 @@ Files: `translations-hi.json`, `translations-ml.json`, `translations-kn.json`, `
 1. **UI Translation** — All buttons, labels and navigation translate to the selected language
 2. **Chapter Names** — Tamil + 5 Indian languages show native translations; other languages show English
 3. **Commentary Translation** — One-click Google Translate opens any Tamil commentary in the user's chosen language
-4. **Native Translation** — Hindi, Malayalam, Kannada and Telugu translations lazy-loaded on first language selection
+4. **Native Translation** — Hindi, Malayalam, Kannada, Telugu and French translations lazy-loaded on first language selection
 5. **English Translation** — Always loaded as part of the core dataset
 6. **Persistent State** — Language preference saved in cookies
 
@@ -222,10 +225,11 @@ Translation files are split by language and fetched only when that language is f
 | File | Size | When Loaded |
 |---|---|---|
 | thirukkural.json | ~2MB | Always (page load) |
-| translations-hi.json | ~300KB | On Hindi selection |
-| translations-ml.json | ~373KB | On Malayalam selection |
-| translations-kn.json | ~437KB | On Kannada selection |
-| translations-te.json | ~255KB | On Telugu selection |
+| thirukkural-hi.json | ~300KB | On Hindi selection |
+| thirukkural-ml.json | ~373KB | On Malayalam selection |
+| thirukkural-kn.json | ~437KB | On Kannada selection |
+| thirukkural-te.json | ~255KB | On Telugu selection |
+| thirukkural-fr.json | ~310KB | On French selection |
 
 ---
 
@@ -247,6 +251,7 @@ Audio uses the Web Speech API (SpeechSynthesis) — no server-side audio files r
 | Malayalam | ml-IN | — |
 | Kannada | kn-IN | — |
 | Telugu | te-IN | — |
+| French | fr-FR | — |
 
 ### Troubleshooting Audio
 If a language doesn't play, the **ⓘ** button next to the audio player provides step-by-step voice download instructions for each platform:
@@ -332,13 +337,13 @@ Click the **ⓘ** button on any audio player for device-specific voice download 
 ## 🏆 Version History
 
 ### v1.6 — Native Translations, Audio Expansion & Performance (February 2026)
-- **5 native language translations** — Malayalam (V.V. Abdulla Sahib), Kannada (ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ / Madurai Kamaraj University), Telugu (Gurucharan), Hindi — all with full attribution in `contributors.html`
+- **6 native language translations** — Malayalam (V.V. Abdulla Sahib), Kannada (ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ / Madurai Kamaraj University), Telugu (Gurucharan), Hindi (Shri Rama Sharma), French (Gnanou Diagou, 1942) — all with full attribution in `contributors.html`
 - **JSON splitting** — `thirukkural.json` split into core (~2MB) + 4 lazy-loaded language files; initial page load reduced from 3.5MB to 2MB
-- **Audio in 6 languages** — Tamil, English, Hindi, Malayalam, Kannada, Telugu via Web Speech API
+- **Audio in 7 languages** — Tamil, English, Hindi, Malayalam, Kannada, Telugu, French via Web Speech API
 - **Audio pre-loading fix** — Split translation file pre-fetched on init for the current UI language so audio buttons appear correctly on first load without requiring a language switch
 - **Audio help modal** — ⓘ button with step-by-step voice download instructions for iPhone, Mac, Android and Windows
 - Bengali hidden from language dropdown (data retained, re-enableable)
-- Welcome modal updated — 5 native translations, 6-language audio
+- Welcome modal updated — 6 native translations, 7-language audio
 - `contributors.html` updated with Telugu and Kannada translation sections
 
 ### v1.5 — SEO, Ashraf Translations & Domain (February 2026)
@@ -396,6 +401,8 @@ Please credit:
 - **V.V. Abdulla Sahib** — Malayalam translation
 - **ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ** — Kannada translation (Madurai Kamaraj University Press)
 - **Gurucharan** — Telugu translation
+- **Gnanou Diagou** — French translation (1942, Pondichery; Asian Educational Services reprint)
+- **Shri Rama Sharma** — Hindi translation
 
 ---
 
@@ -409,6 +416,8 @@ Please credit:
 - **V.V. Abdulla Sahib** — Malayalam translation
 - **ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ** — Kannada translation
 - **Gurucharan** — Telugu translation
+- **Gnanou Diagou** — French translation (1942)
+- **Shri Rama Sharma** — Hindi translation
 - All 25+ English translators whose work Ashraf compared — P.S. Sundaram, G.U. Pope, Rajaji, V.V.S. Aiyar and many more
 
 ---
@@ -431,7 +440,7 @@ Please credit:
 
 - **Frontend** — Vanilla JavaScript (ES6+), no frameworks
 - **Styling** — CSS3 with CSS Variables
-- **Data** — JSON (thirukkural.json ~2MB core + 4 lazy-loaded translation files, translations.json)
+- **Data** — JSON (thirukkural.json ~2MB core + 5 lazy-loaded translation files, translations.json)
 - **Audio** — Web Speech API (SpeechSynthesis) — 6 languages, no server-side audio files
 - **Analytics** — GoatCounter (privacy-friendly, no cookies)
 - **Comments** — Disqus

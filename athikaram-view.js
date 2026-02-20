@@ -694,7 +694,7 @@ function showAudioHelpModal(e) {
                     </ol>
                 </div>
 
-                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi) may require a one-time voice download.</p>
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi, French) may require a one-time voice download.</p>
             </div>
         `;
         modal.addEventListener('click', function(ev) {
