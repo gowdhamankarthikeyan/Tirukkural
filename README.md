@@ -63,6 +63,9 @@ Every kural includes an audio player powered by the device's native text-to-spee
 | తెలుగు (Telugu) | te-IN |
 | Français (French) | fr-FR |
 | 中文 (Chinese) | zh-CN |
+| Русский (Russian) | ru-RU |
+| Deutsch (German) | de-DE |
+| 🇸🇦 العربية (Arabic) | ar-AE | 
 
 Audio buttons appear for Tamil always + the currently selected UI language. An **ⓘ help button** provides step-by-step voice download instructions for iPhone, Mac, Android and Windows.
 
@@ -82,7 +85,6 @@ The entire site interface — menus, labels, chapter names, buttons — translat
 | 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch (German) |
 | 🇮🇳 ಕನ್ನಡ (Kannada) | 🇹🇼 中文 (Chinese) |
 | 🇷🇺 Русский (Russian) | 🇩🇪 Deutsch (German) |
-| 🇸🇦 العربية (Arabic) | |
 | | 🇸🇦 العربية (Arabic) |
 | | 🇷🇺 Русский (Russian) |
 | | 🇯🇵 日本語 (Japanese) |
