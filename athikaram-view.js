@@ -14,7 +14,8 @@ const SPLIT_LANGS = {
     fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'    },
     zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'    },
     ru: { fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU', ttsLabel: 'Русский' },
-    de: { fields: ['german1',  'german2'],  ttsCode: 'de-DE', ttsLabel: 'Deutsch' },
+    de: { fields: ['german1',  'german2'],  ttsCode: 'de-DE', ttsLabel: 'Deutsch'   },
+    ar: { fields: ['arabic1',  'arabic2'],  ttsCode: 'ar-SA', ttsLabel: 'العربية'  },
 };
 const _translationCache = {}; // tracks which langs have been loaded
 
@@ -356,26 +357,25 @@ function createKuralCard(kural, athikaram) {
     let line2Display = kural.transliteration2 || '';
     let isBharatiVerse = false;
 
-    if (currentLang === 'en' && kural.bharati_verse1 && kural.bharati_verse2) {
-        // English: show Shuddhananda Bharatiar's poetic verse
-        line1Display = kural.bharati_verse1;
-        line2Display = kural.bharati_verse2;
-        isBharatiVerse = true;
-    } else if (SPLIT_LANGS[currentLang]) {
-        // Any language with a thirukkural-{lang}.json file — use its fields if loaded,
-        // otherwise fall back to English transliteration
+    // Req 2: Tamil — transliteration (default, already set)
+    // Req 3: Other SPLIT_LANGS — native translation, fall back to Ashraf
+    // Req 4: English — Ashraf's curated lines
+    if (currentLang === 'en') {
+        if (kural.ashraf_line1 && kural.ashraf_line2) {
+            line1Display = kural.ashraf_line1;
+            line2Display = kural.ashraf_line2;
+        }
+    } else if (currentLang !== 'ta' && SPLIT_LANGS[currentLang]) {
         const [f1, f2] = SPLIT_LANGS[currentLang].fields;
         if (kural[f1] && kural[f2]) {
             line1Display = kural[f1];
             line2Display = kural[f2];
-        } else if (kural.bharati_verse1 && kural.bharati_verse2) {
-            // Translation file not yet loaded — fall back to English
-            line1Display = kural.bharati_verse1;
-            line2Display = kural.bharati_verse2;
-            isBharatiVerse = true;
+        } else if (kural.ashraf_line1 && kural.ashraf_line2) {
+            // Translation file not yet loaded — fall back to Ashraf
+            line1Display = kural.ashraf_line1;
+            line2Display = kural.ashraf_line2;
         }
     }
-    // All other languages (ta, es, de, zh, ar, ru, ja…): use transliteration
     
     // Get translated text
     const kuralText = window.t ? window.t('couplet') : 'குறள்';
@@ -388,6 +388,7 @@ function createKuralCard(kural, athikaram) {
     card.innerHTML = `
         <div class="kural-card-header">
             <div class="kural-number-small">${kuralText} ${kural.Number}</div>
+            <a href="kural.html?id=${kural.Number}" class="kural-view-btn" title="Read this kural">📖 Read</a>
         </div>
         
         <div class="kural-text-section-compact">
@@ -395,9 +396,11 @@ function createKuralCard(kural, athikaram) {
                 <span class="kural-line">${line1Words.join(' ')}</span>
                 <span class="kural-line">${line2Words.join(' ')}</span>
             </div>
-            <div class="transliteration-compact${isBharatiVerse ? ' bharati-verse' : ''}">
+            <div class="kural-separator" aria-hidden="true"><span>◇ · ◈ · ◇</span></div>
+            <div class="transliteration-compact">
                 <span class="transliteration-line">${line1Display}</span>
                 <span class="transliteration-line">${line2Display}</span>
+                ${currentLang === 'en' && kural.ashraf_attr ? `<div class="ashraf-attribution">— ${kural.ashraf_attr} · curated by <a href="contributors.html#english-translation" class="attribution-link" target="_blank">N.V.K. Ashraf</a></div>` : ''}
             </div>
             ${createAudioHTML(kural)}
         </div>
@@ -435,19 +438,6 @@ function createKuralCard(kural, athikaram) {
             ` : ''}
         </div>
 
-        ${kural.ashraf ? `
-        <div class="english-translation-section">
-            <div class="english-translation-header">
-                <div class="english-translation-label">English</div>
-            </div>
-            <div class="english-translation-text">${kural.ashraf}</div>
-            <div class="english-attribution">
-                — ${kural.ashraf_attr || 'N.V.K. Ashraf'} · curated by
-                <a href="contributors.html" class="attribution-link" target="_blank">N.V.K. Ashraf</a>
-            </div>
-            <button class="english-translate-btn" data-text="${escapeHtml(kural.ashraf)}">${translateBtn}</button>
-        </div>
-        ` : ''}
     `;
     
     return card;
@@ -611,36 +601,49 @@ function setupExplanationTranslateButtons() {
 }
 
 function setupNavigation() {
-    const prevBtn = document.getElementById('prev-athikaram');
-    const nextBtn = document.getElementById('next-athikaram');
-    
-    prevBtn.addEventListener('click', function() {
+    const prevBtn    = document.getElementById('prev-athikaram');
+    const nextBtn    = document.getElementById('next-athikaram');
+    const prevBtnTop = document.getElementById('prev-athikaram-top');
+    const nextBtnTop = document.getElementById('next-athikaram-top');
+
+    function goPrev() {
         if (currentAthikaramId > 1) {
             currentAthikaramId--;
             displayAthikaram(currentAthikaramId);
             updateNavigationButtons();
             window.scrollTo(0, 0);
         }
-    });
-    
-    nextBtn.addEventListener('click', function() {
+    }
+    function goNext() {
         if (currentAthikaramId < 133) {
             currentAthikaramId++;
             displayAthikaram(currentAthikaramId);
             updateNavigationButtons();
             window.scrollTo(0, 0);
         }
-    });
-    
+    }
+
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+    prevBtnTop.addEventListener('click', goPrev);
+    nextBtnTop.addEventListener('click', goNext);
+
     updateNavigationButtons();
 }
 
 function updateNavigationButtons() {
-    const prevBtn = document.getElementById('prev-athikaram');
-    const nextBtn = document.getElementById('next-athikaram');
-    
-    prevBtn.disabled = currentAthikaramId <= 1;
-    nextBtn.disabled = currentAthikaramId >= 133;
+    const prevBtn    = document.getElementById('prev-athikaram');
+    const nextBtn    = document.getElementById('next-athikaram');
+    const prevBtnTop = document.getElementById('prev-athikaram-top');
+    const nextBtnTop = document.getElementById('next-athikaram-top');
+
+    const atStart = currentAthikaramId <= 1;
+    const atEnd   = currentAthikaramId >= 133;
+
+    prevBtn.disabled    = atStart;
+    nextBtn.disabled    = atEnd;
+    prevBtnTop.disabled = atStart;
+    nextBtnTop.disabled = atEnd;
 }
 
 // ── Audio Help Modal ──
@@ -697,7 +700,7 @@ function showAudioHelpModal(e) {
                     </ol>
                 </div>
 
-                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Telugu, Kannada, Malayalam, Hindi, French, Chinese) may require a one-time voice download.</p>
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French, Chinese, Russian, German, Arabic) may require a one-time voice download.</p>
             </div>
         `;
         modal.addEventListener('click', function(ev) {

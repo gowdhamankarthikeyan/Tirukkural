@@ -1,13 +1,13 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
-A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation, 9 native language translations, audio playback in 10 languages, and support for 100+ languages via Google Translate.
+A free, ad-free web application for exploring the timeless wisdom of Tirukkuṟaḷ (திருக்குறள்) — all 1,330 couplets across 133 chapters, with Tamil text, transliteration, three classical Tamil commentaries, curated English translation, 10 native language translations, audio playback in 11 languages, and support for 100+ languages via Google Translate.
 
 🌐 **Live site:** https://tirukkural.in
 
 ![Version](https://img.shields.io/badge/version-1.6-blue)
 ![Languages](https://img.shields.io/badge/navigation-14%20languages-green)
-![Native Translations](https://img.shields.io/badge/native%20translations-9%20languages-orange)
-![Audio](https://img.shields.io/badge/audio-10%20languages-red)
+![Native Translations](https://img.shields.io/badge/native%20translations-10%20languages-orange)
+![Audio](https://img.shields.io/badge/audio-11%20languages-red)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
 ---
@@ -34,8 +34,8 @@ Every kural includes a carefully curated English translation assembled by resear
 - Every translation credited with the original translator's initials
 - Full methodology: https://kuraltranslations.blogspot.com
 
-### 🗣️ 9 Native Language Translations
-Every kural is available in **9 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
+### 🗣️ 10 Native Language Translations
+Every kural is available in **10 native translations** alongside the Tamil original — loaded on demand without impacting initial page load:
 
 | Language | Translator / Source |
 |---|---|
@@ -48,8 +48,9 @@ Every kural is available in **9 native translations** alongside the Tamil origin
 | 🇹🇼 中文 (Chinese) | Dr. Yu Hsi / 洪清宇 (Taipei, 2010; Tamil Nadu Govt reprint 2014) |
 | 🇷🇺 Русский (Russian) | Vithali Furniki (Vasanta Library, Moscow, 1991) |
 | 🇩🇪 Deutsch (German) | Albrecht Frenz & K. Lalithambal (Galaxy Press, Madurai, 1977) |
+| 🇸🇦 العربية (Arabic) | Dr. Yousuf Kokan; digitised by Dr. N.V. Ahmed Unni; proofread by Dr. C. Saidalavi (Unity College, Manjeri) |
 
-### 🔊 Audio Playback in 10 Languages
+### 🔊 Audio Playback in 11 Languages
 Every kural includes an audio player powered by the device's native text-to-speech engine:
 
 | Language | TTS Code |
@@ -81,6 +82,7 @@ The entire site interface — menus, labels, chapter names, buttons — translat
 | 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch (German) |
 | 🇮🇳 ಕನ್ನಡ (Kannada) | 🇹🇼 中文 (Chinese) |
 | 🇷🇺 Русский (Russian) | 🇩🇪 Deutsch (German) |
+| 🇸🇦 العربية (Arabic) | |
 | | 🇸🇦 العربية (Arabic) |
 | | 🇷🇺 Русский (Russian) |
 | | 🇯🇵 日本語 (Japanese) |
@@ -161,7 +163,8 @@ tirukkural/
 ├── thirukkural-fr.json     # French translations — lazy loaded (~310KB)
 ├── thirukkural-zh.json     # Mandarin Chinese translations
 ├── thirukkural-ru.json     # Russian translations — lazy loaded
-├── thirukkural-de.json     # German translations — lazy loaded — lazy loaded (~400KB)
+├── thirukkural-de.json     # German translations — lazy loaded
+├── thirukkural-ar.json     # Arabic translations — lazy loaded — lazy loaded (~400KB)
 ├── thiruvalluvar-logo.svg  # Logo
 ├── sitemap.xml             # 136-URL sitemap for Google/Bing
 ├── robots.txt              # Crawler instructions
@@ -241,6 +244,7 @@ Translation files are split by language and fetched only when that language is f
 | thirukkural-zh.json | ~400KB | On Chinese selection |
 | thirukkural-ru.json | — | On Russian selection |
 | thirukkural-de.json | — | On German selection |
+| thirukkural-ar.json | — | On Arabic selection |
 | thirukkural-zh.json | ~400KB | On Chinese selection |
 
 ---
@@ -350,13 +354,13 @@ Click the **ⓘ** button on any audio player for device-specific voice download 
 ## 🏆 Version History
 
 ### v1.6 — Native Translations, Audio Expansion & Performance (February 2026)
-- **9 native language translations** — Malayalam (V.V. Abdulla Sahib), Kannada (ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ / Madurai Kamaraj University), Telugu (Gurucharan), Hindi (M.G. Venkatakrishnan, 1964), French (Gnanou Diagou, 1942), Chinese/Mandarin (Dr. Yu Hsi, 2010), Russian (Vithali Furniki, 1991), German (Albrecht Frenz & K. Lalithambal, 1977) — all with full attribution in `contributors.html`
+- **10 native language translations** — Malayalam (V.V. Abdulla Sahib), Kannada (ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ / Madurai Kamaraj University), Telugu (Gurucharan), Hindi (M.G. Venkatakrishnan, 1964), French (Gnanou Diagou, 1942), Chinese/Mandarin (Dr. Yu Hsi, 2010), Russian (Vithali Furniki, 1991), German (Albrecht Frenz & K. Lalithambal, 1977), Arabic (Dr. Yousuf Kokan) — all with full attribution in `contributors.html`
 - **JSON splitting** — `thirukkural.json` split into core (~2MB) + 4 lazy-loaded language files; initial page load reduced from 3.5MB to 2MB
-- **Audio in 10 languages** — Tamil, English, Hindi, Malayalam, Kannada, Telugu, French, Chinese (Mandarin), Russian, German via Web Speech API
+- **Audio in 11 languages** — Tamil, English, Hindi, Malayalam, Kannada, Telugu, French, Chinese (Mandarin), Russian, German, Arabic via Web Speech API
 - **Audio pre-loading fix** — Split translation file pre-fetched on init for the current UI language so audio buttons appear correctly on first load without requiring a language switch
 - **Audio help modal** — ⓘ button with step-by-step voice download instructions for iPhone, Mac, Android and Windows
 - Bengali hidden from language dropdown (data retained, re-enableable)
-- Welcome modal updated — 9 native translations, 10-language audio
+- Welcome modal updated — 10 native translations, 11-language audio
 - `contributors.html` updated with Telugu and Kannada translation sections
 
 ### v1.5 — SEO, Ashraf Translations & Domain (February 2026)

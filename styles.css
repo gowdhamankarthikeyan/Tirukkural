@@ -606,12 +606,12 @@ img, iframe, video {
 
 .transliteration {
     font-size: 1.1rem;
-    color: var(--text-light);
-    font-style: italic;
+    color: var(--text-dark);
+    font-style: normal;
+    font-weight: 500;
     text-align: center;
     margin-top: 5px;
     line-height: 1.3;
-    white-space: pre-line;
 }
 
 .transliteration-line {
@@ -725,10 +725,33 @@ img, iframe, video {
     padding: 40px;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    margin-bottom: 30px;
     text-align: center;
-    border-left: 6px solid var(--primary-color);
+    position: relative;
+    border: 2px solid #c8964a;
+    box-shadow:
+        0 0 0 5px white,
+        0 0 0 7px #c8964a,
+        0 0 0 12px white,
+        0 0 0 13px rgba(200, 150, 74, 0.35);
+    margin-bottom: 44px;
 }
+
+.athikaram-header-box::before,
+.athikaram-header-box::after {
+    content: '✦';
+    position: absolute;
+    color: #c8964a;
+    font-size: 1.1rem;
+    line-height: 1;
+    background: white;
+    padding: 2px 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.athikaram-header-box::before { top: -0.8em; }
+.athikaram-header-box::after  { bottom: -0.8em; }
+
 
 .athikaram-number-large {
     display: inline-block;
@@ -783,7 +806,27 @@ img, iframe, video {
 }
 
 .kural-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
+}
+
+.kural-view-btn {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    border: 1px solid var(--primary-color);
+    padding: 3px 10px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.kural-view-btn:hover {
+    background: var(--primary-color);
+    color: white;
 }
 
 .kural-number-small {
@@ -805,24 +848,47 @@ img, iframe, video {
 
 .kural-tamil-compact {
     font-size: 1.5rem;
-    line-height: 1.3;
+    line-height: 1.4;
     color: var(--text-dark);
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 0;
     text-align: center;
-    white-space: pre-line;
     word-break: break-word;
     overflow-wrap: break-word;
 }
 
-.transliteration-compact {
-    font-size: 1rem;
-    color: var(--text-light);
-    font-style: italic;
+.kural-separator {
+    display: block;
     text-align: center;
-    margin-top: 4px;
-    line-height: 1.3;
-    white-space: pre-line;
+    margin: 10px auto;
+    color: var(--primary-color);
+    opacity: 0.55;
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    user-select: none;
+}
+
+.transliteration-compact {
+    font-size: 1.5rem;
+    font-family: 'EB Garamond', Georgia, serif;
+    color: #6b5a4e;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.ashraf-attribution {
+    display: block;
+    text-align: center;
+    font-size: 0.78rem;
+    font-style: italic;
+    font-weight: normal;
+    color: var(--text-light);
+    margin-top: 8px;
 }
 
 .explanations-section-compact {
@@ -865,6 +931,11 @@ img, iframe, video {
     gap: 15px;
     margin-top: 40px;
     flex-wrap: wrap;
+}
+
+.athikaram-navigation-top {
+    margin-top: 16px;
+    margin-bottom: 24px;
 }
 
 .nav-button-link {
@@ -1538,6 +1609,12 @@ img, iframe, video {
     font-size: 0.95rem;
     font-style: normal;
     margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ashraf-attribution .attribution-link {
+    font-style: italic;
 }
 
 .english-attribution {

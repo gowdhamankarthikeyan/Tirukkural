@@ -28,6 +28,9 @@
     <meta name="twitter:title" id="tw-title" content="Tirukkuṟaḷ Chapter">
     <meta name="twitter:description" id="tw-desc" content="Read Tirukkuṟaḷ couplets with Tamil text and English translation.">
     <meta name="twitter:image" content="https://tirukkural.in/thiruvalluvar-logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=1.4">
 </head>
 <body>
@@ -68,6 +71,13 @@
     <main class="container main-content">
         <div id="athikaram-header">
             <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Top Navigation -->
+        <div class="athikaram-navigation athikaram-navigation-top">
+            <button id="prev-athikaram-top" class="nav-button" data-translate="prev_chapter">← முந்தைய அதிகாரம்</button>
+            <a href="athikarams.html" class="nav-button-link" data-translate="chapters_list">அதிகாரங்கள் பட்டியல்</a>
+            <button id="next-athikaram-top" class="nav-button" data-translate="next_chapter">அடுத்த அதிகாரம் →</button>
         </div>
 
         <div id="kurals-list" class="kurals-list">
