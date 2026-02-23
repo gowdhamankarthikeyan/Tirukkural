@@ -46,6 +46,7 @@ A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets 
 
 ### 🔊 Audio Playback in 12 Languages (Web Speech API)
 
+<<<<<<< HEAD
 | Language | TTS Code | Language | TTS Code |
 |---|---|---|---|
 | தமிழ் | ta-IN | Français | fr-FR |
@@ -54,12 +55,28 @@ A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets 
 | മലയാളം | ml-IN | Deutsch | de-DE |
 | ಕನ್ನಡ | kn-IN | العربية | ar-SA |
 | తెలుగు | te-IN | සිංහල | si-LK |
+=======
+| Language | TTS Code |
+|---|---|
+| தமிழ் (Tamil) | ta-IN |
+| English | en-IN / en-US |
+| हिंदी (Hindi) | hi-IN |
+| മലയാളം (Malayalam) | ml-IN |
+| ಕನ್ನಡ (Kannada) | kn-IN |
+| తెలుగు (Telugu) | te-IN |
+| Français (French) | fr-FR |
+| 中文 (Chinese) | zh-CN |
+| Русский (Russian) | ru-RU |
+| Deutsch (German) | de-DE |
+| 🇸🇦 العربية (Arabic) | ar-AE | 
+>>>>>>> bcd81e0e4f6fa313ec3077aa313e5ae7134cec51
 
 ### 🗺️ 15-Language Navigation
 
 | Indian Languages | International Languages |
 |---|---|
 | 🇮🇳 தமிழ் (Tamil) — Default | 🇬🇧 English |
+<<<<<<< HEAD
 | 🇮🇳 हिंदी (Hindi) | 🇪🇸 Español |
 | 🇮🇳 తెలుగు (Telugu) | 🇫🇷 Français |
 | 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch |
@@ -68,6 +85,68 @@ A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets 
 | | 🇷🇺 Русский |
 | | 🇯🇵 日本語 |
 | | 🇱🇰 සිංහල (Sinhala) |
+=======
+| 🇮🇳 हिंदी (Hindi) | 🇪🇸 Español (Spanish) |
+| 🇮🇳 తెలుగు (Telugu) | 🇫🇷 Français (French) |
+| 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch (German) |
+| 🇮🇳 ಕನ್ನಡ (Kannada) | 🇹🇼 中文 (Chinese) |
+| 🇷🇺 Русский (Russian) | 🇩🇪 Deutsch (German) |
+| | 🇸🇦 العربية (Arabic) |
+| | 🇷🇺 Русский (Russian) |
+| | 🇯🇵 日本語 (Japanese) |
+
+### ✨ Other Capabilities
+- 🔄 **Instant Language Switching** — No page reload; split translation files lazy-loaded on demand
+- 📱 **Responsive Design** — Optimised for mobile, tablet and desktop
+- ⚡ **Fast & Lightweight** — No frameworks, pure vanilla JS; initial load ~2MB (down from 3.5MB via JSON splitting)
+- 💾 **Persistent Preferences** — Language choice saved via cookies
+- 📊 **Visit Counter** — Real-time visitor count via GoatCounter
+- 💬 **Comments** — Disqus integration per chapter
+- 🔍 **SEO Optimised** — Dynamic per-chapter title, meta description and JSON-LD structured data
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- A web server (Apache, Nginx, or any static file server)
+- Modern web browser with JavaScript enabled
+
+### Installation
+
+1. **Clone or Download**
+   ```bash
+   git clone https://github.com/gowdhamankarthikeyan/thirukkural.git
+   cd thirukkural
+   ```
+
+2. **Deploy to Web Server**
+
+   **Option A: Using Apache**
+   ```bash
+   sudo cp -r * /var/www/html/thirukkural/
+   sudo a2enmod rewrite
+   sudo systemctl restart apache2
+   ```
+
+   **Option B: Using Nginx**
+   ```bash
+   sudo cp -r * /usr/share/nginx/html/thirukkural/
+   sudo systemctl restart nginx
+   ```
+
+   **Option C: Simple HTTP Server (Development)**
+   ```bash
+   python3 -m http.server 8000
+   # or
+   npx http-server -p 8000
+   ```
+
+3. **Access the Site**
+   ```
+   http://localhost:8000
+   ```
+>>>>>>> bcd81e0e4f6fa313ec3077aa313e5ae7134cec51
 
 ---
 
