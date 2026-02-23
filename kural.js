@@ -2,17 +2,9 @@
 // kural.js — Individual kural detail page
 // ============================================================
 
-const KURAL_LANGS = [
-    { code: 'ml', label: 'മലയാളം',  flag: '🇮🇳', fields: ['malayalam1','malayalam2'], ttsCode: 'ml-IN' },
-    { code: 'hi', label: 'हिंदी',    flag: '🇮🇳', fields: ['hindi1','hindi2'],         ttsCode: 'hi-IN' },
-    { code: 'kn', label: 'ಕನ್ನಡ',  flag: '🇮🇳', fields: ['kannada1','kannada2'],      ttsCode: 'kn-IN' },
-    { code: 'te', label: 'తెలుగు',  flag: '🇮🇳', fields: ['telugu1','telugu2'],        ttsCode: 'te-IN' },
-    { code: 'fr', label: 'Français', flag: '🇫🇷', fields: ['french1','french2'],        ttsCode: 'fr-FR' },
-    { code: 'zh', label: '中文',     flag: '🇹🇼', fields: ['chinese1','chinese2'],      ttsCode: 'zh-TW' },
-    { code: 'ru', label: 'Русский',  flag: '🇷🇺', fields: ['russian1','russian2'],      ttsCode: 'ru-RU' },
-    { code: 'de', label: 'Deutsch',  flag: '🇩🇪', fields: ['german1','german2'],        ttsCode: 'de-DE' },
-    { code: 'ar', label: 'العربية',  flag: '🇸🇦', fields: ['arabic1','arabic2'],        ttsCode: 'ar-SA', rtl: true },
-];
+// KURAL_LANGS — sourced from LANGUAGES in languages.js (loaded before this script)
+// To add a new language: edit languages.js only.
+const KURAL_LANGS = typeof LANGUAGES !== 'undefined' ? LANGUAGES : [];
 
 const ALL_AUDIO_LANGS = [
     { code: 'ta', label: 'தமிழ்',  flag: '🇮🇳', ttsCode: 'ta-IN', fields: ['Line1','Line2'] },
@@ -66,6 +58,27 @@ async function loadAllData() {
             }
         } catch(e) { console.warn('Could not load thirukkural-' + lang.code + '.json'); }
     }));
+    // Load English commentary (Kannan + Pope)
+    try {
+        const ENKEY = 'tirukkural_en_v1';
+        const enCached = localStorage.getItem(ENKEY);
+        const mergeEn = (enData) => {
+            enData.kural.forEach(t => {
+                const k = kuralData[t.Number - 1];
+                if (k) { k.kannan_exp = t.kannan_exp; k.pope_exp = t.pope_exp; }
+            });
+        };
+        if (enCached) {
+            mergeEn(JSON.parse(enCached));
+            fetch('thirukkural-en.json').then(r=>r.json()).then(f=>localStorage.setItem(ENKEY, JSON.stringify(f))).catch(()=>{});
+        } else {
+            var enRes = await fetch('thirukkural-en.json');
+            var enData = await enRes.json();
+            mergeEn(enData);
+            try { localStorage.setItem(ENKEY, JSON.stringify(enData)); } catch(e) {}
+        }
+    } catch(e) { console.warn('Could not load thirukkural-en.json', e); }
+
     return true;
 }
 
@@ -179,13 +192,22 @@ function renderKural(id) {
     var commentaries = [
         { author: 'மு. வரதராசனார் — Mu. Varadarasanar', text: kural.mv },
         { author: 'சாலமன் பாப்பையா — Solomon Pappaiah',  text: kural.sp },
-        { author: 'கலைஞர் எம். கருணாநிதி — Kalaignar',   text: kural.mk },
+        { author: 'கலைஞர் — Kalaignar M. Karunanidhi',   text: kural.mk },
     ].filter(function(c) { return c.text; }).map(function(c) {
         return '<div class="kural-commentary-item">' +
             '<div class="kural-commentary-author">' + c.author + '</div>' +
             '<div class="kural-commentary-text">' + c.text + '</div>' +
         '</div>';
     }).join('');
+
+    var enExpText  = (kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : kural.pope_exp;
+    var enExpAuthor = (kural.kannan_exp && kural.kannan_exp.trim()) ? 'Kannan' : 'G.U. Pope';
+    var engCommentary = enExpText ? (
+        '<div class="kural-commentary-item kural-commentary-english">' +
+            '<div class="kural-commentary-author english-author">' + enExpAuthor + '</div>' +
+            '<div class="kural-commentary-text">' + enExpText + '</div>' +
+        '</div>'
+    ) : '';
 
     var chapterTa = athikaram ? athikaram.ta : '';
     var chapterEn = athikaram ? athikaram.en : '';
@@ -203,7 +225,7 @@ function renderKural(id) {
             '<div class="kural-translations-title">Translations</div>' +
             translationItems +
         '</div>' +
-        (commentaries ? '<div class="kural-commentaries"><div class="kural-commentaries-title">Tamil Commentaries</div>' + commentaries + '</div>' : '');
+        (commentaries || engCommentary ? '<div class="kural-commentaries"><div class="kural-commentaries-title">Commentaries</div>' + commentaries + engCommentary + '</div>' : '');
 
     document.querySelectorAll('.kural-audio-play-btn').forEach(function(btn) {
         var code = btn.getAttribute('data-lang');
@@ -213,26 +235,6 @@ function renderKural(id) {
     });
 
     window.scrollTo(0, 0);
-    fitKuralText();
-}
-
-function fitKuralText() {
-    var hero = document.querySelector('.kural-hero');
-    var tamil = document.querySelector('.kural-hero-tamil');
-    if (!hero || !tamil) return;
-    var lines = tamil.querySelectorAll('span');
-    var size = 2.0;
-    var MIN = 1.1;
-    var step = 0.05;
-    tamil.style.fontSize = size + 'rem';
-    var containerW = hero.offsetWidth - 48;
-    function overflows() {
-        return Array.from(lines).some(function(l) { return l.scrollWidth > containerW; });
-    }
-    while (overflows() && size > MIN) {
-        size = Math.round((size - step) * 100) / 100;
-        tamil.style.fontSize = size + 'rem';
-    }
 }
 
 function setupNav() {
@@ -253,9 +255,4 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (!ok) return;
     setupNav();
     renderKural(currentId);
-    window.addEventListener('resize', function() {
-        var tamil = document.querySelector('.kural-hero-tamil');
-        if (tamil) tamil.style.fontSize = '2rem';
-        fitKuralText();
-    });
 });

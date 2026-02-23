@@ -797,7 +797,8 @@ img, iframe, video {
     border-radius: 10px;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
-    border-left: 4px solid var(--secondary-color);
+    border: 2px solid #d4a843;
+    border-left: 5px solid var(--secondary-color);
 }
 
 .kural-card:hover {
@@ -840,11 +841,32 @@ img, iframe, video {
 }
 
 .kural-text-section-compact {
-    background: #fff9f0;
-    padding: 15px;
-    border-radius: 8px;
+    background: #fffdf5;
+    padding: 22px 20px 18px;
+    border-radius: 2px;
     margin-bottom: 20px;
+    border: 3px double #c8961a;
+    position: relative;
 }
+
+/* ✦ star ornaments centred on top and bottom border edges */
+.kural-text-section-compact::before,
+.kural-text-section-compact::after {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fffdf5;
+    padding: 0 10px;
+    font-size: 0.72rem;
+    color: #b8791a;
+    letter-spacing: 4px;
+    line-height: 1;
+    white-space: nowrap;
+}
+.kural-text-section-compact::before { top: -0.6em; }
+.kural-text-section-compact::after  { bottom: -0.6em; }
+
 
 .kural-tamil-compact {
     font-size: 1.5rem;
@@ -853,8 +875,10 @@ img, iframe, video {
     font-weight: 500;
     margin-bottom: 0;
     text-align: center;
-    word-break: break-word;
-    overflow-wrap: break-word;
+}
+
+.kural-tamil-compact .kural-line {
+    display: block;
 }
 
 .kural-separator {
@@ -917,6 +941,24 @@ img, iframe, video {
     line-height: 1.8;
     font-size: 0.95rem;
     margin-top: 8px;
+}
+
+/* English commentary (Kannan / G.U. Pope) */
+.explanation-item-compact.english-exp {
+    background: #f7f9fd;
+    border-left: 3px solid #4a7eb5;
+}
+
+.explanation-item-compact.english-exp .explanation-author-small {
+    color: #4a7eb5;
+}
+
+.explanation-item-compact.english-exp .explanation-text-small {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #3d5a7a;
+    margin-top: 6px;
 }
 
 .explanation-item-compact > .explanation-translate-btn {
@@ -1352,7 +1394,6 @@ img, iframe, video {
     /* Athikaram view */
     .athikaram-title-large-ta { font-size: 1.6rem; }
     .athikaram-title-large-en { font-size: 1.1rem; }
-    .kural-tamil-compact      { font-size: 1.3rem; }
     .athikaram-navigation     { flex-direction: column; }
     .nav-button-link          { width: 100%; text-align: center; }
     .athikaram-navigation .nav-button { width: 100%; }
@@ -1415,6 +1456,9 @@ img, iframe, video {
     /* Athikaram nav buttons */
     .athikaram-navigation { gap: 10px; }
     .nav-button-link      { padding: 12px 16px; font-size: 0.95rem; }
+
+    /* Kural Tamil text — scale down so two lines fit on narrow screens */
+    .kural-tamil-compact { font-size: 1.15rem; line-height: 1.5; }
 
     /* Modal */
     .modal-overlay  { padding: 10px; align-items: flex-start; padding-top: 20px; }

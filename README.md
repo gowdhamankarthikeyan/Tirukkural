@@ -1,12 +1,12 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
-A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets — with Tamil text, transliteration, four commentaries (3 Tamil + 1 English), curated English translation, 11 native language translations, audio playback in 12 languages, and 15-language site navigation.
+A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets — with Tamil text, transliteration, four expert commentaries (3 Tamil + 1 English), curated English translation, 11 native language translations, audio in 12 languages, and 15-language site navigation.
 
 🌐 **Live site:** https://tirukkural.in
 
 ![Version](https://img.shields.io/badge/version-1.7-blue)
-![Languages](https://img.shields.io/badge/navigation-15%20languages-green)
-![Native Translations](https://img.shields.io/badge/native%20translations-11%20languages-orange)
+![Navigation](https://img.shields.io/badge/navigation-15%20languages-green)
+![Translations](https://img.shields.io/badge/native%20translations-11%20languages-orange)
 ![Audio](https://img.shields.io/badge/audio-12%20languages-red)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
@@ -15,59 +15,63 @@ A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets 
 ## 🌟 Features
 
 ### 📚 Complete Content
-- **1,330 Couplets** — All kurals with Tamil text and transliteration
-- **133 Chapters** (Athikarams) — Organised into three books (Paal)
-- **3 Books** — Virtue (அறத்துப்பால்), Wealth (பொருட்பால்), Love (காமத்துப்பால்)
+- **1,330 Couplets** across **133 Chapters** in **3 Books**
+- Books: Virtue (அறத்துப்பால்), Wealth (பொருட்பால்), Love (காமத்துப்பால்)
+- Tamil text + transliteration for every kural
 
-### 🔤 Four Commentaries Per Kural
+### 🔤 Four Expert Commentaries
 - **மு. வரதராசனார்** (Mu. Varadarasanar) — Classical scholarly interpretation
 - **சாலமன் பாப்பையா** (Solomon Pappaiah) — Contemporary, accessible insights
 - **கலைஞர் — Kalaignar M. Karunanidhi** — Modern rationalist perspective
-- **Kannan** (English) — Kurals 1–1080; **G.U. Pope** fallback — Kurals 1081–1330
+- **Kannan** (English, kurals 1–1080) + **G.U. Pope** fallback (kurals 1081–1330)
+
+Each commentary has a one-click Google Translate button for 100+ languages.
 
 ### 🇬🇧 Curated English Translation — N.V.K. Ashraf
-18 years comparing 25+ scholarly translations. Every translation credited with translator initials. Full methodology: https://kuraltranslations.blogspot.com
+18 years comparing 25+ scholarly translations, hand-picking the finest rendering per kural. Every translation credited with original translator initials. Full methodology: https://kuraltranslations.blogspot.com
 
 ### 🗣️ 11 Native Language Translations
 
 | Language | Translator / Source |
 |---|---|
 | 🇬🇧 English | N.V.K. Ashraf (curated from 25+ scholars) |
-| 🇮🇳 हिंदी (Hindi) | M.G. Venkatakrishnan (1964) |
-| 🇮🇳 മലയാളം (Malayalam) | V. V. Abdulla Sahib |
-| 🇮🇳 ಕನ್ನಡ (Kannada) | ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ — Madurai Kamaraj University Press |
-| 🇮🇳 తెలుగు (Telugu) | Gurucharan |
-| 🇫🇷 Français (French) | Gnanou Diagou (Pondichery, 1942) |
-| 🇹🇼 中文 (Chinese) | Dr. Yu Hsi / 洪清宇 (Taipei, 2010) |
-| 🇷🇺 Русский (Russian) | Vithali Furniki (Moscow, 1991) |
-| 🇩🇪 Deutsch (German) | Albrecht Frenz & K. Lalithambal (Madurai, 1977) |
-| 🇸🇦 العربية (Arabic) | Dr. Yousuf Kokan; digitised by Dr. N.V. Ahmed Unni |
-| 🇱🇰 සිංහල (Sinhala) | G. Misihami & Dr. S. Tambayah (Anula Press, Colombo, 1961) |
+| 🇮🇳 हिंदी Hindi | M.G. Venkatakrishnan (1964) |
+| 🇮🇳 മലയാളം Malayalam | V. V. Abdulla Sahib |
+| 🇮🇳 ಕನ್ನಡ Kannada | ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ — Madurai Kamaraj University Press |
+| 🇮🇳 తెలుగు Telugu | Gurucharan |
+| 🇫🇷 Français French | Gnanou Diagou (Pondichery, 1942) |
+| 🇹🇼 中文 Chinese | Dr. Yu Hsi / 洪清宇 (Taipei, 2010) |
+| 🇷🇺 Русский Russian | Vithali Furniki (Moscow, 1991) |
+| 🇩🇪 Deutsch German | Albrecht Frenz & K. Lalithambal (Madurai, 1977) |
+| 🇸🇦 العربية Arabic | Dr. Yousuf Kokan; digitised by Dr. N.V. Ahmed Unni |
+| 🇱🇰 සිංහල Sinhala | G. Misihami & Dr. S. Tambayah (Anula Press, Colombo, 1961) |
 
-### 🔊 Audio Playback in 12 Languages (Web Speech API)
+### 🔊 Audio in 12 Languages (Web Speech API)
 
 | Language | TTS Code | Language | TTS Code |
 |---|---|---|---|
-| தமிழ் | ta-IN | Français | fr-FR |
-| English | en-IN/en-US | 中文 | zh-TW |
-| हिंदी | hi-IN | Русский | ru-RU |
-| മലയാളം | ml-IN | Deutsch | de-DE |
-| ಕನ್ನಡ | kn-IN | العربية | ar-SA |
-| తెలుగు | te-IN | සිංහල | si-LK |
+| தமிழ் Tamil | ta-IN | Français French | fr-FR |
+| English | en-IN / en-US | 中文 Chinese | zh-TW |
+| हिंदी Hindi | hi-IN | Русский Russian | ru-RU |
+| മലയാളം Malayalam | ml-IN | Deutsch German | de-DE |
+| ಕನ್ನಡ Kannada | kn-IN | العربية Arabic | ar-SA |
+| తెలుగు Telugu | te-IN | සිංහල Sinhala | si-LK |
+
+> English audio works on most devices without setup. Other languages may need a one-time voice download — click the **ⓘ** button for platform instructions.
 
 ### 🗺️ 15-Language Navigation
 
 | Indian Languages | International Languages |
 |---|---|
-| 🇮🇳 தமிழ் (Tamil) — Default | 🇬🇧 English |
-| 🇮🇳 हिंदी (Hindi) | 🇪🇸 Español |
-| 🇮🇳 తెలుగు (Telugu) | 🇫🇷 Français |
-| 🇮🇳 മലയാളം (Malayalam) | 🇩🇪 Deutsch |
-| 🇮🇳 ಕನ್ನಡ (Kannada) | 🇹🇼 中文 |
-| | 🇸🇦 العربية |
-| | 🇷🇺 Русский |
-| | 🇯🇵 日本語 |
-| | 🇱🇰 සිංහල (Sinhala) |
+| 🇮🇳 தமிழ் Tamil — Default | 🇬🇧 English |
+| 🇮🇳 हिंदी Hindi | 🇪🇸 Español Spanish |
+| 🇮🇳 తెలుగు Telugu | 🇫🇷 Français French |
+| 🇮🇳 മലയാളം Malayalam | 🇩🇪 Deutsch German |
+| 🇮🇳 ಕನ್ನಡ Kannada | 🇹🇼 中文 Chinese |
+| | 🇸🇦 العربية Arabic |
+| | 🇷🇺 Русский Russian |
+| | 🇯🇵 日本語 Japanese |
+| | 🇱🇰 සිංහල Sinhala |
 
 ---
 
@@ -77,18 +81,21 @@ A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets 
 tirukkural/
 ├── index.html              # Homepage
 ├── athikarams.html         # Chapter listing (133 chapters)
-├── athikaram-view.html     # Chapter view (kurals + commentaries + audio)
+├── athikaram-view.html     # Chapter view — kurals, commentaries, audio
 ├── kural.html              # Individual kural detail page
 ├── contributors.html       # All translators & scholars
 ├── styles.css              # Global styles
-├── kural.css               # Kural page styles
-├── language.js             # Language management
-├── translations.json       # UI strings (15 langs) + chapter names + language config
-├── athikarams-data.js      # Chapter metadata (id, ta, en, si... names, kural range)
+├── kural.css               # Kural detail page styles
+├── languages.js            # ★ Single source of truth for native language config
+├── language.js             # Language management — dropdown, translations, cookies
+├── translations.json       # UI strings (15 languages) + language dropdown config
+├── athikaram-titles.json   # Chapter name translations (15 languages, separate file)
+├── athikarams-data.js      # Chapter metadata (id, names, kural range)
 ├── athikarams.js           # Chapter listing logic
-├── athikaram-view.js       # Chapter view + lazy loading + TTS + SEO
+├── athikaram-view.js       # Chapter view — lazy loading, TTS, SEO
 ├── kural.js                # Kural detail page logic
 ├── thirukkural.json        # Core database — Tamil, transliteration, commentaries (~2MB)
+├── thirukkural-en.json     # English commentary — Kannan (1–1080) + G.U. Pope (1081–1330)
 ├── thirukkural-hi.json     # Hindi (lazy-loaded)
 ├── thirukkural-ml.json     # Malayalam (lazy-loaded)
 ├── thirukkural-kn.json     # Kannada (lazy-loaded)
@@ -99,7 +106,6 @@ tirukkural/
 ├── thirukkural-de.json     # German (lazy-loaded)
 ├── thirukkural-ar.json     # Arabic (lazy-loaded)
 ├── thirukkural-si.json     # Sinhala (lazy-loaded)
-├── thirukkural-en.json     # English commentary — Kannan + Pope
 ├── sitemap.xml             # 136-URL sitemap
 ├── robots.txt
 └── README.md
@@ -107,47 +113,49 @@ tirukkural/
 
 ---
 
-## ➕ Adding a New Language — Complete Modular Checklist
+## ➕ Adding a New Language — Complete Checklist
 
-**All steps are mechanical — no business logic to change.**
+Adding a native translation requires changes in **6 places only**. All UI behaviour is automatic.
 
-### Step 1: Create translation file
-`thirukkural-{code}.json`:
+### 1. `languages.js` — add one entry
+```javascript
+{ code: 'xx', label: 'Native Name', flag: '🏳️', fields: ['xx1','xx2'], ttsCode: 'xx-XX' }
+// rtl: true  — add this for right-to-left scripts (Arabic, Hebrew etc.)
+```
+This single entry drives: lazy-loading, audio buttons, kural detail page display.
+
+### 2. `thirukkural-xx.json` — create translation file
 ```json
-{ "kural": [{ "Number": 1, "{code}1": "line 1", "{code}2": "line 2" }] }
+{ "kural": [{ "Number": 1, "xx1": "line one", "xx2": "line two" }] }
 ```
 
-### Step 2: Register in athikaram-view.js → SPLIT_LANGS
-```javascript
-xx: { fields: ['{code}1', '{code}2'], ttsCode: 'xx-XX', ttsLabel: 'Native Name' }
-```
-
-### Step 3: Register in kural.js → KURAL_LANGS
-```javascript
-{ code: 'xx', label: 'Native', flag: '🏳️', fields: ['{code}1','{code}2'], ttsCode: 'xx-XX' }
-```
-
-### Step 4: translations.json — three sections
+### 3. `translations.json` — three sections
 ```json
 "languages":       { "xx": { "name": "...", "nativeName": "...", "flag": "🏳️", "segment": "indian|international" } }
-"translations":    { "xx": { "home": "...", "chapters": "...", ... } }
-"athikaram_names": { "xx": { "1": "Chapter 1 title", ... } }
+"translations":    { "xx": { "home": "...", "chapters": "...", "kural": "...", ... } }
 ```
 
-### Step 5: athikarams-data.js — add `xx:` to each entry
+### 4. `athikaram-titles.json` — add chapter name translations
+```json
+{ "xx": { "1": "Chapter 1 name", "2": "...", ... "133": "..." } }
+```
+
+### 5. `athikarams-data.js` — add `xx:` field to each of the 133 chapter entries
 ```javascript
-{ id: 1, ta: "...", en: "...", xx: "Chapter 1 in new language", ... }
+{ id: 1, ta: "கடவுள் வாழ்த்து", en: "The Praise of God", xx: "Chapter name", ... }
 ```
 
-### Step 6: contributors.html — add translator card
-### Step 7: index.html — increment language counts in meta + body text
-### Step 8: README.md — update translation table, audio table, navigation table, version history
+### 6. Update copy & docs
+- `contributors.html` — translator credit card
+- `index.html` — increment native translations count, audio count, language list in modal
+- `athikaram-view.js` — add language to audio help tip
+- `README.md` — update all tables and version history
 
 ---
 
 ## 📊 Data Schema
 
-### translations.json structure
+### translations.json
 ```json
 {
   "languages": {
@@ -155,47 +163,90 @@ xx: { fields: ['{code}1', '{code}2'], ttsCode: 'xx-XX', ttsLabel: 'Native Name' 
     "si": { "name": "සිංහල", "nativeName": "සිංහල", "flag": "🇱🇰", "segment": "international" }
   },
   "translations": {
-    "en": { "home": "Home", "chapters": "Chapters", "kural": "Kural", ... },
+    "en": { "home": "Home", "chapters": "Chapters", "kural": "Couplet", ... },
     "si": { "home": "මුල් පිටුව", "chapters": "පරිච්ඡේද", ... }
-  },
-  "athikaram_names": {
-    "ta": { "1": "கடவுள் வாழ்த்து", ... },
-    "si": { "1": "නමකර", ... }
   }
 }
 ```
 
+### athikaram-titles.json (separate file, lazy-cached)
+```json
+{
+  "ta": { "1": "கடவுள் வாழ்த்து", ... },
+  "en": { "1": "The Praise of God", ... },
+  "si": { "1": "නමකර", ... }
+}
+```
+
+### thirukkural.json (core, ~2MB)
+```json
+{
+  "Number": 1,
+  "Line1": "அகர முதல எழுத்தெல்லாம்",
+  "Line2": "ஆதி பகவன் முதற்றே உலகு",
+  "transliteration1": "Agara mudala ezhuthellaam",
+  "transliteration2": "Aadhi bagavan mudattre ulagu",
+  "mv": "மு. வரதராசனார் commentary...",
+  "sp": "சாலமன் பாப்பையா commentary...",
+  "mk": "கலைஞர் commentary...",
+  "ashraf": "With alpha begins all alphabets...",
+  "ashraf_attr": "KN",
+  "bharati_verse1": "English TTS line 1",
+  "bharati_verse2": "English TTS line 2"
+}
+```
+
+### thirukkural-{lang}.json (lazy-loaded per language)
+```json
+{ "kural": [{ "Number": 1, "sinhala1": "...", "sinhala2": "..." }] }
+```
+Field name convention: `{language}1` / `{language}2` (e.g. `hindi1`, `sinhala1`).
+
+### thirukkural-en.json (English commentary)
+```json
+{ "kural": [{ "Number": 1, "kannan_exp": "...", "pope_exp": "..." }] }
+```
+`kannan_exp` used for kurals 1–1080; `pope_exp` as fallback for 1081–1330.
+
 ---
 
 ## 🔊 Audio System
-Uses **Web Speech API** — no server-side audio files. Tamil always shown; selected UI language shown if TTS supported. **ⓘ** button provides voice download instructions:
-- **iPhone/iPad** — Settings → Accessibility → Spoken Content → Voices
-- **Mac** — System Settings → Accessibility → Spoken Content → Manage Voices
-- **Android** — Settings → General Management → Text-to-Speech → Install voice data
-- **Windows** — Settings → Language & Region → Text-to-speech pack
+
+Web Speech API (SpeechSynthesis) — no server-side audio files.
+
+- Tamil always shown; currently selected UI language shown if it has a `ttsCode`
+- Pre-fetched on page init so audio buttons render correctly on first load
+- **ⓘ** button opens help modal with platform-specific voice download instructions:
+  - **iPhone/iPad** — Settings → Accessibility → Spoken Content → Voices
+  - **Mac** — System Settings → Accessibility → Spoken Content → Manage Voices
+  - **Android** — Settings → General Management → Text-to-Speech → Install voice data
+  - **Windows** — Settings → Language & Region → Text-to-speech pack
 
 ---
 
 ## 🏆 Version History
 
-### v1.7 — Sinhala, English Commentary, Navigation (February 2026)
-- **Sinhala** — 11th native translation; 12th audio language (si-LK); 15th navigation language
-- **Sinhala chapter titles** — All 133 chapters in Sinhala in navigation
-- **English commentary** — Kannan (1–1080) + G.U. Pope fallback (1081–1330); blue accent
-- **"உரை / Commentaries"** — Renamed from "Explanations" across all 15 languages
-- **Kalaignar name** — Corrected to `கலைஞர் — Kalaignar M. Karunanidhi` (Tamil first)
-- **kural.html nav hidden** — Home/Chapters/Contributors + hamburger removed from kural page
-- **Gold border universal** — Applied to all chapters, not just chapter 1
-- **Kannan en.json cache fix** — Now always loads on cached and fresh visits
+### v1.7 — Sinhala, English Commentary, Modular Architecture (February 2026)
+- **Sinhala** — 11th native translation; 12th audio language (si-LK); 15th navigation language; all 133 chapter titles; full UI strings
+- **English commentary** — Kannan (kurals 1–1080) + G.U. Pope fallback (1081–1330); blue accent card
+- **Four commentaries** — section renamed from "Triple Expert Commentary" everywhere
+- **Modular language system** — `languages.js` is now single source of truth; adding a language requires one entry there + JSON file
+- **translations.json split** — chapter titles extracted to `athikaram-titles.json` (separate lazy-cached file)
+- **"உரை / Commentaries"** — renamed from "Explanations" across all 15 languages
+- **Kalaignar name** — corrected to `கலைஞர் — Kalaignar M. Karunanidhi`
+- **kural.html nav hidden** — Home/Chapters/Contributors + hamburger removed; Back to Chapter handles navigation
+- **Kural card border** — `border: 2px solid #d4a843` all sides + thick left accent
+- **Kural text section border** — double-line gold border with ✦ ✦ ✦ star ornaments (top & bottom)
+- **localStorage cache key bumped** — stale combined translations cache auto-busted
 
-### v1.6 — Native Translations, Audio & Performance (February 2026)
-- 10 native translations (Malayalam, Kannada, Telugu, Hindi, French, Chinese, Russian, German, Arabic)
-- JSON splitting — 9 lazy-loaded language files; load reduced from 3.5MB to ~2MB
+### v1.6 — 10 Native Translations, Audio & Performance (February 2026)
+- Malayalam, Kannada, Telugu, Hindi, French, Chinese, Russian, German, Arabic translations
+- JSON splitting — 9 lazy-loaded files; initial load reduced from 3.5MB to ~2MB
 - Audio in 11 languages via Web Speech API
 - Audio help modal with platform instructions
 
 ### v1.5 — SEO, Ashraf Translations & Domain (February 2026)
-- tirukkural.in domain; N.V.K. Ashraf curated translations; contributors.html; dynamic SEO; sitemap.xml
+- tirukkural.in domain; N.V.K. Ashraf curated translations; contributors.html; dynamic SEO; sitemap.xml; listed on Wikipedia
 
 ### v1.4 — Indian Language Navigation
 - Chapter name translations for 5 Indian languages
@@ -209,15 +260,18 @@ Uses **Web Speech API** — no server-side audio files. Tamil always shown; sele
 
 ## 📜 License & Attribution
 
-Tirukkuṟaḷ text — Public domain. Code — Educational/non-commercial.
+Tirukkuṟaḷ text — Public domain (~31 BCE–1 CE). Code — Educational/non-commercial.
 
-Translators: திருவள்ளுவர் · N.V.K. Ashraf · Kannan · G.U. Pope · V.V. Abdulla Sahib · ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ · Gurucharan · M.G. Venkatakrishnan · Gnanou Diagou · Dr. Yu Hsi · Vithali Furniki · Albrecht Frenz & K. Lalithambal · Dr. Yousuf Kokan · G. Misihami & Dr. S. Tambayah
+**Translators:** N.V.K. Ashraf · Kannan · G.U. Pope · V.V. Abdulla Sahib · ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ · Gurucharan · M.G. Venkatakrishnan · Gnanou Diagou · Dr. Yu Hsi · Vithali Furniki · Albrecht Frenz & K. Lalithambal · Dr. Yousuf Kokan · G. Misihami & Dr. S. Tambayah
+
+**Commentators:** மு. வரதராசனார் · சாலமன் பாப்பையா · கலைஞர் எம். கருணாநிதி
 
 ---
 
 ## 🔮 Roadmap
-- [x] Audio *(v1.6)* · [x] English commentary *(v1.7)* · [x] Sinhala *(v1.7)*
-- [ ] Search · [ ] Bookmarks · [ ] Daily kural · [ ] Dark mode · [ ] PWA · [ ] Share cards
+
+- [x] Audio (v1.6) · [x] English commentary (v1.7) · [x] Sinhala (v1.7) · [x] Modular language system (v1.7)
+- [ ] Search across all 1,330 kurals · [ ] Bookmarks · [ ] Daily kural · [ ] Dark mode · [ ] PWA
 
 ---
 

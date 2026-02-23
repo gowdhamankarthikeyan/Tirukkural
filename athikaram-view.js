@@ -2,21 +2,11 @@
 let kuralData = null;
 let currentAthikaramId = 1;
 
-// Languages that live in separate thirukkural-{lang}.json files (lazy-loaded)
-// fields: the two field names inside each kural object for that language
-// To add a new language: add one entry here only — audio is registered automatically.
-// ttsCode: BCP-47 tag for Web Speech API (omit if no TTS support for that language)
-const SPLIT_LANGS = {
-    hi: { fields: ['hindi1',    'hindi2'],    ttsCode: 'hi-IN', ttsLabel: 'हिंदी'     },
-    ml: { fields: ['malayalam1','malayalam2'], ttsCode: 'ml-IN', ttsLabel: 'മലയാളം'     },
-    kn: { fields: ['kannada1',  'kannada2'],  ttsCode: 'kn-IN', ttsLabel: 'ಕನ್ನಡ'     },
-    te: { fields: ['telugu1',   'telugu2'],   ttsCode: 'te-IN', ttsLabel: 'తెలుగు'   },
-    fr: { fields: ['french1',   'french2'],   ttsCode: 'fr-FR', ttsLabel: 'Français'    },
-    zh: { fields: ['chinese1',  'chinese2'],  ttsCode: 'zh-TW', ttsLabel: '中文'    },
-    ru: { fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU', ttsLabel: 'Русский' },
-    de: { fields: ['german1',  'german2'],  ttsCode: 'de-DE', ttsLabel: 'Deutsch'   },
-    ar: { fields: ['arabic1',  'arabic2'],  ttsCode: 'ar-SA', ttsLabel: 'العربية'  },
-};
+// LANGUAGES is defined in languages.js (loaded before this script in HTML)
+// Build SPLIT_LANGS map from it for internal lazy-loading
+const SPLIT_LANGS = Object.fromEntries(
+    LANGUAGES.map(l => [l.code, { fields: l.fields, ttsCode: l.ttsCode, ttsLabel: l.label }])
+);
 const _translationCache = {}; // tracks which langs have been loaded
 
 // Merge a split translation file's data into kuralData
@@ -60,13 +50,12 @@ async function loadTranslationData(lang) {
 // All SPLIT_LANGS entries with a ttsCode are registered automatically.
 // ============================================================
 const TTS_LANGUAGES = {
-    ta: { code: 'ta-IN',                     label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
-    en: { code: 'en-IN', fallback: 'en-US',  label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
+    ta: { code: 'ta-IN',                    label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
+    en: { code: 'en-IN', fallback: 'en-US', label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
 };
-Object.entries(SPLIT_LANGS).forEach(([lang, cfg]) => {
-    if (cfg.ttsCode) {
-        TTS_LANGUAGES[lang] = { code: cfg.ttsCode, label: cfg.ttsLabel, fields: cfg.fields, audioPath: lang };
-    }
+// Auto-register all LANGUAGES entries that have a ttsCode
+LANGUAGES.filter(l => l.ttsCode).forEach(l => {
+    TTS_LANGUAGES[l.code] = { code: l.ttsCode, label: l.label, fields: l.fields, audioPath: l.code };
 });
 
 const AUDIO_BASE = '/audio';
@@ -223,6 +212,26 @@ document.addEventListener('DOMContentLoaded', async function() {
             kuralData = data.kural;
             try { localStorage.setItem(KURAL_CACHE_KEY, JSON.stringify(data.kural)); } catch(e) {}
         }
+        // Always merge English commentary (Kannan + Pope) — must run after kuralData is set
+        try {
+            const ENKEY = 'tirukkural_en_v1';
+            const enCached = localStorage.getItem(ENKEY);
+            const mergeEn = (enData) => {
+                enData.kural.forEach(t => {
+                    const k = kuralData[t.Number - 1];
+                    if (k) { k.kannan_exp = t.kannan_exp; k.pope_exp = t.pope_exp; }
+                });
+            };
+            if (enCached) {
+                mergeEn(JSON.parse(enCached));
+                fetch('thirukkural-en.json').then(r=>r.json()).then(f=>localStorage.setItem(ENKEY, JSON.stringify(f))).catch(()=>{});
+            } else {
+                const enRes = await fetch('thirukkural-en.json');
+                const enData = await enRes.json();
+                mergeEn(enData);
+                try { localStorage.setItem(ENKEY, JSON.stringify(enData)); } catch(e) {}
+            }
+        } catch(e) { console.warn('Could not load thirukkural-en.json', e); }
     } catch (e) {
         if (kuralsContainer) kuralsContainer.innerHTML =
             '<div class="loading">தரவு ஏற்றுவதில் பிழை. பக்கத்தை மீண்டும் ஏற்றவும்.</div>';
@@ -379,7 +388,7 @@ function createKuralCard(kural, athikaram) {
     
     // Get translated text
     const kuralText = window.t ? window.t('couplet') : 'குறள்';
-    const explText = window.t ? window.t('explanations') : 'விளக்கங்கள்';
+    const explText = window.t ? window.t('explanations') : 'உரை';
     const scholarMV = window.t ? window.t('scholar_mv') : 'மு. வரதராசனார்';
     const scholarSP = window.t ? window.t('scholar_sp') : 'சாலமன் பாப்பையா';
     const scholarMK = window.t ? window.t('scholar_mk') : 'கலைஞர்';
@@ -436,13 +445,24 @@ function createKuralCard(kural, athikaram) {
                 <button class="explanation-translate-btn" data-text="${escapeHtml(kural.mk)}">${translateBtn}</button>
             </div>
             ` : ''}
+            ${(kural.kannan_exp || kural.pope_exp) ? (() => {
+                const isKannan = kural.kannan_exp && kural.kannan_exp.trim();
+                const author = isKannan ? 'Kannan' : 'G.U. Pope';
+                const text   = isKannan ? kural.kannan_exp : kural.pope_exp;
+                return `<div class="explanation-item-compact english-exp">
+                    <div class="explanation-header">
+                        <div class="explanation-author-small">${author}</div>
+                    </div>
+                    <div class="explanation-text-small">${text}</div>
+                    <button class="explanation-translate-btn" data-text="${escapeHtml(text)}">${translateBtn}</button>
+                </div>`;
+            })() : ''}
         </div>
 
     `;
     
     return card;
 }
-
 
 // ── Dynamic SEO — updates title, meta, OG and JSON-LD per athikaram ──
 function updatePageSEO(athikaram, firstKuralAshraf) {
@@ -700,7 +720,7 @@ function showAudioHelpModal(e) {
                     </ol>
                 </div>
 
-                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French, Chinese, Russian, German, Arabic) may require a one-time voice download.</p>
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French, Chinese, Russian, German, Arabic, Sinhala) may require a one-time voice download.</p>
             </div>
         `;
         modal.addEventListener('click', function(ev) {

@@ -12,31 +12,37 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // Load translations — localStorage first (instant), fallback to fetch + cache
+// translations.json: UI strings + language config
+// athikaram-titles.json: chapter name translations (separate, lazy)
 async function loadTranslations() {
-    const CACHE_KEY = 'tirukkural_translations_v1';
+    const CACHE_KEY   = 'tirukkural_translations_v2';
+    const TITLES_KEY  = 'tirukkural_titles_v1';
     try {
-        // Try localStorage first — available synchronously on return visits
+        // ── UI strings + language config ──
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             const data = JSON.parse(cached);
             translations = data.translations;
             languageData = data.languages;
-            window.athikaram_names = data.athikaram_names;
-            // Refresh cache silently in background for future visits
-            fetch('translations.json')
-                .then(r => r.json())
-                .then(fresh => localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)))
-                .catch(() => {});
-            return;
+            fetch('translations.json').then(r => r.json())
+                .then(f => localStorage.setItem(CACHE_KEY, JSON.stringify(f))).catch(() => {});
+        } else {
+            const data = await (await fetch('translations.json')).json();
+            translations = data.translations;
+            languageData = data.languages;
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
         }
-        // First visit — fetch, apply, then cache
-        const response = await fetch('translations.json');
-        const data = await response.json();
-        translations = data.translations;
-        languageData = data.languages;
-        window.athikaram_names = data.athikaram_names;
-        // Cache for all future visits (happens while user reads welcome modal)
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
+        // ── Chapter titles (separate file) ──
+        const cachedTitles = localStorage.getItem(TITLES_KEY);
+        if (cachedTitles) {
+            window.athikaram_names = JSON.parse(cachedTitles);
+            fetch('athikaram-titles.json').then(r => r.json())
+                .then(f => localStorage.setItem(TITLES_KEY, JSON.stringify(f))).catch(() => {});
+        } else {
+            const titles = await (await fetch('athikaram-titles.json')).json();
+            window.athikaram_names = titles;
+            try { localStorage.setItem(TITLES_KEY, JSON.stringify(titles)); } catch(e) {}
+        }
     } catch (error) {
         console.error('Error loading translations:', error);
     }
