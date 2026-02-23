@@ -227,17 +227,70 @@
         return canvas;
     }
 
-    // ── Shared: execute share flow for a given kural number + button ──
-    async function executeShare(kuralNumber, btn) {
+    // ── WhatsApp share button ──
+    function makeBtn() {
+        const btn = document.createElement('button');
+        btn.id = 'wa-share-btn';
+        btn.innerHTML =
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" ' +
+            'style="vertical-align:middle;margin-right:8px;flex-shrink:0">' +
+            '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+            'Share on WhatsApp';
+        Object.assign(btn.style, {
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            padding: '12px 26px', background: '#25D366', color: '#fff',
+            border: 'none', borderRadius: '50px', fontSize: '1rem', fontWeight: '700',
+            cursor: 'pointer', fontFamily: 'inherit',
+            boxShadow: '0 3px 14px rgba(37,211,102,0.4)', transition: 'all 0.2s ease',
+        });
+        btn.addEventListener('mouseenter', () => { btn.style.background = '#1da851'; btn.style.transform = 'translateY(-2px)'; });
+        btn.addEventListener('mouseleave', () => { btn.style.background = '#25D366'; btn.style.transform = ''; });
+        btn.addEventListener('click', handleShare);
+        return btn;
+    }
+
+    function injectButton() {
+        const old = document.getElementById('wa-share-wrapper');
+        if (old) old.remove();
+
+        // Inject responsive styles once
+        if (!document.getElementById('wa-share-style')) {
+            const style = document.createElement('style');
+            style.id = 'wa-share-style';
+            style.textContent = [
+                '#wa-share-wrapper { margin: 20px 0 8px; text-align: center; }',
+                '#wa-share-btn { max-width: 320px; }',
+                '@media (max-width: 600px) {',
+                '  #wa-share-wrapper { margin: 16px 0 8px; }',
+                '  #wa-share-btn { width: 100% !important; max-width: 100% !important; border-radius: 12px !important; }',
+                '}',
+            ].join('\n');
+            document.head.appendChild(style);
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.id = 'wa-share-wrapper';
+        wrapper.appendChild(makeBtn());
+        // Insert after the Tamil kural card (.kural-hero), before translations
+        const hero = document.querySelector('#kural-content .kural-hero');
+        if (hero) {
+            hero.insertAdjacentElement('afterend', wrapper);
+        } else {
+            const anchor = document.getElementById('kural-content');
+            if (anchor) anchor.insertAdjacentElement('afterend', wrapper);
+        }
+    }
+
+    async function handleShare() {
         if (typeof kuralData === 'undefined' || !kuralData) {
             alert('Kural data not loaded yet — please wait a moment and try again.');
             return;
         }
-        const kural = kuralData[kuralNumber - 1];
+        const kural = kuralData[currentId - 1];
         if (!kural) return;
-        const athikaram = typeof getAthikaramForKural === 'function'
-            ? getAthikaramForKural(kuralNumber) : null;
+        const athikaram = typeof getAthikaramForKural === 'function' ? getAthikaramForKural(currentId) : null;
 
+        const btn = document.getElementById('wa-share-btn');
         const orig = btn.innerHTML;
         btn.textContent = '⏳ Generating…';
         btn.disabled = true;
@@ -246,13 +299,15 @@
         try {
             await new Promise(r => setTimeout(r, 60));
             const canvas = drawCard(kural, athikaram);
-            const link = 'https://tirukkural.in/kural.html?id=' + kuralNumber;
-            const shareText = '🎧 Read & listen today\'s Kural in 12 languages:\n' + link;
+
+            const link = 'https://tirukkural.in/kural.html?id=' + currentId;
+            const shareText =
+                '🎧 Read & listen today\'s Kural in 12 languages:\n' + link;
 
             canvas.toBlob(async function (blob) {
-                const fileName = 'tirukkural-' + kuralNumber + '.png';
+                const fileName = 'tirukkural-' + currentId + '.png';
 
-                // Mobile: Web Share API — hands image directly to WhatsApp
+                // Mobile: Web Share API sends the actual image to WhatsApp status
                 if (navigator.canShare && navigator.share) {
                     const file = new File([blob], fileName, { type: 'image/png' });
                     if (navigator.canShare({ files: [file] })) {
@@ -261,18 +316,23 @@
                             return;
                         } catch (err) {
                             if (err.name === 'AbortError') return;
+                            // fall through to desktop fallback
                         }
                     }
                 }
-                // Desktop: download PNG + open WhatsApp
+
+                // Desktop fallback: download PNG + open wa.me with text
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url; a.download = fileName;
                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 3000);
-                setTimeout(() => window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank'), 800);
+                setTimeout(() => {
+                    window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
+                }, 800);
 
             }, 'image/png');
+
         } catch (e) {
             console.error('kural-share:', e);
             alert('Could not generate image. Please try again.');
@@ -281,118 +341,15 @@
         }
     }
 
-    // ── Shared: WA SVG icon string ──
-    const WA_ICON =
-        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" ' +
-        'style="vertical-align:middle;margin-right:6px;flex-shrink:0">' +
-        '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
-
-    // ══════════════════════════════════════════════
-    // PAGE: kural.html — big centred share button
-    // ══════════════════════════════════════════════
-    function initKuralPage() {
-        if (!document.getElementById('wa-share-style')) {
-            const s = document.createElement('style');
-            s.id = 'wa-share-style';
-            s.textContent =
-                '#wa-share-wrapper { margin: 20px 0 8px; text-align: center; }' +
-                '#wa-share-btn { display:inline-flex; align-items:center; justify-content:center;' +
-                '  padding:12px 26px; background:#25D366; color:#fff; border:none;' +
-                '  border-radius:50px; font-size:1rem; font-weight:700; cursor:pointer;' +
-                '  font-family:inherit; box-shadow:0 3px 14px rgba(37,211,102,0.4);' +
-                '  transition:all 0.2s ease; max-width:320px; }' +
-                '@media(max-width:600px){' +
-                '  #wa-share-btn{width:100%!important;max-width:100%!important;border-radius:12px!important;}' +
-                '}';
-            document.head.appendChild(s);
-        }
-
-        function inject() {
-            const old = document.getElementById('wa-share-wrapper');
-            if (old) old.remove();
-            const btn = document.createElement('button');
-            btn.id = 'wa-share-btn';
-            btn.innerHTML = WA_ICON + 'Share on WhatsApp';
-            btn.addEventListener('mouseenter', () => { btn.style.background='#1da851'; btn.style.transform='translateY(-2px)'; });
-            btn.addEventListener('mouseleave', () => { btn.style.background='#25D366'; btn.style.transform=''; });
-            btn.addEventListener('click', () => executeShare(currentId, btn));
-            const wrap = document.createElement('div');
-            wrap.id = 'wa-share-wrapper';
-            wrap.appendChild(btn);
-            const hero = document.querySelector('#kural-content .kural-hero');
-            const anchor = hero || document.getElementById('kural-content');
-            if (anchor) anchor.insertAdjacentElement('afterend', wrap);
-        }
-
+    function watchContent() {
         const el = document.getElementById('kural-content');
-        if (!el) { setTimeout(initKuralPage, 200); return; }
-        new MutationObserver(() => setTimeout(inject, 100)).observe(el, { childList: true });
-        setTimeout(inject, 400);
-    }
-
-    // ══════════════════════════════════════════════
-    // PAGE: athikaram-view.html — small button next to Read
-    // ══════════════════════════════════════════════
-    function initAthikaramPage() {
-        if (!document.getElementById('wa-share-style')) {
-            const s = document.createElement('style');
-            s.id = 'wa-share-style';
-            s.textContent =
-                '.kural-card-header-btns { display:flex; align-items:center; gap:8px; }' +
-                '.ath-share-btn { display:inline-flex; align-items:center; font-size:0.78rem;' +
-                '  font-weight:600; color:#25D366; background:none; border:1px solid #25D366;' +
-                '  padding:3px 10px; border-radius:12px; cursor:pointer; font-family:inherit;' +
-                '  transition:all 0.2s ease; white-space:nowrap; line-height:1.4; }' +
-                '.ath-share-btn:hover { background:#25D366; color:#fff; }' +
-                '.ath-share-btn:disabled { opacity:0.5; cursor:default; }';
-            document.head.appendChild(s);
-        }
-
-        function attachAll() {
-            document.querySelectorAll('.kural-card').forEach(card => {
-                const header = card.querySelector('.kural-card-header');
-                const numEl  = card.querySelector('.kural-number-small');
-                if (!header || !numEl || header.querySelector('.kural-card-header-btns')) return;
-                const match = numEl.textContent.match(/\d+/);
-                if (!match) return;
-                const kuralNumber = parseInt(match[0], 10);
-
-                const readLink = header.querySelector('.kural-view-btn');
-                if (!readLink) return;
-
-                const group = document.createElement('div');
-                group.className = 'kural-card-header-btns';
-                readLink.parentNode.insertBefore(group, readLink);
-                group.appendChild(readLink);
-
-                const btn = document.createElement('button');
-                btn.className = 'ath-share-btn';
-                btn.innerHTML = WA_ICON + 'Share';
-                btn.title = 'Share Kural ' + kuralNumber;
-                btn.addEventListener('click', () => executeShare(kuralNumber, btn));
-                group.appendChild(btn);
-            });
-        }
-
-        const container = document.getElementById('kurals-list') || document.querySelector('main');
-        if (!container) { setTimeout(initAthikaramPage, 300); return; }
-        attachAll();
-        new MutationObserver(() => setTimeout(attachAll, 80)).observe(container, { childList: true, subtree: true });
-    }
-
-    // ── Boot: detect page and initialise ──
-    function boot() {
-        if (document.getElementById('kural-content')) {
-            initKuralPage();
-        } else if (document.getElementById('kurals-list')) {
-            initAthikaramPage();
-        }
-        // If neither exists yet, wait and retry
-        else { setTimeout(boot, 200); }
+        if (!el) { setTimeout(watchContent, 200); return; }
+        new MutationObserver(() => setTimeout(injectButton, 100)).observe(el, { childList: true });
+        setTimeout(injectButton, 400);
     }
 
     document.readyState === 'loading'
-        ? document.addEventListener('DOMContentLoaded', boot)
-        : boot();
+        ? document.addEventListener('DOMContentLoaded', watchContent)
+        : watchContent();
 
 })();
