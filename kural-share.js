@@ -551,4 +551,6 @@
         ? document.addEventListener('DOMContentLoaded', boot)
         : boot();
 
+    window.executeShare = executeShare;
+
 })();
