@@ -397,7 +397,7 @@ function createKuralCard(kural, athikaram) {
     card.innerHTML = `
         <div class="kural-card-header">
             <div class="kural-number-small">${kuralText} ${kural.Number}</div>
-            <a href="kural.html?id=${kural.Number}" class="kural-view-btn" title="Read this kural">📖 Read</a>
+            <a href="kural.html?id=${kural.Number}" class="kural-view-btn" title="Read this kural">${window.t ? window.t('read') : '📖 Read'}</a>
         </div>
         
         <div class="kural-text-section-compact">

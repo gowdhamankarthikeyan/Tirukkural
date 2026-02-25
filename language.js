@@ -86,6 +86,14 @@ function applyTranslations() {
             element.textContent = t[key];
         }
     });
+
+    // Translate placeholder attributes (data-translate-placeholder)
+    document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-translate-placeholder');
+        if (t[key]) {
+            element.setAttribute('placeholder', t[key]);
+        }
+    });
     
     // Translate specific content elements by ID
     const elementsToTranslate = {
@@ -97,7 +105,9 @@ function applyTranslations() {
         'virtueDesc': 'virtue_desc',
         'wealthDesc': 'wealth_desc',
         'loveDesc': 'love_desc',
-        'thirukkuralPaalTitle': 'three_books_title'
+        'thirukkuralPaalTitle': 'three_books_title',
+        'contributorsBannerText': 'contributors_subtitle',
+        'statLabelIyal': 'sections'
     };
     
     Object.entries(elementsToTranslate).forEach(([elementId, translationKey]) => {

@@ -429,22 +429,27 @@ img, iframe, video {
 
 /* ── Stats Section ── */
 .stats-section {
-    padding: 0;
+    padding: 24px 20px;
+    background: white;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
     text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .stat-item {
-    padding: 20px;
-    background: white;
+    padding: 18px 10px;
+    background: #fafafa;
     border: 1.5px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
 .stat-item--visitors {
@@ -454,15 +459,147 @@ img, iframe, video {
 }
 
 .stat-number {
-    font-size: 3rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 .stat-label {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.stat-sublabel {
+    font-size: 0.75rem;
     color: var(--text-light);
+    margin-top: 2px;
+}
+
+/* ── Contributors Banner ── */
+.contributors-banner {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 14px 20px;
+}
+
+.contributors-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.contributors-banner-text {
+    margin: 0;
+    font-size: 0.93rem;
+    opacity: 0.96;
+    flex: 1;
+    min-width: 220px;
+    line-height: 1.5;
+}
+
+.contributors-banner-link {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.contributors-banner-link:hover {
+    background: rgba(255, 255, 255, 0.32);
+}
+
+/* ── Iyal Section (hidden by default — remove .hidden to enable) ── */
+.iyal-section {
+    padding: 32px 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.iyal-section.hidden {
+    display: none;
+}
+
+.iyal-section-title {
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.iyal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.iyal-card {
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1.5px solid transparent;
+}
+
+.iyal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+}
+
+.iyal-virtue { background: #fff7e6; border-color: #fa8c16; }
+.iyal-wealth { background: #f0f9ff; border-color: #4096ff; }
+.iyal-love   { background: #fff0f6; border-color: #eb2f96; }
+
+.iyal-name {
+    font-weight: 700;
+    font-size: 0.98rem;
+    margin-bottom: 2px;
+    color: var(--text-dark);
+}
+
+.iyal-en {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.iyal-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iyal-paal {
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+    padding: 1px 8px;
+}
+
+.iyal-paal--virtue { color: #d46b08; }
+.iyal-paal--wealth { color: #0958d9; }
+.iyal-paal--love   { color: #c41d7f; }
+
+.iyal-chapters {
+    font-size: 0.7rem;
+    color: #aaa;
 }
 
 /* ── Filter Tabs ── */
@@ -1399,9 +1536,15 @@ img, iframe, video {
     .athikaram-navigation .nav-button { width: 100%; }
 
     /* Stats */
-    .stats-grid  { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .stat-number { font-size: 2rem; }
-    .stat-label  { font-size: 1rem; }
+    .stats-grid  { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stat-number { font-size: 1.9rem; }
+    .stat-label  { font-size: 0.85rem; }
+    .stat-sublabel { font-size: 0.68rem; }
+    /* Contributors banner — stack on mobile */
+    .contributors-banner-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .contributors-banner-link  { width: 100%; text-align: center; justify-content: center; }
+    /* Iyal grid */
+    .iyal-grid { grid-template-columns: repeat(2, 1fr); }
 
     /* Tamil explanation translate button — original behaviour */
     /* Mobile — translate button full width below text for all 4 explanations */

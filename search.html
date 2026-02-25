@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>தேடல் - திருக்குறள்</title>
+    <meta name="description" content="Search Tirukkuṟaḷ by kural number, athikaram number, chapter name, or any word in 15 languages.">
+    <meta name="keywords" content="tirukkural search, thirukkural search, kural search, திருக்குறள் தேடல்">
+    <link rel="canonical" href="https://tirukkural.in/search.html">
+    <link rel="icon" type="image/svg+xml" href="thiruvalluvar-logo.svg">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tirukkural.in/search.html">
+    <meta property="og:title" content="Search Tirukkuṟaḷ — 1330 Couplets">
+    <meta property="og:description" content="Search Tirukkuṟaḷ by kural number, athikaram, chapter name or any word in 15 languages.">
+    <meta property="og:image" content="https://tirukkural.in/thiruvalluvar-logo.svg">
+
+    <link rel="stylesheet" href="styles.css?v=1.3">
+
+    <style>
+        /* ── Search page specific ── */
+        .search-hero {
+            text-align: center;
+            padding: 36px 20px 24px;
+        }
+
+        .search-hero-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 6px;
+        }
+
+        .search-hero-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin: 0 0 24px;
+        }
+
+        .search-box-wrap {
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.18);
+            border: 2px solid var(--primary-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            flex: 1;
+            border: none;
+            padding: 14px 20px;
+            font-size: 1.05rem;
+            outline: none;
+            font-family: inherit;
+            background: white;
+            color: var(--text-dark);
+            min-width: 0;
+        }
+
+        #searchInput::placeholder {
+            color: #bbb;
+        }
+
+        #searchBtn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        #searchBtn:hover { opacity: 0.88; }
+
+        /* Filter chips */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .filter-chip {
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--secondary-color);
+            background: white;
+            color: var(--text-light);
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Results area */
+        .search-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .results-meta {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            margin: 22px 0 14px;
+            min-height: 1.4em;
+        }
+
+        /* Kural result card */
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary-color);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .result-card--athikaram {
+            border-left-color: var(--secondary-color);
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .result-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .result-badge--athikaram {
+            background: var(--secondary-color);
+        }
+
+        .result-athikaram-label {
+            font-size: 0.76rem;
+            color: #999;
+        }
+
+        .result-lines {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-dark);
+            line-height: 1.55;
+        }
+
+        .result-translation {
+            font-size: 0.86rem;
+            color: var(--text-light);
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        .result-athikaram-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .result-athikaram-meta {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        mark.search-highlight {
+            background: #fff3cd;
+            border-radius: 2px;
+            padding: 0 2px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Tip box */
+        .search-tip {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 1px dashed var(--border-color);
+            margin-top: 10px;
+        }
+
+        .search-tip-icon { font-size: 1.4rem; margin-bottom: 8px; }
+
+        .search-tip p {
+            color: var(--text-light);
+            font-size: 0.88rem;
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .search-tip strong { color: var(--text-dark); }
+
+        /* Loading spinner */
+        .search-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f0f0f0;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .no-results-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .no-results h3 { font-size: 1.1rem; margin-bottom: 6px; color: var(--text-dark); }
+
+        /* Match source tag */
+        .match-source {
+            display: inline-block;
+            font-size: 0.68rem;
+            background: #f5f5f5;
+            color: #888;
+            border-radius: 8px;
+            padding: 1px 7px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* Divider between athikaram and kural results */
+        .results-section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 20px 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .search-hero-title { font-size: 1.5rem; }
+            #searchInput { font-size: 0.95rem; padding: 12px 14px; }
+            #searchBtn { padding: 12px 16px; font-size: 0.9rem; }
+            .result-card { padding: 14px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="header-link">
+                    <img src="thiruvalluvar-logo.svg" alt="திருவள்ளுவர்" class="site-logo">
+                    <div class="header-text">
+                        <h1 class="site-title" id="siteTitle">திருக்குறள்</h1>
+                        <p class="site-tagline" id="siteTagline">உலகப் பொதுமறை, வாழ்வின் கலை</p>
+                        <p class="site-subtitle" id="siteSubtitle">திருவள்ளுவர் அருளியது</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="nav-hamburger" onclick="this.closest('.nav').querySelector('.nav-links').classList.toggle('open')">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-translate="home">முகப்பு</a>
+                <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
+                <a href="search.html" class="nav-link active" data-translate="search">🔍 தேடல்</a>
+            </div>
+            <div class="nav-controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                </select>
+                <button class="welcome-btn" onclick="openWelcomeModal()" title="Welcome Guide">ℹ️</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Hero -->
+    <div class="search-hero">
+        <h2 class="search-hero-title" data-translate="search_title">🔍 தேடல்</h2>
+        <p class="search-hero-subtitle" id="searchSubtitle">
+            <span data-translate="kural">குறள்</span> <span data-translate="number">எண்</span>,
+            <span data-translate="chapter">அதிகாரம்</span> <span data-translate="number">எண்</span>,
+            <span data-translate="filter_name">அதிகாரப் பெயர்</span>
+            <span data-translate="or">அல்லது</span>
+            <span data-translate="filter_word">வார்த்தை</span>
+            — <span data-translate="in_any_lang">எந்த மொழியிலும்</span>
+        </p>
+
+        <div class="search-box-wrap">
+            <input type="search" id="searchInput" autocomplete="off" autocorrect="off" spellcheck="false"
+                placeholder="Enter number, word, or chapter name…" aria-label="Search Tirukkural" data-translate-placeholder="search_placeholder">
+            <button id="searchBtn" data-translate="search_btn">தேடு →</button>
+        </div>
+
+        <div class="filter-row" id="filterRow">
+            <button class="filter-chip active" data-filter="all" data-translate="filter_all">அனைத்தும்</button>
+            <button class="filter-chip" data-filter="kural"><span data-translate="kural">குறள்</span> #</button>
+            <button class="filter-chip" data-filter="athikaram"><span data-translate="chapter">அதிகாரம்</span> #</button>
+            <button class="filter-chip" data-filter="name" data-translate="filter_name">Chapter Name</button>
+            <button class="filter-chip" data-filter="word" data-translate="filter_word">Word</button>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="search-content">
+        <div class="results-meta" id="resultsMeta"></div>
+        <div id="resultsContainer">
+            <!-- Tip shown on initial load -->
+            <div class="search-tip" id="searchTip">
+                <div class="search-tip-icon">💡</div>
+                <p>
+                    <strong>5</strong> → <span data-translate="kural">குறள்</span> 5 &amp; <span data-translate="chapter">அதிகாரம்</span> 5 &nbsp;·&nbsp;
+                    <strong>அன்பு</strong> → <span data-translate="filter_word">வார்த்தை</span> &nbsp;·&nbsp;
+                    <strong>love</strong> → <span data-translate="filter_word">வார்த்தை</span> &nbsp;·&nbsp;
+                    <strong>கடவுள் வாழ்த்து</strong> → <span data-translate="filter_name">அதிகாரப் பெயர்</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 திருக்குறள் - கௌதமன் கார்த்திகேயன்</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="languages.js?v=1.0"></script>
+    <script src="language.js?v=1.3"></script>
+    <script src="search.js?v=1.0"></script>
+
+</body>
+</html>

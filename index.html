@@ -163,7 +163,7 @@
             <div class="nav-links">
                 <a href="index.html" class="nav-link active" data-translate="home">முகப்பு</a>
                 <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
-                <a href="contributors.html" class="nav-link" data-translate="contributors_title">பங்களிப்பாளர்கள் & ஆதாரங்கள்</a>
+                <a href="search.html" class="nav-link" data-translate="search">🔍 தேடல்</a>
             </div>
             <div class="nav-controls">
                 <select id="languageDropdown" class="language-dropdown">
@@ -250,25 +250,126 @@
             </div>
         </section>
 
-        <!-- Quick Stats + Visit Counter — same row -->
+        <!-- Quick Stats + Visit Counter -->
         <section class="stats-section">
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number">1330</div>
                     <div class="stat-label" data-translate="couplets">குறள்கள்</div>
+                    <div class="stat-sublabel" data-translate="couplets_sub">Couplets</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">133</div>
                     <div class="stat-label" data-translate="chapters">அதிகாரங்கள்</div>
+                    <div class="stat-sublabel" data-translate="chapters_sub">Chapters</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label" data-translate="books">பால்கள்</div>
+                    <div class="stat-number">9</div>
+                    <div class="stat-label" id="statLabelIyal">இயல்கள்</div>
+                    <div class="stat-sublabel" data-translate="sections">Sections</div>
                 </div>
-                <!-- Visit counter — separate box, same row -->
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label" data-translate="languages">மொழிகள்</div>
+                    <div class="stat-sublabel" data-translate="languages">Languages</div>
+                </div>
+                <!-- Visit counter — highlighted box -->
                 <div class="stat-item stat-item--visitors">
                     <div class="stat-number" id="visitCount">—</div>
                     <div class="stat-label" data-translate="visits">வருகைகள்</div>
+                    <div class="stat-sublabel" data-translate="visits">Visits</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contributors Banner — full width, below stats -->
+        <section class="contributors-banner">
+            <div class="contributors-banner-inner">
+                <p class="contributors-banner-text" id="contributorsBannerText">
+                    📚 This site stands on the shoulders of scholars and translators who devoted years to preserving Tiruvaḷḷuvar's wisdom.
+                </p>
+                <a href="contributors.html" class="contributors-banner-link" data-translate="contributors_link">View All Contributors &amp; Sources →</a>
+            </div>
+        </section>
+
+        <!-- Iyal Section — 9 Sections of Tirukkural (hidden for now, enable by removing hidden class) -->
+        <section class="iyal-section hidden">
+            <h2 class="iyal-section-title" data-translate="iyalkal">9 இயல்கள் — Sections of Tirukkuṟaḷ</h2>
+            <div class="iyal-grid">
+                <!-- அறத்துப்பால் Iyals -->
+                <div class="iyal-card iyal-virtue">
+                    <div class="iyal-name">பாயிரவியல்</div>
+                    <div class="iyal-en">Prologue</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--virtue">⚖️ Virtue</span>
+                        <span class="iyal-chapters">Ch. 1–4</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-virtue">
+                    <div class="iyal-name">இல்லறவியல்</div>
+                    <div class="iyal-en">Domestic Virtue</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--virtue">⚖️ Virtue</span>
+                        <span class="iyal-chapters">Ch. 5–24</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-virtue">
+                    <div class="iyal-name">துறவறவியல்</div>
+                    <div class="iyal-en">Ascetic Virtue</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--virtue">⚖️ Virtue</span>
+                        <span class="iyal-chapters">Ch. 25–37</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-virtue">
+                    <div class="iyal-name">ஊழியல்</div>
+                    <div class="iyal-en">Fate</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--virtue">⚖️ Virtue</span>
+                        <span class="iyal-chapters">Ch. 38</span>
+                    </div>
+                </div>
+                <!-- பொருட்பால் Iyals -->
+                <div class="iyal-card iyal-wealth">
+                    <div class="iyal-name">அரசியல்</div>
+                    <div class="iyal-en">Royalty</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--wealth">💰 Wealth</span>
+                        <span class="iyal-chapters">Ch. 39–63</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-wealth">
+                    <div class="iyal-name">அங்கவியல்</div>
+                    <div class="iyal-en">Ministers of State</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--wealth">💰 Wealth</span>
+                        <span class="iyal-chapters">Ch. 64–95</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-wealth">
+                    <div class="iyal-name">ஒழிபியல்</div>
+                    <div class="iyal-en">Miscellaneous</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--wealth">💰 Wealth</span>
+                        <span class="iyal-chapters">Ch. 96–108</span>
+                    </div>
+                </div>
+                <!-- இன்பத்துப்பால் Iyals -->
+                <div class="iyal-card iyal-love">
+                    <div class="iyal-name">களவியல்</div>
+                    <div class="iyal-en">Pre-marital Love</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--love">💕 Love</span>
+                        <span class="iyal-chapters">Ch. 109–115</span>
+                    </div>
+                </div>
+                <div class="iyal-card iyal-love">
+                    <div class="iyal-name">கற்பியல்</div>
+                    <div class="iyal-en">Post-marital Love</div>
+                    <div class="iyal-meta">
+                        <span class="iyal-paal iyal-paal--love">💕 Love</span>
+                        <span class="iyal-chapters">Ch. 116–133</span>
+                    </div>
                 </div>
             </div>
         </section>

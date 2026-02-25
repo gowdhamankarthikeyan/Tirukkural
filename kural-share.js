@@ -469,14 +469,14 @@
             // Share button
             const btn = document.createElement('button');
             btn.id = 'wa-share-btn';
-            btn.innerHTML = WA_ICON + 'Share on WhatsApp';
+            btn.innerHTML = WA_ICON + (window.t ? window.t('share_on_whatsapp') : 'Share on WhatsApp');
             btn.addEventListener('mouseenter', () => { btn.style.background='#1da851'; btn.style.transform='translateY(-2px)'; });
             btn.addEventListener('mouseleave', () => { btn.style.background='#25D366'; btn.style.transform=''; });
             btn.addEventListener('click', () => executeShare(currentId, btn));
             // Audio info button
             const infoBtn = document.createElement('button');
             infoBtn.id = 'audio-info-btn';
-            infoBtn.innerHTML = '🔊 Audio Info';
+            infoBtn.innerHTML = window.t ? window.t('audio_info') : '🔊 Audio Info';
             infoBtn.addEventListener('click', () => {
                 buildModal();
                 document.getElementById('audio-info-modal').classList.add('open');
@@ -528,7 +528,7 @@
                 group.appendChild(readLink);
                 const btn = document.createElement('button');
                 btn.className = 'ath-share-btn';
-                btn.innerHTML = WA_ICON + 'Share';
+                btn.innerHTML = WA_ICON + (window.t ? window.t('share') : 'Share');
                 btn.title = 'Share Kural ' + kuralNumber;
                 btn.addEventListener('click', () => executeShare(kuralNumber, btn));
                 group.appendChild(btn);
