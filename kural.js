@@ -121,13 +121,39 @@ function playAudio(btn, lang, kural) {
     playTTS(lang.ttsCode, text);
 }
 
+function getVoiceForLang(ttsCode) {
+    const voices = window.speechSynthesis.getVoices();
+    // Exact match first, then language prefix match
+    return voices.find(v => v.lang === ttsCode)
+        || voices.find(v => v.lang.startsWith(ttsCode.split('-')[0]));
+}
+
 function playTTS(ttsCode, text) {
     if (!window.speechSynthesis) { stopCurrentAudio(); return; }
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = ttsCode;
-    utt.onend = utt.onerror = stopCurrentAudio;
-    _currentUtterance = utt;
-    window.speechSynthesis.speak(utt);
+    function speak() {
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = ttsCode;
+        const voice = getVoiceForLang(ttsCode);
+        if (voice) utt.voice = voice;
+        utt.onend = utt.onerror = stopCurrentAudio;
+        _currentUtterance = utt;
+        window.speechSynthesis.speak(utt);
+    }
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+        speak();
+    } else {
+        // Android Chrome loads voices async — wait for the event
+        window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.onvoiceschanged = null;
+            speak();
+        };
+        // Fallback timeout in case onvoiceschanged never fires
+        setTimeout(function() {
+            if (_currentUtterance) return; // already spoke
+            speak();
+        }, 1500);
+    }
 }
 
 function renderKural(id) {
@@ -161,7 +187,7 @@ function renderKural(id) {
 
     // Translation rows — Tamil audio lives in Transliteration row
     var rows = [
-        { langCode: 'ta', langLabel: 'Transliteration (Roman)', flag: '🔤', cls: '', rtl: false,
+        { langCode: 'ta', langLabel: 'Transliteration', flag: '🔤', cls: '', rtl: false,
           line1: kural.transliteration1, line2: kural.transliteration2, attr: '' },
         { langCode: 'en', langLabel: 'English', flag: '🇬🇧', cls: 'english', rtl: false,
           line1: kural.ashraf_line1, line2: kural.ashraf_line2,

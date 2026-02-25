@@ -720,7 +720,7 @@ function showAudioHelpModal(e) {
                     </ol>
                 </div>
 
-                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French, Chinese, Russian, German, Arabic, Sinhala) may require a one-time voice download.</p>
+                <p class="audio-help-note">&#128161; <strong>Tip:</strong> English audio works on most devices without any setup. Other languages (Tamil, Hindi, Malayalam, Kannada, Telugu, French, Chinese, Russian, German, Arabic, Sinhala, Polski, Svenska, Bahasa Melayu) may require a one-time voice download.</p>
             </div>
         `;
         modal.addEventListener('click', function(ev) {

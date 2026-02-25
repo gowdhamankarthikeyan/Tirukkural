@@ -1,13 +1,13 @@
 # திருக்குறள் — Tirukkuṟaḷ Multilingual Website
 
-A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets — with Tamil text, transliteration, four expert commentaries (3 Tamil + 1 English), curated English translation, 11 native language translations, audio in 12 languages, and 15-language site navigation.
+A free, ad-free web application for exploring all 1,330 Tirukkuṟaḷ couplets — with Tamil text, transliteration, four expert commentaries (3 Tamil + 1 English), curated English translation, 14 native language translations, audio in 15 languages, and 15-language site navigation.
 
 🌐 **Live site:** https://tirukkural.in
 
-![Version](https://img.shields.io/badge/version-1.7-blue)
+![Version](https://img.shields.io/badge/version-1.8-blue)
 ![Navigation](https://img.shields.io/badge/navigation-15%20languages-green)
-![Translations](https://img.shields.io/badge/native%20translations-11%20languages-orange)
-![Audio](https://img.shields.io/badge/audio-12%20languages-red)
+![Translations](https://img.shields.io/badge/native%20translations-14%20languages-orange)
+![Audio](https://img.shields.io/badge/audio-15%20languages-red)
 ![License](https://img.shields.io/badge/license-Educational-purple)
 
 ---
@@ -45,6 +45,9 @@ Each commentary has a one-click Google Translate button for 100+ languages.
 | 🇩🇪 Deutsch German | Albrecht Frenz & K. Lalithambal (Madurai, 1977) |
 | 🇸🇦 العربية Arabic | Dr. Yousuf Kokan; digitised by Dr. N.V. Ahmed Unni |
 | 🇱🇰 සිංහල Sinhala | G. Misihami & Dr. S. Tambayah (Anula Press, Colombo, 1961) |
+| 🇵🇱 Polski Polish | Bohdan Gębarski — Ossolineum, Wrocław (1977) |
+| 🇸🇪 Svenska Swedish | Yngve Frykholm — Sydindisk levnadsvisdom, statskunskap och kärlek |
+| 🇲🇾 Bahasa Melayu Malay | G. Soosai — Kitab Murni |
 
 ### 🔊 Audio in 12 Languages (Web Speech API)
 
@@ -56,6 +59,9 @@ Each commentary has a one-click Google Translate button for 100+ languages.
 | മലയാളം Malayalam | ml-IN | Deutsch German | de-DE |
 | ಕನ್ನಡ Kannada | kn-IN | العربية Arabic | ar-SA |
 | తెలుగు Telugu | te-IN | සිංහල Sinhala | si-LK |
+| Polski Polish | pl-PL |
+| Svenska Swedish | sv-SE |
+| Bahasa Melayu Malay | ms-MY |
 
 > English audio works on most devices without setup. Other languages may need a one-time voice download — click the **ⓘ** button for platform instructions.
 
@@ -106,6 +112,9 @@ tirukkural/
 ├── thirukkural-de.json     # German (lazy-loaded)
 ├── thirukkural-ar.json     # Arabic (lazy-loaded)
 ├── thirukkural-si.json     # Sinhala (lazy-loaded)
+├── thirukkural-pl.json     # Polish (lazy-loaded)
+├── thirukkural-sv.json     # Swedish (lazy-loaded)
+├── thirukkural-ms.json     # Malay (lazy-loaded)
 ├── sitemap.xml             # 136-URL sitemap
 ├── robots.txt
 └── README.md
@@ -226,6 +235,14 @@ Web Speech API (SpeechSynthesis) — no server-side audio files.
 
 ## 🏆 Version History
 
+### v1.8 — Polish, Swedish & Malay Translations (February 2026)
+- **Polski (Polish)** — 12th native translation; Bohdan Gębarski's *Świeta księga południowych Indii*, Ossolineum 1977
+- **Svenska (Swedish)** — 13th native translation; Yngve Frykholm's *Sydindisk levnadsvisdom, statskunskap och kärlek*
+- **Bahasa Melayu (Malay)** — 14th native translation; G. Soosai's *Kitab Murni*
+- Native translations count: 11 → **14**; Audio languages: 12 → **15**
+- Contributors page updated with research notes for all three new translators
+- Welcome modal, README, and audio help tip updated accordingly
+
 ### v1.7 — Sinhala, English Commentary, Modular Architecture (February 2026)
 - **Sinhala** — 11th native translation; 12th audio language (si-LK); 15th navigation language; all 133 chapter titles; full UI strings
 - **English commentary** — Kannan (kurals 1–1080) + G.U. Pope fallback (1081–1330); blue accent card
@@ -262,7 +279,7 @@ Web Speech API (SpeechSynthesis) — no server-side audio files.
 
 Tirukkuṟaḷ text — Public domain (~31 BCE–1 CE). Code — Educational/non-commercial.
 
-**Translators:** N.V.K. Ashraf · Kannan · G.U. Pope · V.V. Abdulla Sahib · ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ · Gurucharan · M.G. Venkatakrishnan · Gnanou Diagou · Dr. Yu Hsi · Vithali Furniki · Albrecht Frenz & K. Lalithambal · Dr. Yousuf Kokan · G. Misihami & Dr. S. Tambayah
+**Translators:** N.V.K. Ashraf · Kannan · G.U. Pope · V.V. Abdulla Sahib · ಪಾ. ಶ. ಶ್ರೀನಿವಾಸ · Gurucharan · M.G. Venkatakrishnan · Gnanou Diagou · Dr. Yu Hsi · Vithali Furniki · Albrecht Frenz & K. Lalithambal · Dr. Yousuf Kokan · G. Misihami & Dr. S. Tambayah · Bohdan Gębarski · Yngve Frykholm · G. Soosai
 
 **Commentators:** மு. வரதராசனார் · சாலமன் பாப்பையா · கலைஞர் எம். கருணாநிதி
 
@@ -270,9 +287,9 @@ Tirukkuṟaḷ text — Public domain (~31 BCE–1 CE). Code — Educational/non
 
 ## 🔮 Roadmap
 
-- [x] Audio (v1.6) · [x] English commentary (v1.7) · [x] Sinhala (v1.7) · [x] Modular language system (v1.7)
+- [x] Audio (v1.6) · [x] English commentary (v1.7) · [x] Sinhala (v1.7) · [x] Modular language system (v1.7) · [x] Polish, Swedish, Malay (v1.8)
 - [ ] Search across all 1,330 kurals · [ ] Bookmarks · [ ] Daily kural · [ ] Dark mode · [ ] PWA
 
 ---
 
-**வாழ்க தமிழ்! வாழ்க திருக்குறள்!** — Built with ❤️ for Tamil literature | *v1.7, February 2026*
+**வாழ்க தமிழ்! வாழ்க திருக்குறள்!** — Built with ❤️ for Tamil literature | *v1.8, February 2026*

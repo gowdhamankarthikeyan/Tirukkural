@@ -7,18 +7,21 @@
 
 (function () {
 
-    const W = 1080, H = 1920;
+    const W = 2160, H = 3840;
 
     // ── Palette from kural.html / styles.css ──
-    const PRIMARY  = '#E8B84B';   // --primary-color  (deep orange-red)
+    const PRIMARY  = '#e06b00';   // --primary-color  (deep orange-red)
     const SECONDARY= '#fa8c16';   // --secondary-color
-    const TEXT_DARK= '#F5DEB3';   // --text-dark
-    const TEXT_LITE= '#C8A45A';   // --text-light
+    const TEXT_DARK= '#4a2500';   // --text-dark
+    const TEXT_LITE= '#595959';   // --text-light
     const BG_HERO  = '#fff9f0';   // .kural-hero background
-    const BORDER   = '#D4A017';   // .kural-hero-border color
-    const TLIT_CLR = '#C8A45A';   // .kural-translation-text color
-    const COMM_ACC = '#D4A017';   // commentary border accent
-    const EN_ACC   = '#B8860B';   // english commentary accent
+    const BORDER   = '#c8964a';   // .kural-hero-border color
+    const TLIT_CLR = '#6b5a4e';   // .kural-translation-text color
+    const COMM_ACC = '#e07b39';   // commentary border accent
+    const EN_ACC   = '#4a7eb5';   // english commentary accent
+    const BG_PAGE  = '#fafafa';   // body background-color
+    const BG_MK    = '#fafafa';   // .kural-commentary-item background
+    const BG_EN    = '#f7f9fd';   // .kural-commentary-english background
 
     // ── Text-wrap helper ──
     function wrap(ctx, text, maxW) {
@@ -63,13 +66,13 @@
 
         // fonts
         function f(size, style, family) {
-            return (style ? style + ' ' : '') + Math.round(size * s) + 'px ' + (family || 'serif');
+            return (style ? style + ' ' : '') + Math.round(size * s) + 'px ' + (family || 'Palatino Linotype, Palatino, Book Antiqua, serif');
         }
 
         let total = PAD; // top margin
 
         // ── Header block ──
-        total += Math.round(50 * s); // site name
+        total += Math.round(50 * s); // site name (no Tamil subtitle)
         total += Math.round(20 * s); // gap
 
         // ── Hero card ──
@@ -85,16 +88,16 @@
         // divider
         total += Math.round(20 * s);
         // kural lines
-        ctx.font = f(76, 'bold');
+        ctx.font = f(62, 'bold');
         const kLines = [
             ...wrap(ctx, kural.Line1 || '', INNER - CARD*2),
             ...wrap(ctx, kural.Line2 || '', INNER - CARD*2),
         ];
-        total += kLines.length * Math.round(96 * s) + Math.round(16 * s);
+        total += kLines.length * Math.round(80 * s) + Math.round(16 * s);
         // divider
         total += Math.round(20 * s);
         // transliteration
-        ctx.font = f(28, 'italic', 'Georgia, serif');
+        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const tlStr = (kural.transliteration1 || '') + '  ·  ' + (kural.transliteration2 || '');
         const tlLines = wrap(ctx, tlStr, INNER - CARD*2);
         total += tlLines.length * Math.round(40 * s);
@@ -114,8 +117,8 @@
 
         // ── English section ──
         total += Math.round(32 * s) + Math.round(10 * s);
-        ctx.font = f(40, 'italic', 'Georgia, serif');
-        const enText = (kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
+        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
+        const enText = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
         const enLines = wrap(ctx, enText, INNER - CARD);
         total += enLines.length * Math.round(56 * s);
         total += Math.round(32 * s);
@@ -134,10 +137,12 @@
         const ctx = canvas.getContext('2d');
 
         // Binary-search for largest scale that fits
-        let lo = 0.55, hi = 1.0, scale = 0.85;
-        for (let iter = 0; iter < 20; iter++) {
+        // Find scale that fills H as fully as possible without overflow
+        // Search range 0.5 – 3.0 to accommodate 2x canvas
+        let lo = 0.5, hi = 3.0, scale = 1.5;
+        for (let iter = 0; iter < 24; iter++) {
             const mid = (lo + hi) / 2;
-            if (measureTotal(ctx, mid, kural, athikaram) <= H) { lo = mid; scale = mid; }
+            if (measureTotal(ctx, mid, kural, athikaram) <= H * 0.87) { lo = mid; scale = mid; }
             else hi = mid;
         }
 
@@ -148,117 +153,98 @@
         const GAP  = Math.round(16 * s);
 
         function f(size, style, family) {
-            return (style ? style + ' ' : '') + Math.round(size * s) + 'px ' + (family || 'serif');
+            return (style ? style + ' ' : '') + Math.round(size * s) + 'px ' + (family || 'Palatino Linotype, Palatino, Book Antiqua, serif');
         }
         function lh(size) { return Math.round(size * s); }
 
-        // ══ Background ══
-        // Warm pale yellow-golden parchment
-        const bg = ctx.createLinearGradient(0, 0, 0, H);
-        bg.addColorStop(0,    '#3B1A00');
-        bg.addColorStop(0.35, '#4A2200');
-        bg.addColorStop(0.65, '#3B1A00');
-        bg.addColorStop(1,    '#2A1000');
-        ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+        // ══ Background — exact body background-color from styles.css ══
+        ctx.fillStyle = BG_PAGE; ctx.fillRect(0, 0, W, H);
 
-        // Grain texture (horizontal, like ola leaf)
-        ctx.save(); ctx.globalAlpha = 0.035; ctx.strokeStyle = '#6B3A10'; ctx.lineWidth = 1;
-        for (let gy = 0; gy < H; gy += 18) {
-            ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
-        }
-        ctx.restore();
-
-        // Edge vignette
-        const vig = ctx.createRadialGradient(W/2, H/2, W*0.25, W/2, H/2, W*0.88);
-        vig.addColorStop(0, 'rgba(0,0,0,0)');
-        vig.addColorStop(1, 'rgba(0,0,0,0.45)');
-        ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
-
-        // Outer border (double, like kural-hero-border)
-        const B = Math.round(28 * s);
+        // Outer border — single rule, #c8964a
+        const B = Math.round(40 * s);
         ctx.save();
-        ctx.strokeStyle = BORDER; ctx.lineWidth = Math.round(6 * s); ctx.globalAlpha = 0.8;
+        ctx.strokeStyle = BORDER; ctx.lineWidth = Math.round(3 * s);
         ctx.strokeRect(B, B, W - B*2, H - B*2);
-        ctx.strokeStyle = BORDER; ctx.lineWidth = Math.round(2 * s); ctx.globalAlpha = 0.35;
-        ctx.strokeRect(B + lh(12), B + lh(12), W - (B + lh(12))*2, H - (B + lh(12))*2);
         ctx.restore();
 
-        // Corner ✦ ornaments (from .kural-hero-border::before/after)
-        function starAt(x, y) {
-            ctx.save();
-            ctx.font = f(36, '', 'serif'); ctx.fillStyle = BORDER; ctx.globalAlpha = 0.85;
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('✦', x, y); ctx.restore();
-        }
-        const CO = B + lh(20);
-        starAt(CO, CO); starAt(W - CO, CO); starAt(CO, H - CO); starAt(W - CO, H - CO);
-
-        // Binding holes (ola leaf motif)
-        function holes(hy) {
-            ctx.save(); ctx.fillStyle = '#D4A017'; ctx.globalAlpha = 0.35;
-            for (let i = 0; i < 9; i++) {
-                ctx.beginPath();
-                ctx.arc(PAD + i * Math.round((INNER) / 8), hy, lh(7), 0, Math.PI*2);
-                ctx.fill();
-            }
-            ctx.restore();
-        }
-        holes(B + lh(6));
-        holes(H - B - lh(6));
 
         // ══ Layout start ══
-        let y = PAD;
+        let y = B + lh(32); // start below outer border+diamond
 
         // ── Site name header ──
         ctx.textAlign = 'center';
-        ctx.font = f(46, 'bold'); ctx.fillStyle = '#E8B84B';
+        ctx.font = f(46, 'bold'); ctx.fillStyle = PRIMARY;
         ctx.fillText('Tirukkuṟaḷ', W/2, y + lh(38)); y += lh(50);
-        ctx.font = f(26, 'italic', 'Georgia, serif'); ctx.fillStyle = TEXT_LITE;
-        ctx.fillText('திருக்குறள்', W/2, y + lh(22)); y += lh(30);
 
-        y += GAP;
+        y += GAP * 2; // extra breathing room before hero card
 
         // ── Hero card (like .kural-hero.kural-hero-border) ──
         // Measure hero content height first
         ctx.font = f(52, 'bold');
         const cTaLines = wrap(ctx, athikaram ? athikaram.ta : '', INNER - CARD*2);
-        ctx.font = f(76, 'bold');
+        ctx.font = f(62, 'bold');
         const kLines = [
             ...wrap(ctx, kural.Line1 || '', INNER - CARD*2),
             ...wrap(ctx, kural.Line2 || '', INNER - CARD*2),
         ];
-        ctx.font = f(28, 'italic', 'Georgia, serif');
+        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const tlStr = (kural.transliteration1 || '') + '  ·  ' + (kural.transliteration2 || '');
         const tlLines = wrap(ctx, tlStr, INNER - CARD*2);
 
         const heroInner =
             lh(30) + lh(12) +                         // kural num pill
-            cTaLines.length * lh(66) + lh(10) +       // chapter ta
-            lh(36) + lh(8) +                           // chapter en
+            cTaLines.length * lh(56) + lh(6) +        // chapter ta
+            lh(30) + lh(8) +                           // chapter en
             lh(2) + GAP +                              // divider
-            kLines.length * lh(96) + lh(16) +         // kural
+            kLines.length * lh(80) + lh(16) +         // kural
             lh(2) + GAP +                              // divider
             tlLines.length * lh(40);                   // tlit
 
         const heroH = CARD + heroInner + CARD;
         const heroX = PAD, heroW = INNER;
 
-        // Border only — transparent background
+        // Hero card — .kural-hero background + .kural-hero-border double-ring
+        // CSS: border: 2px solid #c8964a
+        //      box-shadow: 0 0 0 6px #fff9f0, 0 0 0 8px #c8964a,
+        //                  0 0 0 13px #fff9f0, 0 0 0 14px rgba(200,150,74,.35)
+        // Replicated as 4 inset strokes expanding outward:
+        const O1 = lh(6),  O2 = lh(8),  O3 = lh(13), O4 = lh(14);
+        // Fill background
         ctx.save();
         roundRect(ctx, heroX, y, heroW, heroH, lh(12));
-        ctx.strokeStyle = BORDER; ctx.lineWidth = lh(3); ctx.globalAlpha = 0.8; ctx.stroke();
+        ctx.fillStyle = BG_HERO; ctx.fill();
         ctx.restore();
+        // Ring 1 — inner border: 2px #c8964a (flush with card edge)
         ctx.save();
-        roundRect(ctx, heroX + lh(8), y + lh(8), heroW - lh(16), heroH - lh(16), lh(8));
-        ctx.strokeStyle = BORDER; ctx.lineWidth = lh(1); ctx.globalAlpha = 0.3; ctx.stroke();
+        roundRect(ctx, heroX, y, heroW, heroH, lh(12));
+        ctx.strokeStyle = BORDER; ctx.lineWidth = lh(2); ctx.stroke();
         ctx.restore();
-
-        // ✦ top & bottom — drawn on parchment, no bg erase
+        // Ring 2 — gap: 6px #fff9f0
         ctx.save();
-        ctx.font = f(24); ctx.fillStyle = BORDER; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.globalAlpha = 0.9;
-        ctx.fillText('✦', W/2, y);
-        ctx.fillText('✦', W/2, y + heroH);
+        roundRect(ctx, heroX - O1, y - O1, heroW + O1*2, heroH + O1*2, lh(15));
+        ctx.strokeStyle = BG_HERO; ctx.lineWidth = lh(6); ctx.stroke();
+        ctx.restore();
+        // Ring 3 — outer border: 2px #c8964a
+        ctx.save();
+        roundRect(ctx, heroX - O2, y - O2, heroW + O2*2, heroH + O2*2, lh(16));
+        ctx.strokeStyle = BORDER; ctx.lineWidth = lh(2); ctx.stroke();
+        ctx.restore();
+        // Ring 4 — outer gap + faint ring
+        ctx.save();
+        roundRect(ctx, heroX - O3, y - O3, heroW + O3*2, heroH + O3*2, lh(17));
+        ctx.strokeStyle = BG_HERO; ctx.lineWidth = lh(5); ctx.stroke();
+        roundRect(ctx, heroX - O4, y - O4, heroW + O4*2, heroH + O4*2, lh(17));
+        ctx.strokeStyle = BORDER; ctx.lineWidth = lh(1); ctx.globalAlpha = 0.35; ctx.stroke();
+        ctx.restore();
+        // ✦ ::before/::after — erase outer border, draw star
+        ctx.save();
+        ctx.font = f(22); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = BG_PAGE;
+        ctx.fillRect(W/2 - lh(26), y - O4 - lh(16), lh(52), lh(32));
+        ctx.fillRect(W/2 - lh(26), y + heroH + O4 - lh(16), lh(52), lh(32));
+        ctx.fillStyle = BORDER;
+        ctx.fillText('✦', W/2, y - O1);
+        ctx.fillText('✦', W/2, y + heroH + O1);
         ctx.restore();
 
         let hy = y + CARD;
@@ -266,7 +252,7 @@
         // Athikaram · Kural number pill
         ctx.save();
         ctx.font = f(18, 'bold');
-        const pillLabel = 'அதிகாரம் ' + (athikaram ? athikaram.id : '') + '  ·  குறள் ' + kural.Number;
+        const pillLabel = 'Chapter ' + (athikaram ? Number(athikaram.id) : '?') + '  ·  Kural ' + kural.Number;
         const pillW = Math.round(ctx.measureText(pillLabel).width) + lh(48), pillH = lh(30);
         const pillX = W/2 - pillW/2;
         roundRect(ctx, pillX, hy, pillW, pillH, pillH/2);
@@ -276,41 +262,39 @@
         ctx.restore();
         hy += pillH + lh(12);
 
-        // Chapter Tamil name
-        ctx.font = f(52, 'bold'); ctx.fillStyle = PRIMARY; ctx.textAlign = 'center';
-        cTaLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(66) + lh(50)));
-        hy += cTaLines.length * lh(66) + lh(10);
-
-        // Chapter English name
-        ctx.font = f(30, 'italic', 'Georgia, serif'); ctx.fillStyle = TEXT_LITE;
-        ctx.fillText(athikaram ? athikaram.en : '', W/2, hy + lh(28));
-        hy += lh(36) + lh(8);
+        // Chapter Tamil name (large) + English name below it
+        ctx.font = f(44, 'bold'); ctx.fillStyle = PRIMARY; ctx.textAlign = 'center';
+        cTaLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(56) + lh(44)));
+        hy += cTaLines.length * lh(56) + lh(6);
+        ctx.font = f(26, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TEXT_LITE;
+        ctx.fillText(athikaram ? athikaram.en : '', W/2, hy + lh(24));
+        hy += lh(30) + lh(8);
 
         // Divider (like the box-shadow rings)
         hline(ctx, heroX + CARD, heroX + heroW - CARD, hy, BORDER, 0.35, lh(1.5));
         hy += lh(2) + GAP;
 
         // Kural Tamil text — large, bold, centered (like .kural-hero-tamil)
-        ctx.font = f(76, 'bold'); ctx.fillStyle = '#F5DEB3'; ctx.textAlign = 'center';
-        ctx.save(); ctx.shadowColor = 'rgba(80,30,0,0.12)'; ctx.shadowBlur = lh(5);
-        kLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(96) + lh(74)));
+        ctx.font = f(62, 'bold'); ctx.fillStyle = TEXT_DARK; ctx.textAlign = 'center';
+        ctx.save(); ctx.shadowColor = 'rgba(80,30,0,0.12)'; ctx.shadowBlur = lh(4);
+        kLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(80) + lh(62)));
         ctx.restore();
-        hy += kLines.length * lh(96) + lh(16);
+        hy += kLines.length * lh(80) + lh(16);
 
         // Divider
         hline(ctx, heroX + CARD, heroX + heroW - CARD, hy, BORDER, 0.25, lh(1));
         hy += lh(2) + GAP;
 
         // Transliteration (like .kural-translation-text italic)
-        ctx.font = f(28, 'italic', 'Georgia, serif'); ctx.fillStyle = TLIT_CLR; ctx.textAlign = 'center';
+        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TLIT_CLR; ctx.textAlign = 'center';
         tlLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(40) + lh(28)));
 
         y += heroH + GAP * 2;
 
         // ── Section label ──
-        ctx.font = f(22, 'bold'); ctx.fillStyle = '#C8A45A'; ctx.textAlign = 'left';
+        ctx.font = f(22, 'bold'); ctx.fillStyle = '#595959'; ctx.textAlign = 'left';
         ctx.save(); ctx.globalAlpha = 0.7;
-        ctx.fillText('TRANSLATIONS & COMMENTARIES', PAD, y + lh(22));
+        ctx.fillText('COMMENTARIES', PAD, y + lh(22));
         ctx.restore();
         y += lh(30) + lh(12);
 
@@ -318,39 +302,45 @@
         ctx.font = f(42); ctx.textAlign = 'left';
         const mkLines = wrap(ctx, kural.mk || '', INNER - CARD);
 
-        ctx.save(); ctx.fillStyle = COMM_ACC; ctx.globalAlpha = 0.8;
-        ctx.fillRect(PAD, y, lh(5), lh(32) + lh(10) + mkLines.length * lh(58));
+        // .kural-commentary-item: background #fafafa, border-left 3px solid #e07b39
+        ctx.save();
+        const mkH = lh(16) + lh(32) + lh(10) + mkLines.length * lh(58) + lh(16);
+        ctx.fillStyle = BG_MK; ctx.fillRect(PAD, y, INNER, mkH);
+        ctx.fillStyle = COMM_ACC; ctx.fillRect(PAD, y, lh(4), mkH);
         ctx.restore();
 
         let cy = y;
-        ctx.font = f(28, 'bold'); ctx.fillStyle = '#D4A017'; ctx.textAlign = 'left';
+        ctx.font = f(28, 'bold'); ctx.fillStyle = '#c8964a'; ctx.textAlign = 'left';
         ctx.fillText('கலைஞர் உரை', PAD + lh(20), cy + lh(26)); cy += lh(32) + lh(10);
-        ctx.font = f(42); ctx.fillStyle = '#F5DEB3';
+        ctx.font = f(42); ctx.fillStyle = TEXT_DARK;
         mkLines.forEach((l, i) => ctx.fillText(l, PAD + lh(20), cy + i * lh(58) + lh(42)));
-        y += lh(32) + lh(10) + mkLines.length * lh(58) + GAP * 2;
+        y += mkH + GAP;
 
         hline(ctx, PAD, PAD + INNER, y, BORDER, 0.18, lh(1));
         y += GAP * 2;
 
         // ── Kannan section — accent bar + text directly on parchment ──
-        const enText = (kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
-        const enAuthor = (kural.kannan_exp && kural.kannan_exp.trim()) ? 'Kannan' : 'G.U. Pope';
-        ctx.font = f(40, 'italic', 'Georgia, serif'); ctx.textAlign = 'left';
+        const enText = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
+        const enAuthor = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? 'Kannan' : 'G.U. Pope';
+        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.textAlign = 'left';
         const enLines = wrap(ctx, enText, INNER - CARD);
 
-        ctx.save(); ctx.fillStyle = EN_ACC; ctx.globalAlpha = 0.8;
-        ctx.fillRect(PAD, y, lh(5), lh(32) + lh(10) + enLines.length * lh(56));
+        // .kural-commentary-english: background #f7f9fd, border-left 3px solid #4a7eb5
+        ctx.save();
+        const enH = lh(16) + lh(32) + lh(10) + enLines.length * lh(56) + lh(16);
+        ctx.fillStyle = BG_EN; ctx.fillRect(PAD, y, INNER, enH);
+        ctx.fillStyle = EN_ACC; ctx.fillRect(PAD, y, lh(4), enH);
         ctx.restore();
 
         cy = y;
-        ctx.font = f(28, 'bold', 'Georgia, serif'); ctx.fillStyle = '#B8860B'; ctx.textAlign = 'left';
+        ctx.font = f(28, 'bold', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#4a7eb5'; ctx.textAlign = 'left';
         ctx.fillText(enAuthor, PAD + lh(20), cy + lh(26)); cy += lh(32) + lh(10);
-        ctx.font = f(40, 'italic', 'Georgia, serif'); ctx.fillStyle = '#F5DEB3';
+        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TEXT_DARK;
         enLines.forEach((l, i) => ctx.fillText(l, PAD + lh(20), cy + i * lh(56) + lh(40)));
-        y += lh(32) + lh(10) + enLines.length * lh(56) + GAP * 2;
+        y += enH + GAP;
 
         // ── Footer URL ──
-        ctx.font = f(24, '', 'Georgia, serif'); ctx.fillStyle = '#C8A45A'; ctx.textAlign = 'center';
+        ctx.font = f(24, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#595959'; ctx.textAlign = 'center';
         ctx.globalAlpha = 0.65;
         ctx.fillText('tirukkural.in/kural.html?id=' + kural.Number, W/2, y + lh(22));
         ctx.globalAlpha = 1;
@@ -414,29 +404,87 @@
             const s = document.createElement('style');
             s.id = 'wa-share-style';
             s.textContent =
-                '#wa-share-wrapper { margin: 20px 0 8px; text-align: center; }' +
+                '#wa-share-wrapper { margin: 20px 0 8px; text-align: center; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }' +
                 '#wa-share-btn { display:inline-flex; align-items:center; justify-content:center;' +
                 '  padding:12px 26px; background:#25D366; color:#fff; border:none;' +
                 '  border-radius:50px; font-size:1rem; font-weight:700; cursor:pointer;' +
                 '  font-family:inherit; box-shadow:0 3px 14px rgba(37,211,102,0.4);' +
-                '  transition:all 0.2s ease; max-width:320px; }' +
+                '  transition:all 0.2s ease; }' +
+                '#audio-info-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px;' +
+                '  padding:12px 20px; background:none; color:var(--primary-color); border:2px solid var(--primary-color);' +
+                '  border-radius:50px; font-size:1rem; font-weight:600; cursor:pointer;' +
+                '  font-family:inherit; transition:all 0.2s ease; }' +
+                '#audio-info-btn:hover { background:var(--primary-color); color:#fff; }' +
+                '#audio-info-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);' +
+                '  z-index:9999; align-items:center; justify-content:center; padding:20px; }' +
+                '#audio-info-modal.open { display:flex; }' +
+                '#audio-info-box { background:#fff; border-radius:16px; padding:28px 24px; max-width:480px;' +
+                '  width:100%; box-shadow:0 8px 40px rgba(0,0,0,0.3); font-family:inherit; }' +
+                '#audio-info-box h3 { margin:0 0 16px; color:var(--primary-color); font-size:1.15rem; }' +
+                '#audio-info-box p { margin:0 0 12px; color:#444; font-size:0.95rem; line-height:1.6; }' +
+                '#audio-info-box ol { margin:0 0 16px; padding-left:20px; color:#333; font-size:0.92rem; line-height:1.8; }' +
+                '#audio-info-box .close-btn { display:block; width:100%; padding:10px; background:var(--primary-color);' +
+                '  color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:700;' +
+                '  cursor:pointer; font-family:inherit; margin-top:4px; }' +
+                '.voice-status { font-size:0.82rem; color:#888; margin-top:4px; padding:8px 12px;' +
+                '  background:#f5f5f5; border-radius:8px; }' +
                 '@media(max-width:600px){' +
-                '  #wa-share-btn{width:100%!important;max-width:100%!important;border-radius:12px!important;}' +
+                '  #wa-share-btn,#audio-info-btn{width:100%;border-radius:12px!important;}' +
+                '  #wa-share-wrapper{flex-direction:column;}' +
                 '}';
             document.head.appendChild(s);
+        }
+
+        function buildModal() {
+            if (document.getElementById('audio-info-modal')) return;
+            const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+            const tamilVoice = voices.find(v => v.lang.startsWith('ta'));
+            const voiceList = voices.length
+                ? voices.map(v => v.name + ' (' + v.lang + ')').join(', ')
+                : 'No voices detected yet — try tapping \"Audio Info\" after the page fully loads.';
+            const modal = document.createElement('div');
+            modal.id = 'audio-info-modal';
+            modal.innerHTML =
+                '<div id=\"audio-info-box\">'+
+                '<h3>🔊 Audio & Voice Info</h3>'+
+                '<p>Tamil and English kurals play from pre-recorded MP3s. All other languages use your device\'s Text-to-Speech (TTS) engine.</p>'+
+                '<p><strong>If audio is silent for non-English languages:</strong></p>'+
+                '<ol>'+
+                '<li>Open <strong>Settings → General Management → Language</strong></li>'+
+                '<li>Tap <strong>Text-to-speech</strong></li>'+
+                '<li>Choose <strong>Samsung TTS</strong> or <strong>Google TTS</strong> as preferred engine</li>'+
+                '<li>Tap ⚙️ settings → <strong>Install voice data</strong> → download languages needed</li>'+
+                '</ol>'+
+                '<p class=\"voice-status\"><strong>Tamil voice available:</strong> ' + (tamilVoice ? '✅ ' + tamilVoice.name : '❌ Not found — install Tamil TTS data') + '</p>'+
+                '<p class=\"voice-status\"><strong>All voices on this device (' + voices.length + '):</strong><br>' + voiceList + '</p>'+
+                '<button class=\"close-btn\">Got it</button>'+
+                '</div>';
+            modal.addEventListener('click', e => { if (e.target === modal || e.target.classList.contains('close-btn')) modal.classList.remove('open'); });
+            document.body.appendChild(modal);
         }
 
         function inject() {
             const old = document.getElementById('wa-share-wrapper');
             if (old) old.remove();
+            // Share button
             const btn = document.createElement('button');
             btn.id = 'wa-share-btn';
             btn.innerHTML = WA_ICON + 'Share on WhatsApp';
             btn.addEventListener('mouseenter', () => { btn.style.background='#1da851'; btn.style.transform='translateY(-2px)'; });
             btn.addEventListener('mouseleave', () => { btn.style.background='#25D366'; btn.style.transform=''; });
             btn.addEventListener('click', () => executeShare(currentId, btn));
+            // Audio info button
+            const infoBtn = document.createElement('button');
+            infoBtn.id = 'audio-info-btn';
+            infoBtn.innerHTML = '🔊 Audio Info';
+            infoBtn.addEventListener('click', () => {
+                buildModal();
+                document.getElementById('audio-info-modal').classList.add('open');
+            });
             const wrap = document.createElement('div');
-            wrap.id = 'wa-share-wrapper'; wrap.appendChild(btn);
+            wrap.id = 'wa-share-wrapper';
+            wrap.appendChild(btn);
+            wrap.appendChild(infoBtn);
             const hero = document.querySelector('#kural-content .kural-hero');
             const anchor = hero || document.getElementById('kural-content');
             if (anchor) anchor.insertAdjacentElement('afterend', wrap);
