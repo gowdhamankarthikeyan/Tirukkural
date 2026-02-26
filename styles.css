@@ -364,6 +364,9 @@ img, iframe, video {
     box-shadow: var(--shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .paal-card:hover {
@@ -409,8 +412,8 @@ img, iframe, video {
     font-weight: 600;
     color: var(--secondary-color);
     margin-bottom: 20px;
+    margin-top: auto;
 }
-
 .paal-link {
     display: inline-block;
     background: var(--primary-color);

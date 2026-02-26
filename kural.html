@@ -45,7 +45,24 @@
         </div>
     </header>
 
-    <!-- Navigation hidden on kural page — Back to Chapter button handles navigation -->
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-hamburger" onclick="this.closest('.nav').querySelector('.nav-links').classList.toggle('open')">☰</button>
+        <div class="container nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-translate="home">முகப்பு</a>
+                <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
+                <a href="search.html" class="nav-link" data-translate="search">🔍 தேடல்</a>
+            </div>
+            <div class="nav-controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
 
     <!-- Main -->
     <main class="container main-content">
@@ -70,6 +87,17 @@
         </div>
 
     </main>
+
+
+        <!-- Contributors Banner -->
+        <section class="contributors-banner">
+            <div class="contributors-banner-inner">
+                <p class="contributors-banner-text" id="contributorsBannerText">
+                    📚 This site stands on the shoulders of scholars and translators who devoted years to preserving Tiruvaḷḷuvar's wisdom.
+                </p>
+                <a href="contributors.html" class="contributors-banner-link" data-translate="contributors_link">View All Contributors &amp; Sources →</a>
+            </div>
+        </section>
 
     <!-- Footer -->
     <footer class="footer">

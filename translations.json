@@ -178,7 +178,10 @@
       "read": "📖 படி",
       "share": "பகிர்",
       "share_on_whatsapp": "WhatsApp-ல் பகிர்",
-      "audio_info": "🔊 ஒலி தகவல்"
+      "audio_info": "🔊 ஒலி தகவல்",
+      "sections_sub": "பிரிவுகள்",
+      "languages_sub": "மொழிகள்",
+      "visits_sub": "வருகைகள்"
     },
     "en": {
       "home": "Home",
@@ -248,7 +251,10 @@
       "read": "📖 Read",
       "share": "Share",
       "share_on_whatsapp": "Share on WhatsApp",
-      "audio_info": "🔊 Audio Info"
+      "audio_info": "🔊 Audio Info",
+      "sections_sub": "Sections",
+      "languages_sub": "Languages",
+      "visits_sub": "Visits"
     },
     "hi": {
       "home": "होम",
@@ -318,7 +324,10 @@
       "read": "📖 पढ़ें",
       "share": "साझा करें",
       "share_on_whatsapp": "WhatsApp पर साझा करें",
-      "audio_info": "🔊 ऑडियो जानकारी"
+      "audio_info": "🔊 ऑडियो जानकारी",
+      "sections_sub": "अनुभाग",
+      "languages_sub": "भाषाएँ",
+      "visits_sub": "दर्शन"
     },
     "te": {
       "home": "హోమ్",
@@ -388,7 +397,10 @@
       "read": "📖 చదవండి",
       "share": "పంచుకోండి",
       "share_on_whatsapp": "WhatsApp లో పంచుకోండి",
-      "audio_info": "🔊 ఆడియో సమాచారం"
+      "audio_info": "🔊 ఆడియో సమాచారం",
+      "sections_sub": "విభాగాలు",
+      "languages_sub": "భాషలు",
+      "visits_sub": "సందర్శనలు"
     },
     "ml": {
       "home": "ഹോം",
@@ -458,7 +470,10 @@
       "read": "📖 വായിക്കുക",
       "share": "പങ്കിടുക",
       "share_on_whatsapp": "WhatsApp-ൽ പങ്കിടുക",
-      "audio_info": "🔊 ഓഡിയോ വിവരം"
+      "audio_info": "🔊 ഓഡിയോ വിവരം",
+      "sections_sub": "വിഭാഗങ്ങൾ",
+      "languages_sub": "ഭാഷകൾ",
+      "visits_sub": "സന്ദർശനങ്ങൾ"
     },
     "kn": {
       "home": "ಮುಖಪುಟ",
@@ -528,7 +543,10 @@
       "read": "📖 ಓದಿ",
       "share": "ಹಂಚಿಕೊಳ್ಳಿ",
       "share_on_whatsapp": "WhatsApp ನಲ್ಲಿ ಹಂಚಿಕೊಳ್ಳಿ",
-      "audio_info": "🔊 ಆಡಿಯೋ ಮಾಹಿತಿ"
+      "audio_info": "🔊 ಆಡಿಯೋ ಮಾಹಿತಿ",
+      "sections_sub": "ವಿಭಾಗಗಳು",
+      "languages_sub": "ಭಾಷೆಗಳು",
+      "visits_sub": "ಭೇಟಿಗಳು"
     },
     "bn": {
       "home": "হোম",
@@ -598,7 +616,10 @@
       "read": "📖 পড়ুন",
       "share": "শেয়ার করুন",
       "share_on_whatsapp": "WhatsApp-এ শেয়ার করুন",
-      "audio_info": "🔊 অডিও তথ্য"
+      "audio_info": "🔊 অডিও তথ্য",
+      "sections_sub": "বিভাগ",
+      "languages_sub": "ভাষা",
+      "visits_sub": "পরিদর্শন"
     },
     "es": {
       "home": "Inicio",
@@ -668,7 +689,10 @@
       "read": "📖 Leer",
       "share": "Compartir",
       "share_on_whatsapp": "Compartir en WhatsApp",
-      "audio_info": "🔊 Info Audio"
+      "audio_info": "🔊 Info Audio",
+      "sections_sub": "Secciones",
+      "languages_sub": "Idiomas",
+      "visits_sub": "Visitas"
     },
     "fr": {
       "home": "Accueil",
@@ -738,7 +762,10 @@
       "read": "📖 Lire",
       "share": "Partager",
       "share_on_whatsapp": "Partager sur WhatsApp",
-      "audio_info": "🔊 Info Audio"
+      "audio_info": "🔊 Info Audio",
+      "sections_sub": "Sections",
+      "languages_sub": "Langues",
+      "visits_sub": "Visites"
     },
     "de": {
       "home": "Startseite",
@@ -808,7 +835,10 @@
       "read": "📖 Lesen",
       "share": "Teilen",
       "share_on_whatsapp": "Auf WhatsApp teilen",
-      "audio_info": "🔊 Audio-Info"
+      "audio_info": "🔊 Audio-Info",
+      "sections_sub": "Abschnitte",
+      "languages_sub": "Sprachen",
+      "visits_sub": "Besuche"
     },
     "zh": {
       "home": "主页",
@@ -878,7 +908,10 @@
       "read": "📖 阅读",
       "share": "分享",
       "share_on_whatsapp": "分享到 WhatsApp",
-      "audio_info": "🔊 音频信息"
+      "audio_info": "🔊 音频信息",
+      "sections_sub": "章节",
+      "languages_sub": "语言",
+      "visits_sub": "访问量"
     },
     "ar": {
       "home": "الرئيسية",
@@ -948,7 +981,10 @@
       "read": "📖 اقرأ",
       "share": "مشاركة",
       "share_on_whatsapp": "مشاركة على WhatsApp",
-      "audio_info": "🔊 معلومات الصوت"
+      "audio_info": "🔊 معلومات الصوت",
+      "sections_sub": "الأقسام",
+      "languages_sub": "اللغات",
+      "visits_sub": "زيارات"
     },
     "ru": {
       "home": "Главная",
@@ -1018,7 +1054,10 @@
       "read": "📖 Читать",
       "share": "Поделиться",
       "share_on_whatsapp": "Поделиться в WhatsApp",
-      "audio_info": "🔊 Об аудио"
+      "audio_info": "🔊 Об аудио",
+      "sections_sub": "Разделы",
+      "languages_sub": "Языки",
+      "visits_sub": "Посещения"
     },
     "ja": {
       "home": "ホーム",
@@ -1088,7 +1127,10 @@
       "read": "📖 読む",
       "share": "共有",
       "share_on_whatsapp": "WhatsAppで共有",
-      "audio_info": "🔊 音声情報"
+      "audio_info": "🔊 音声情報",
+      "sections_sub": "セクション",
+      "languages_sub": "言語",
+      "visits_sub": "訪問数"
     },
     "si": {
       "home": "මුල් පිටුව",
@@ -1158,7 +1200,10 @@
       "read": "📖 කියවන්",
       "share": "බෙදාගන්න",
       "share_on_whatsapp": "WhatsApp හි බෙදාගන්න",
-      "audio_info": "🔊 ශ්‍රව්‍ය තොරතුරු"
+      "audio_info": "🔊 ශ්‍රව්‍ය තොරතුරු",
+      "sections_sub": "කොටස්",
+      "languages_sub": "භාෂා",
+      "visits_sub": "සංචාර"
     },
     "sv": {
       "home": "Hem",
@@ -1228,7 +1273,10 @@
       "read": "📖 Läs",
       "share": "Dela",
       "share_on_whatsapp": "Dela på WhatsApp",
-      "audio_info": "🔊 Ljudinfo"
+      "audio_info": "🔊 Ljudinfo",
+      "sections_sub": "Avsnitt",
+      "languages_sub": "Språk",
+      "visits_sub": "Besök"
     },
     "ms": {
       "home": "Laman Utama",
@@ -1298,7 +1346,10 @@
       "read": "📖 Baca",
       "share": "Kongsi",
       "share_on_whatsapp": "Kongsi di WhatsApp",
-      "audio_info": "🔊 Maklumat Audio"
+      "audio_info": "🔊 Maklumat Audio",
+      "sections_sub": "Bahagian",
+      "languages_sub": "Bahasa",
+      "visits_sub": "Lawatan"
     },
     "pl": {
       "home": "Strona główna",
@@ -1368,7 +1419,10 @@
       "read": "📖 Czytaj",
       "share": "Udostępnij",
       "share_on_whatsapp": "Udostępnij na WhatsApp",
-      "audio_info": "🔊 Info Audio"
+      "audio_info": "🔊 Info Audio",
+      "sections_sub": "Sekcje",
+      "languages_sub": "Języki",
+      "visits_sub": "Wizyty"
     }
   }
 }

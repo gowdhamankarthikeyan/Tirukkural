@@ -367,7 +367,7 @@
             await new Promise(r => setTimeout(r, 60));
             const canvas = drawCard(kural, athikaram);
             const link = 'https://tirukkural.in/kural.html?id=' + kuralNumber;
-            const shareText = '🎧 Read & listen today\'s Kural in 12 languages:\n' + link;
+            const shareText = '🎧 Read & listen today\'s Kural in 15 languages:\n' + link;
 
             canvas.toBlob(async function (blob) {
                 const fileName = 'tirukkural-' + kuralNumber + '.png';
