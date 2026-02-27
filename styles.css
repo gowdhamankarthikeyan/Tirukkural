@@ -510,7 +510,8 @@ img, iframe, video {
 .contributors-banner-link {
     display: inline-flex;
     align-items: center;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
     padding: 8px 18px;
     background: rgba(255, 255, 255, 0.2);
     border: 2px solid rgba(255, 255, 255, 0.65);
@@ -519,7 +520,8 @@ img, iframe, video {
     font-weight: 700;
     text-decoration: none;
     font-size: 0.88rem;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-width: 0;
     transition: background 0.2s ease;
 }
 
@@ -1540,6 +1542,7 @@ img, iframe, video {
 
     /* Stats */
     .stats-grid  { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stat-item   { padding: 14px 8px; }
     .stat-number { font-size: 1.9rem; }
     .stat-label  { font-size: 0.85rem; }
     .stat-sublabel { font-size: 0.68rem; }
@@ -1585,6 +1588,12 @@ img, iframe, video {
     .thiruvalluvar-info h3  { font-size: 1.4rem; }
     .thiruvalluvar-image img { width: 100px; height: 100px; }
     .stat-badge             { font-size: 0.8rem; padding: 6px 12px; }
+
+    /* Stats — 2 columns on very small screens */
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-number { font-size: 1.7rem; }
+    .stat-label  { font-size: 0.8rem; }
+    .stat-sublabel { font-size: 0.65rem; }
 
     /* Paal cards */
     .paal-card    { padding: 20px 16px; }
