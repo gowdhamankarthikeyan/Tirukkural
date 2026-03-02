@@ -181,7 +181,8 @@
       "audio_info": "🔊 ஒலி தகவல்",
       "sections_sub": "இயல்கள்",
       "languages_sub": "மொழிகள்",
-      "visits_sub": "வருகைகள்"
+      "visits_sub": "வருகைகள்",
+      "back_to_chapter": "அதிகாரம் திரும்பு"
     },
     "en": {
       "home": "Home",
@@ -254,7 +255,8 @@
       "audio_info": "🔊 Audio Info",
       "sections_sub": "Sections",
       "languages_sub": "Languages",
-      "visits_sub": "Visits"
+      "visits_sub": "Visits",
+      "back_to_chapter": "Back to Chapter"
     },
     "hi": {
       "home": "होम",
@@ -327,7 +329,8 @@
       "audio_info": "🔊 ऑडियो जानकारी",
       "sections_sub": "अनुभाग",
       "languages_sub": "भाषाएँ",
-      "visits_sub": "दर्शन"
+      "visits_sub": "दर्शन",
+      "back_to_chapter": "अध्याय पर वापस"
     },
     "te": {
       "home": "హోమ్",
@@ -400,7 +403,8 @@
       "audio_info": "🔊 ఆడియో సమాచారం",
       "sections_sub": "విభాగాలు",
       "languages_sub": "భాషలు",
-      "visits_sub": "సందర్శనలు"
+      "visits_sub": "సందర్శనలు",
+      "back_to_chapter": "అధ్యాయానికి తిరిగి"
     },
     "ml": {
       "home": "ഹോം",
@@ -473,7 +477,8 @@
       "audio_info": "🔊 ഓഡിയോ വിവരം",
       "sections_sub": "വിഭാഗങ്ങൾ",
       "languages_sub": "ഭാഷകൾ",
-      "visits_sub": "സന്ദർശനങ്ങൾ"
+      "visits_sub": "സന്ദർശനങ്ങൾ",
+      "back_to_chapter": "അദ്ധ്യായത്തിലേക്ക് മടങ്ങുക"
     },
     "kn": {
       "home": "ಮುಖಪುಟ",
@@ -546,7 +551,8 @@
       "audio_info": "🔊 ಆಡಿಯೋ ಮಾಹಿತಿ",
       "sections_sub": "ವಿಭಾಗಗಳು",
       "languages_sub": "ಭಾಷೆಗಳು",
-      "visits_sub": "ಭೇಟಿಗಳು"
+      "visits_sub": "ಭೇಟಿಗಳು",
+      "back_to_chapter": "ಅಧ್ಯಾಯಕ್ಕೆ ಹಿಂತಿರುಗಿ"
     },
     "bn": {
       "home": "হোম",
@@ -619,7 +625,8 @@
       "audio_info": "🔊 অডিও তথ্য",
       "sections_sub": "বিভাগ",
       "languages_sub": "ভাষা",
-      "visits_sub": "পরিদর্শন"
+      "visits_sub": "পরিদর্শন",
+      "back_to_chapter": "অধ্যায়ে ফিরে যান"
     },
     "es": {
       "home": "Inicio",
@@ -692,7 +699,8 @@
       "audio_info": "🔊 Info Audio",
       "sections_sub": "Secciones",
       "languages_sub": "Idiomas",
-      "visits_sub": "Visitas"
+      "visits_sub": "Visitas",
+      "back_to_chapter": "Volver al Capítulo"
     },
     "fr": {
       "home": "Accueil",
@@ -765,7 +773,8 @@
       "audio_info": "🔊 Info Audio",
       "sections_sub": "Sections",
       "languages_sub": "Langues",
-      "visits_sub": "Visites"
+      "visits_sub": "Visites",
+      "back_to_chapter": "Retour au Chapitre"
     },
     "de": {
       "home": "Startseite",
@@ -838,7 +847,8 @@
       "audio_info": "🔊 Audio-Info",
       "sections_sub": "Abschnitte",
       "languages_sub": "Sprachen",
-      "visits_sub": "Besuche"
+      "visits_sub": "Besuche",
+      "back_to_chapter": "Zurück zum Kapitel"
     },
     "zh": {
       "home": "主页",
@@ -911,7 +921,8 @@
       "audio_info": "🔊 音频信息",
       "sections_sub": "章节",
       "languages_sub": "语言",
-      "visits_sub": "访问量"
+      "visits_sub": "访问量",
+      "back_to_chapter": "返回章节"
     },
     "ar": {
       "home": "الرئيسية",
@@ -984,7 +995,8 @@
       "audio_info": "🔊 معلومات الصوت",
       "sections_sub": "الأقسام",
       "languages_sub": "اللغات",
-      "visits_sub": "زيارات"
+      "visits_sub": "زيارات",
+      "back_to_chapter": "العودة إلى الفصل"
     },
     "ru": {
       "home": "Главная",
@@ -1057,7 +1069,8 @@
       "audio_info": "🔊 Об аудио",
       "sections_sub": "Разделы",
       "languages_sub": "Языки",
-      "visits_sub": "Посещения"
+      "visits_sub": "Посещения",
+      "back_to_chapter": "Назад к Главе"
     },
     "ja": {
       "home": "ホーム",
@@ -1130,7 +1143,8 @@
       "audio_info": "🔊 音声情報",
       "sections_sub": "セクション",
       "languages_sub": "言語",
-      "visits_sub": "訪問数"
+      "visits_sub": "訪問数",
+      "back_to_chapter": "章に戻る"
     },
     "si": {
       "home": "මුල් පිටුව",
@@ -1203,7 +1217,8 @@
       "audio_info": "🔊 ශ්‍රව්‍ය තොරතුරු",
       "sections_sub": "කොටස්",
       "languages_sub": "භාෂා",
-      "visits_sub": "සංචාර"
+      "visits_sub": "සංචාර",
+      "back_to_chapter": "පරිච්ඡේදයට ආපසු"
     },
     "sv": {
       "home": "Hem",
@@ -1276,7 +1291,8 @@
       "audio_info": "🔊 Ljudinfo",
       "sections_sub": "Avsnitt",
       "languages_sub": "Språk",
-      "visits_sub": "Besök"
+      "visits_sub": "Besök",
+      "back_to_chapter": "Tillbaka till Kapitel"
     },
     "ms": {
       "home": "Laman Utama",
@@ -1349,7 +1365,8 @@
       "audio_info": "🔊 Maklumat Audio",
       "sections_sub": "Bahagian",
       "languages_sub": "Bahasa",
-      "visits_sub": "Lawatan"
+      "visits_sub": "Lawatan",
+      "back_to_chapter": "Kembali ke Bab"
     },
     "pl": {
       "home": "Strona główna",
@@ -1422,7 +1439,8 @@
       "audio_info": "🔊 Info Audio",
       "sections_sub": "Sekcje",
       "languages_sub": "Języki",
-      "visits_sub": "Wizyty"
+      "visits_sub": "Wizyty",
+      "back_to_chapter": "Powrót do Rozdziału"
     }
   }
 }

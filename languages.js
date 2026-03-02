@@ -19,8 +19,8 @@ const LANGUAGES = [
     { code: 'ru', label: 'Русский',  flag: '🇷🇺', fields: ['russian1',  'russian2'],  ttsCode: 'ru-RU' },
     { code: 'de', label: 'Deutsch',  flag: '🇩🇪', fields: ['german1',   'german2'],   ttsCode: 'de-DE' },
     { code: 'si', label: 'සිංහල',   flag: '🇱🇰', fields: ['sinhala1',  'sinhala2'],  ttsCode: 'si-LK' },
-    { code: 'ar', label: 'العربية',  flag: '🇸🇦', fields: ['arabic1',   'arabic2'],   ttsCode: 'ar-SA', rtl: true },
     { code: 'pl', label: 'Polski',   flag: '🇵🇱', fields: ['polski1',  'polski2'],  ttsCode: 'pl-PL' },
     { code: 'ms', label: 'Melayu',   flag: '🇲🇾', fields: ['melayu1',  'melayu2'],  ttsCode: 'ms-MY' },
     { code: 'sv', label: 'Svenska',   flag: '🇸🇪', fields: ['svenska1',  'svenska2'],  ttsCode: 'sv-SE' },
+    { code: 'ar', label: 'العربية',  flag: '🇸🇦', fields: ['arabic1',   'arabic2'],   ttsCode: 'ar-SA', rtl: true },
 ];

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // translations.json: UI strings + language config
 // athikaram-titles.json: chapter name translations (separate, lazy)
 async function loadTranslations() {
-    const CACHE_KEY   = 'tirukkural_translations_v2';
+    const CACHE_KEY   = 'tirukkural_translations_v3';
     const TITLES_KEY  = 'tirukkural_titles_v1';
     try {
         // ── UI strings + language config ──

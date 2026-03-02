@@ -238,12 +238,22 @@ function renderKural(id) {
     var chapterTa = athikaram ? athikaram.ta : '';
     var chapterEn = athikaram ? athikaram.en : '';
 
+    // Get translated chapter name for current language
+    var lang = (typeof currentLanguage !== 'undefined') ? currentLanguage : 'en';
+    var t = (typeof translations !== 'undefined' && translations[lang]) ? translations[lang] : {};
+    var kuralLabel = t.kural || 'Kural';
+    var chapterTranslated = '';
+    if (athikaram) {
+        var names = window.athikaram_names || {};
+        chapterTranslated = (names[lang] && names[lang][String(athikaram.id)]) || chapterEn;
+    }
+
     document.getElementById('kural-content').innerHTML =
         '<div class="kural-hero kural-hero-border">' +
-            '<div class="kural-hero-number">Kural ' + id + '</div>' +
+            '<div class="kural-hero-number">' + kuralLabel + ' ' + id + '</div>' +
             '<div class="kural-hero-chapter">' +
                 '<a class="kural-chapter-ta" href="' + chapterHref + '">' + chapterTa + '</a>' +
-                '<a class="kural-chapter-en" href="' + chapterHref + '">' + chapterEn + '</a>' +
+                '<a class="kural-chapter-en" href="' + chapterHref + '">' + chapterTranslated + '</a>' +
             '</div>' +
             '<div class="kural-hero-tamil"><span>' + kural.Line1 + '</span><span>' + kural.Line2 + '</span></div>' +
         '</div>' +
@@ -282,3 +292,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     setupNav();
     renderKural(currentId);
 });
+
+// Expose for language.js changeLanguage re-render
+window.displayKural = function(id) { renderKural(id || currentId); };
+Object.defineProperty(window, 'currentKuralNumber', { get: function() { return currentId; } });
