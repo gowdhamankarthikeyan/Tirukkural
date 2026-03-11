@@ -57,6 +57,21 @@
         ctx.closePath();
     }
 
+    // ── Compute kural font size so each line fits in one line ──
+    function kuralFontSize(ctx, kural, maxW, baseSize, s) {
+        let sz = Math.round(baseSize * s);
+        // Each Tamil line must fit on exactly one line — shrink font until both fit
+        for (let attempt = 0; attempt < 60; attempt++) {
+            ctx.font = 'bold ' + sz + 'px Palatino Linotype, Palatino, Book Antiqua, serif';
+            const w1 = ctx.measureText(kural.Line1 || '').width;
+            const w2 = ctx.measureText(kural.Line2 || '').width;
+            if (w1 <= maxW && w2 <= maxW) break;
+            sz -= 2;
+            if (sz < 20) break;
+        }
+        return sz;
+    }
+
     // ── Measure total height for a given font scale ──
     function measureTotal(ctx, scale, kural, athikaram) {
         const s = scale;
@@ -87,41 +102,34 @@
         total += Math.round(36 * s) + Math.round(8 * s);
         // divider
         total += Math.round(20 * s);
-        // kural lines
-        ctx.font = f(62, 'bold');
-        const kLines = [
-            ...wrap(ctx, kural.Line1 || '', INNER - CARD*2),
-            ...wrap(ctx, kural.Line2 || '', INNER - CARD*2),
-        ];
-        total += kLines.length * Math.round(80 * s) + Math.round(16 * s);
+        // kural lines — always exactly 2 lines (one per Line1/Line2)
+        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, s);
+        total += 2 * Math.round(kuralSz * 1.3) + Math.round(16 * s);
         // divider
         total += Math.round(20 * s);
         // transliteration
-        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
+        ctx.font = f(30, 'bold italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const tlStr = (kural.transliteration1 || '') + '  ·  ' + (kural.transliteration2 || '');
         const tlLines = wrap(ctx, tlStr, INNER - CARD*2);
-        total += tlLines.length * Math.round(40 * s);
+        total += tlLines.length * Math.round(44 * s);
         total += CARD;  // bottom padding hero
 
-        total += Math.round(24 * s); // gap
-
-        // ── Section label (Translations) ──
-        total += Math.round(30 * s) + Math.round(16 * s);
+        total += Math.round(24 * s); // gap after hero
 
         // ── Kalaignar section ──
         total += Math.round(32 * s) + Math.round(10 * s); // label
-        ctx.font = f(42);
+        ctx.font = f(44, '600');
         const mkLines = wrap(ctx, kural.mk || '', INNER - CARD);
-        total += mkLines.length * Math.round(58 * s);
+        total += mkLines.length * Math.round(62 * s);
         total += Math.round(32 * s); // gap + divider
 
         // ── English section ──
         total += Math.round(32 * s) + Math.round(10 * s);
-        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
+        ctx.font = f(42, '600 italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const enText = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
         const enLines = wrap(ctx, enText, INNER - CARD);
-        total += enLines.length * Math.round(56 * s);
-        total += Math.round(32 * s);
+        total += enLines.length * Math.round(60 * s);
+        total += Math.round(16 * s); // gap before footer
 
         // ── Footer ──
         total += Math.round(60 * s);
@@ -142,7 +150,7 @@
         let lo = 0.5, hi = 3.0, scale = 1.5;
         for (let iter = 0; iter < 24; iter++) {
             const mid = (lo + hi) / 2;
-            if (measureTotal(ctx, mid, kural, athikaram) <= H * 0.87) { lo = mid; scale = mid; }
+            if (measureTotal(ctx, mid, kural, athikaram) <= H * 0.90) { lo = mid; scale = mid; }
             else hi = mid;
         }
 
@@ -182,12 +190,10 @@
         // Measure hero content height first
         ctx.font = f(52, 'bold');
         const cTaLines = wrap(ctx, athikaram ? athikaram.ta : '', INNER - CARD*2);
-        ctx.font = f(62, 'bold');
-        const kLines = [
-            ...wrap(ctx, kural.Line1 || '', INNER - CARD*2),
-            ...wrap(ctx, kural.Line2 || '', INNER - CARD*2),
-        ];
-        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif');
+        // Compute kural font size so each line never wraps (auto-fit)
+        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, s);
+        const kuralLH = Math.round(kuralSz * 1.3);
+        ctx.font = f(30, 'bold italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const tlStr = (kural.transliteration1 || '') + '  ·  ' + (kural.transliteration2 || '');
         const tlLines = wrap(ctx, tlStr, INNER - CARD*2);
 
@@ -196,9 +202,9 @@
             cTaLines.length * lh(56) + lh(6) +        // chapter ta
             lh(30) + lh(8) +                           // chapter en
             lh(2) + GAP +                              // divider
-            kLines.length * lh(80) + lh(16) +         // kural
+            2 * kuralLH + lh(16) +                    // kural (always exactly 2 lines)
             lh(2) + GAP +                              // divider
-            tlLines.length * lh(40);                   // tlit
+            tlLines.length * lh(44);                   // tlit
 
         const heroH = CARD + heroInner + CARD;
         const heroX = PAD, heroW = INNER;
@@ -251,16 +257,16 @@
 
         // Athikaram · Kural number pill
         ctx.save();
-        ctx.font = f(18, 'bold');
+        ctx.font = f(22, 'bold');
         const pillLabel = 'Chapter ' + (athikaram ? Number(athikaram.id) : '?') + '  ·  Kural ' + kural.Number;
-        const pillW = Math.round(ctx.measureText(pillLabel).width) + lh(48), pillH = lh(30);
+        const pillW = Math.round(ctx.measureText(pillLabel).width) + lh(56), pillH = lh(34);
         const pillX = W/2 - pillW/2;
         roundRect(ctx, pillX, hy, pillW, pillH, pillH/2);
         ctx.fillStyle = PRIMARY; ctx.fill();
         ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
         ctx.fillText(pillLabel, W/2, hy + pillH * 0.68);
         ctx.restore();
-        hy += pillH + lh(12);
+        hy += pillH + lh(14);
 
         // Chapter Tamil name (large) + English name below it
         ctx.font = f(44, 'bold'); ctx.fillStyle = PRIMARY; ctx.textAlign = 'center';
@@ -274,46 +280,41 @@
         hline(ctx, heroX + CARD, heroX + heroW - CARD, hy, BORDER, 0.35, lh(1.5));
         hy += lh(2) + GAP;
 
-        // Kural Tamil text — large, bold, centered (like .kural-hero-tamil)
-        ctx.font = f(62, 'bold'); ctx.fillStyle = TEXT_DARK; ctx.textAlign = 'center';
+        // Kural Tamil text — auto-sized bold, centered, always exactly 2 lines
+        ctx.font = 'bold ' + kuralSz + 'px Palatino Linotype, Palatino, Book Antiqua, serif';
+        ctx.fillStyle = TEXT_DARK; ctx.textAlign = 'center';
         ctx.save(); ctx.shadowColor = 'rgba(80,30,0,0.12)'; ctx.shadowBlur = lh(4);
-        kLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(80) + lh(62)));
+        ctx.fillText(kural.Line1 || '', W/2, hy + kuralLH * 0.8);
+        ctx.fillText(kural.Line2 || '', W/2, hy + kuralLH * 0.8 + kuralLH);
         ctx.restore();
-        hy += kLines.length * lh(80) + lh(16);
+        hy += 2 * kuralLH + lh(16);
 
         // Divider
         hline(ctx, heroX + CARD, heroX + heroW - CARD, hy, BORDER, 0.25, lh(1));
         hy += lh(2) + GAP;
 
-        // Transliteration (like .kural-translation-text italic)
-        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TLIT_CLR; ctx.textAlign = 'center';
-        tlLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(40) + lh(28)));
+        // Transliteration — bold italic, clearly visible
+        ctx.font = f(30, 'bold italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TLIT_CLR; ctx.textAlign = 'center';
+        tlLines.forEach((l, i) => ctx.fillText(l, W/2, hy + i * lh(44) + lh(30)));
 
         y += heroH + GAP * 2;
 
-        // ── Section label ──
-        ctx.font = f(22, 'bold'); ctx.fillStyle = '#595959'; ctx.textAlign = 'left';
-        ctx.save(); ctx.globalAlpha = 0.7;
-        ctx.fillText('COMMENTARIES', PAD, y + lh(22));
-        ctx.restore();
-        y += lh(30) + lh(12);
-
         // ── Kalaignar section — accent bar + text directly on parchment ──
-        ctx.font = f(42); ctx.textAlign = 'left';
+        ctx.font = f(44, '600'); ctx.textAlign = 'left';
         const mkLines = wrap(ctx, kural.mk || '', INNER - CARD);
 
         // .kural-commentary-item: background #fafafa, border-left 3px solid #e07b39
         ctx.save();
-        const mkH = lh(16) + lh(32) + lh(10) + mkLines.length * lh(58) + lh(16);
+        const mkH = lh(16) + lh(32) + lh(10) + mkLines.length * lh(62);
         ctx.fillStyle = BG_MK; ctx.fillRect(PAD, y, INNER, mkH);
-        ctx.fillStyle = COMM_ACC; ctx.fillRect(PAD, y, lh(4), mkH);
+        ctx.fillStyle = COMM_ACC; ctx.fillRect(PAD, y, lh(6), mkH);
         ctx.restore();
 
         let cy = y;
-        ctx.font = f(28, 'bold'); ctx.fillStyle = '#c8964a'; ctx.textAlign = 'left';
-        ctx.fillText('கலைஞர் உரை', PAD + lh(20), cy + lh(26)); cy += lh(32) + lh(10);
-        ctx.font = f(42); ctx.fillStyle = TEXT_DARK;
-        mkLines.forEach((l, i) => ctx.fillText(l, PAD + lh(20), cy + i * lh(58) + lh(42)));
+        ctx.font = f(30, 'bold'); ctx.fillStyle = '#c8964a'; ctx.textAlign = 'left';
+        ctx.fillText('கலைஞர் உரை', PAD + lh(22), cy + lh(28)); cy += lh(36) + lh(10);
+        ctx.font = f(44, '600'); ctx.fillStyle = TEXT_DARK;
+        mkLines.forEach((l, i) => ctx.fillText(l, PAD + lh(22), cy + i * lh(62) + lh(44)));
         y += mkH + GAP;
 
         hline(ctx, PAD, PAD + INNER, y, BORDER, 0.18, lh(1));
@@ -322,27 +323,27 @@
         // ── Kannan section — accent bar + text directly on parchment ──
         const enText = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? kural.kannan_exp : (kural.pope_exp || '');
         const enAuthor = (kural.Number <= 1080 && kural.kannan_exp && kural.kannan_exp.trim()) ? 'Kannan' : 'G.U. Pope';
-        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.textAlign = 'left';
+        ctx.font = f(42, '600 italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.textAlign = 'left';
         const enLines = wrap(ctx, enText, INNER - CARD);
 
         // .kural-commentary-english: background #f7f9fd, border-left 3px solid #4a7eb5
         ctx.save();
-        const enH = lh(16) + lh(32) + lh(10) + enLines.length * lh(56) + lh(16);
+        const enH = lh(16) + lh(32) + lh(10) + enLines.length * lh(60);
         ctx.fillStyle = BG_EN; ctx.fillRect(PAD, y, INNER, enH);
-        ctx.fillStyle = EN_ACC; ctx.fillRect(PAD, y, lh(4), enH);
+        ctx.fillStyle = EN_ACC; ctx.fillRect(PAD, y, lh(6), enH);
         ctx.restore();
 
         cy = y;
-        ctx.font = f(28, 'bold', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#4a7eb5'; ctx.textAlign = 'left';
-        ctx.fillText(enAuthor, PAD + lh(20), cy + lh(26)); cy += lh(32) + lh(10);
-        ctx.font = f(40, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TEXT_DARK;
-        enLines.forEach((l, i) => ctx.fillText(l, PAD + lh(20), cy + i * lh(56) + lh(40)));
+        ctx.font = f(30, 'bold', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#4a7eb5'; ctx.textAlign = 'left';
+        ctx.fillText(enAuthor, PAD + lh(22), cy + lh(28)); cy += lh(36) + lh(10);
+        ctx.font = f(42, '600 italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = TEXT_DARK;
+        enLines.forEach((l, i) => ctx.fillText(l, PAD + lh(22), cy + i * lh(60) + lh(42)));
         y += enH + GAP;
 
-        // ── Footer URL ──
-        ctx.font = f(24, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#595959'; ctx.textAlign = 'center';
+        // ── Footer watermark — two line gap then right-aligned Tamil name ──
+        ctx.font = f(28, 'italic', 'Palatino Linotype, Palatino, Georgia, serif'); ctx.fillStyle = '#595959'; ctx.textAlign = 'right';
         ctx.globalAlpha = 0.65;
-        ctx.fillText('tirukkural.in/kural.html?id=' + kural.Number, W/2, y + lh(22));
+        ctx.fillText('... அன்புடன் கௌதமன் கார்த்திகேயன்', PAD + INNER, y + lh(44) + lh(22));
         ctx.globalAlpha = 1;
 
         return canvas;
