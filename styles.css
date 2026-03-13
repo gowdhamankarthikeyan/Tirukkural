@@ -1473,7 +1473,7 @@ img, iframe, video {
     }
 
     .nav-links {
-        display: none !important;
+        display: none;
         flex-direction: column;
         gap: 4px;
         position: absolute;
