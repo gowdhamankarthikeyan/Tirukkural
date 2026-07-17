@@ -194,6 +194,18 @@ img, iframe, video {
     color: white;
 }
 
+.nav-today-link {
+    border: 1.5px solid #c8961a;
+    background: #fffdf5;
+    color: #b8791a;
+    font-weight: 700;
+}
+
+.nav-today-link:hover {
+    background: #c8961a;
+    color: #fff;
+}
+
 .language-dropdown {
     padding: 8px 16px;
     border: 2px solid var(--border-color);
@@ -1446,6 +1458,73 @@ img, iframe, video {
 
 .footer p {
     opacity: 0.9;
+}
+
+.footer-app-badge {
+    margin-bottom: 16px;
+}
+
+.play-store-badge {
+    height: 54px;
+    width: auto;
+}
+
+/* ============================================================
+   TODAY'S KURAL OVERLAY (nav-triggered popup)
+   Scoped under .tk-overlay-card so generic names like .pill/.tamil
+   don't leak out and affect unrelated elements elsewhere on the site.
+   ============================================================ */
+#todayOverlay .modal-container {
+    max-width: 440px;
+    background: #fff9f0;
+    padding: 8px;
+}
+
+.tk-overlay-card {
+    border: 2px solid #c8964a;
+    border-radius: 14px;
+    box-shadow: 0 0 0 6px #fff9f0, 0 0 0 8px #c8964a, 0 0 0 13px #fff9f0;
+    padding: 26px 20px 22px;
+    margin: 8px;
+    text-align: center;
+    font-family: 'Palatino Linotype', Palatino, Georgia, serif;
+}
+
+.tk-overlay-card .pill { display:inline-block; background:#e06b00; color:#fff; font-size:0.75rem; font-weight:bold; border-radius:999px; padding:4px 16px; margin-bottom:12px; }
+.tk-overlay-card .chapter-ta { color:#e06b00; font-size:1.05rem; font-weight:bold; margin-bottom:2px; }
+.tk-overlay-card .chapter-en { color:#595959; font-size:0.82rem; font-style:italic; margin-bottom:12px; }
+.tk-overlay-card hr { border:none; border-top:1px solid rgba(200,150,74,0.35); margin:10px 0; }
+.tk-overlay-card .tamil { color:#4a2500; font-size:1.2rem; font-weight:bold; line-height:1.7; margin:6px 0; }
+.tk-overlay-card .translit { color:#6b5a4e; font-size:0.82rem; font-style:italic; margin:8px 0 0; }
+
+.tk-overlay-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 16px 16px;
+}
+
+.tk-overlay-btn-share {
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:14px; background:var(--primary-color); color:#fff;
+    border:none; border-radius:50px; font-size:1rem; font-weight:bold;
+    font-family:inherit; cursor:pointer; transition:opacity 0.2s;
+}
+.tk-overlay-btn-share:active { opacity: 0.85; }
+.tk-overlay-btn-share:disabled { opacity: 0.4; cursor: default; }
+
+.tk-overlay-btn-read {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px; background:none; color:var(--primary-color);
+    border:2px solid var(--primary-color); border-radius:50px; font-size:0.95rem; font-weight:bold;
+    font-family:inherit; cursor:pointer; text-decoration:none;
+}
+
+.tk-overlay-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #c8964a;
+    font-style: italic;
 }
 
 /* ============================================================

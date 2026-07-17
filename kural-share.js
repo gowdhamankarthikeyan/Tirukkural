@@ -1,5 +1,5 @@
 // ============================================================
-// kural-share.js — WhatsApp status card · Parchment design
+// kural-share.js — Share card · Parchment design
 // Palette mirrors kural.html / kural.css exactly.
 // Layout engine guarantees NO overflow: measures all content,
 // scales fonts down until everything fits, then draws.
@@ -103,7 +103,7 @@
         // divider
         total += Math.round(20 * s);
         // kural lines — always exactly 2 lines (one per Line1/Line2)
-        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, s);
+        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, 1);
         total += 2 * Math.round(kuralSz * 1.3) + Math.round(16 * s);
         // divider
         total += Math.round(20 * s);
@@ -191,7 +191,7 @@
         ctx.font = f(52, 'bold');
         const cTaLines = wrap(ctx, athikaram ? athikaram.ta : '', INNER - CARD*2);
         // Compute kural font size so each line never wraps (auto-fit)
-        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, s);
+        const kuralSz = kuralFontSize(ctx, kural, INNER - CARD*2, 72, 1);
         const kuralLH = Math.round(kuralSz * 1.3);
         ctx.font = f(30, 'bold italic', 'Palatino Linotype, Palatino, Georgia, serif');
         const tlStr = (kural.transliteration1 || '') + '  ·  ' + (kural.transliteration2 || '');
@@ -384,32 +384,32 @@
                 a.href = url; a.download = fileName;
                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 3000);
-                setTimeout(() => window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank'), 800);
             }, 'image/png');
         } catch (e) {
             console.error('kural-share:', e);
             alert('Could not generate image. Please try again.');
         } finally {
-            setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; btn.style.background = '#25D366'; }, 1400);
+            setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; btn.style.background = ''; }, 1400);
         }
     }
 
-    const WA_ICON =
-        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" ' +
+    const SHARE_ICON =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ' +
         'style="vertical-align:middle;margin-right:6px;flex-shrink:0">' +
-        '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+        '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>' +
+        '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
 
     // ══ kural.html page init ══
     function initKuralPage() {
-        if (!document.getElementById('wa-share-style')) {
+        if (!document.getElementById('share-style')) {
             const s = document.createElement('style');
-            s.id = 'wa-share-style';
+            s.id = 'share-style';
             s.textContent =
-                '#wa-share-wrapper { margin: 20px 0 8px; text-align: center; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }' +
-                '#wa-share-btn { display:inline-flex; align-items:center; justify-content:center;' +
-                '  padding:12px 26px; background:#25D366; color:#fff; border:none;' +
+                '#share-wrapper { margin: 20px 0 8px; text-align: center; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }' +
+                '#share-btn { display:inline-flex; align-items:center; justify-content:center;' +
+                '  padding:12px 26px; background:var(--primary-color); color:#fff; border:none;' +
                 '  border-radius:50px; font-size:1rem; font-weight:700; cursor:pointer;' +
-                '  font-family:inherit; box-shadow:0 3px 14px rgba(37,211,102,0.4);' +
+                '  font-family:inherit; box-shadow:0 3px 14px rgba(212,56,13,0.35);' +
                 '  transition:all 0.2s ease; }' +
                 '#audio-info-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px;' +
                 '  padding:12px 20px; background:none; color:var(--primary-color); border:2px solid var(--primary-color);' +
@@ -430,8 +430,8 @@
                 '.voice-status { font-size:0.82rem; color:#888; margin-top:4px; padding:8px 12px;' +
                 '  background:#f5f5f5; border-radius:8px; }' +
                 '@media(max-width:600px){' +
-                '  #wa-share-btn,#audio-info-btn{width:100%;border-radius:12px!important;}' +
-                '  #wa-share-wrapper{flex-direction:column;}' +
+                '  #share-btn,#audio-info-btn{width:100%;border-radius:12px!important;}' +
+                '  #share-wrapper{flex-direction:column;}' +
                 '}';
             document.head.appendChild(s);
         }
@@ -465,14 +465,12 @@
         }
 
         function inject() {
-            const old = document.getElementById('wa-share-wrapper');
+            const old = document.getElementById('share-wrapper');
             if (old) old.remove();
             // Share button
             const btn = document.createElement('button');
-            btn.id = 'wa-share-btn';
-            btn.innerHTML = WA_ICON + (window.t ? window.t('share_on_whatsapp') : 'Share on WhatsApp');
-            btn.addEventListener('mouseenter', () => { btn.style.background='#1da851'; btn.style.transform='translateY(-2px)'; });
-            btn.addEventListener('mouseleave', () => { btn.style.background='#25D366'; btn.style.transform=''; });
+            btn.id = 'share-btn';
+            btn.innerHTML = SHARE_ICON + (window.t ? window.t('share') : 'Share');
             btn.addEventListener('click', () => executeShare(currentId, btn));
             // Audio info button
             const infoBtn = document.createElement('button');
@@ -483,7 +481,7 @@
                 document.getElementById('audio-info-modal').classList.add('open');
             });
             const wrap = document.createElement('div');
-            wrap.id = 'wa-share-wrapper';
+            wrap.id = 'share-wrapper';
             wrap.appendChild(btn);
             wrap.appendChild(infoBtn);
             const hero = document.querySelector('#kural-content .kural-hero');
@@ -499,16 +497,16 @@
 
     // ══ athikaram-view.html page init ══
     function initAthikaramPage() {
-        if (!document.getElementById('wa-share-style')) {
+        if (!document.getElementById('share-style')) {
             const s = document.createElement('style');
-            s.id = 'wa-share-style';
+            s.id = 'share-style';
             s.textContent =
                 '.kural-card-header-btns { display:flex; align-items:center; gap:8px; }' +
                 '.ath-share-btn { display:inline-flex; align-items:center; font-size:0.78rem;' +
-                '  font-weight:600; color:#25D366; background:none; border:1px solid #25D366;' +
+                '  font-weight:600; color:var(--primary-color); background:none; border:1px solid var(--primary-color);' +
                 '  padding:3px 10px; border-radius:12px; cursor:pointer; font-family:inherit;' +
                 '  transition:all 0.2s ease; white-space:nowrap; line-height:1.4; }' +
-                '.ath-share-btn:hover { background:#25D366; color:#fff; }' +
+                '.ath-share-btn:hover { background:var(--primary-color); color:#fff; }' +
                 '.ath-share-btn:disabled { opacity:0.5; cursor:default; }';
             document.head.appendChild(s);
         }
@@ -529,7 +527,7 @@
                 group.appendChild(readLink);
                 const btn = document.createElement('button');
                 btn.className = 'ath-share-btn';
-                btn.innerHTML = WA_ICON + (window.t ? window.t('share') : 'Share');
+                btn.innerHTML = SHARE_ICON + (window.t ? window.t('share') : 'Share');
                 btn.title = 'Share Kural ' + kuralNumber;
                 btn.addEventListener('click', () => executeShare(kuralNumber, btn));
                 group.appendChild(btn);
@@ -542,15 +540,18 @@
         new MutationObserver(() => setTimeout(attachAll, 80)).observe(container, { childList: true, subtree: true });
     }
 
-    function boot() {
-        if (document.getElementById('kural-content')) initKuralPage();
-        else if (document.getElementById('kurals-list')) initAthikaramPage();
-        else setTimeout(boot, 200);
+    function boot(attempt) {
+        attempt = attempt || 0;
+        if (document.getElementById('kural-content')) { initKuralPage(); return; }
+        if (document.getElementById('kurals-list')) { initAthikaramPage(); return; }
+        // Give up after ~4 seconds — this page just doesn't have either element
+        // (e.g. it only needs the exported executeShare for the Today's Kural overlay).
+        if (attempt < 20) setTimeout(function () { boot(attempt + 1); }, 200);
     }
 
     document.readyState === 'loading'
-        ? document.addEventListener('DOMContentLoaded', boot)
-        : boot();
+        ? document.addEventListener('DOMContentLoaded', function () { boot(0); })
+        : boot(0);
 
     window.executeShare = executeShare;
 

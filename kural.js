@@ -14,9 +14,6 @@ const ALL_AUDIO_LANGS = [
 
 let kuralData         = null;
 let currentId         = 1;
-let _currentAudio     = null;
-let _currentBtn       = null;
-let _currentUtterance = null;
 
 async function loadAllData() {
     const CACHE_KEY = 'tirukkural_kural_data_v1';
@@ -87,13 +84,7 @@ function getAthikaramForKural(num) {
 }
 
 function stopCurrentAudio() {
-    if (_currentAudio)     { _currentAudio.pause(); _currentAudio = null; }
-    if (_currentUtterance) { window.speechSynthesis.cancel(); _currentUtterance = null; }
-    if (_currentBtn) {
-        _currentBtn.classList.remove('playing');
-        _currentBtn.querySelector('.kural-audio-icon').textContent = '▶';
-        _currentBtn = null;
-    }
+    TTSShared.stop();
 }
 
 function buildTTSText(lang, kural) {
@@ -103,58 +94,15 @@ function buildTTSText(lang, kural) {
 }
 
 function playAudio(btn, lang, kural) {
-    if (_currentBtn === btn) { stopCurrentAudio(); return; }
-    stopCurrentAudio();
-    _currentBtn = btn;
-    btn.classList.add('playing');
-    btn.querySelector('.kural-audio-icon').textContent = '⏹';
-    const text = buildTTSText(lang, kural);
-    if (!text) { stopCurrentAudio(); return; }
-    if (lang.code === 'ta' || lang.code === 'en') {
-        const audio = new Audio('/audio/' + lang.code + '/' + kural.Number + '.mp3');
-        audio.onended = stopCurrentAudio;
-        audio.onerror = () => { _currentAudio = null; playTTS(lang.ttsCode, text); };
-        _currentAudio = audio;
-        audio.play().catch(() => { _currentAudio = null; playTTS(lang.ttsCode, text); });
-        return;
-    }
-    playTTS(lang.ttsCode, text);
+    TTSShared.play({
+        btn: btn,
+        kuralNumber: kural.Number,
+        langCode: lang.code,
+        ttsCode: lang.ttsCode,
+        text: buildTTSText(lang, kural)
+    });
 }
 
-function getVoiceForLang(ttsCode) {
-    const voices = window.speechSynthesis.getVoices();
-    // Exact match first, then language prefix match
-    return voices.find(v => v.lang === ttsCode)
-        || voices.find(v => v.lang.startsWith(ttsCode.split('-')[0]));
-}
-
-function playTTS(ttsCode, text) {
-    if (!window.speechSynthesis) { stopCurrentAudio(); return; }
-    function speak() {
-        const utt = new SpeechSynthesisUtterance(text);
-        utt.lang = ttsCode;
-        const voice = getVoiceForLang(ttsCode);
-        if (voice) utt.voice = voice;
-        utt.onend = utt.onerror = stopCurrentAudio;
-        _currentUtterance = utt;
-        window.speechSynthesis.speak(utt);
-    }
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-        speak();
-    } else {
-        // Android Chrome loads voices async — wait for the event
-        window.speechSynthesis.onvoiceschanged = function() {
-            window.speechSynthesis.onvoiceschanged = null;
-            speak();
-        };
-        // Fallback timeout in case onvoiceschanged never fires
-        setTimeout(function() {
-            if (_currentUtterance) return; // already spoke
-            speak();
-        }, 1500);
-    }
-}
 
 function renderKural(id) {
     currentId = id;

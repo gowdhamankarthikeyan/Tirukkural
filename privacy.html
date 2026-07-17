@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Thirukkural App</title>
+<style>
+  :root {
+    --primary:   #d4380d;
+    --secondary: #fa8c16;
+    --text-dark: #262626;
+    --text-light:#595959;
+    --border:    #d9d9d9;
+    --bg:        #ffffff;
+    --surface:   #fff9f0;
+    --cream:     #fff9f0;
+    --shadow:    0 2px 8px rgba(0,0,0,0.09);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    line-height: 1.7;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .header-content {
+    max-width: 780px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: 60px; gap: 12px;
+  }
+  .header-logo { width: 36px; height: 36px; }
+  .header-titles { display: flex; flex-direction: column; }
+  .header-title {
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--primary); letter-spacing: -0.3px;
+    text-decoration: none;
+  }
+  .header-sub {
+    font-size: 0.72rem; color: var(--text-light);
+  }
+  .header-back {
+    margin-left: auto;
+    font-size: 0.85rem; color: var(--primary);
+    text-decoration: none; font-weight: 600;
+    padding: 6px 14px; border: 1.5px solid var(--primary);
+    border-radius: 20px; transition: all 0.2s;
+  }
+  .header-back:hover { background: var(--primary); color: #fff; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: #fff; text-align: center;
+    padding: 48px 20px 40px;
+  }
+  .hero-icon { font-size: 2.8rem; margin-bottom: 12px; }
+  .hero h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 8px; }
+  .hero p  { font-size: 0.95rem; opacity: 0.88; max-width: 480px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block; margin-top: 16px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px; padding: 4px 16px;
+    font-size: 0.8rem; font-weight: 600;
+  }
+
+  /* ── Content ── */
+  .content {
+    max-width: 780px; margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Summary cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px; margin-bottom: 40px;
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .summary-card .icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .summary-card h3 { font-size: 0.88rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+  .summary-card p  { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; }
+
+  /* Sections */
+  .section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .section-header .icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1rem; font-weight: 700; color: var(--text-dark);
+  }
+  .section-body { padding: 18px 20px; }
+  .section-body p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 10px; }
+  .section-body p:last-child { margin-bottom: 0; }
+  .section-body ul {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 8px;
+    margin: 10px 0;
+  }
+  .section-body ul li {
+    font-size: 0.9rem; color: var(--text-light);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .section-body ul li::before {
+    content: '✓';
+    color: var(--primary); font-weight: 700; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .section-body a { color: var(--primary); }
+  .highlight-box {
+    background: var(--cream);
+    border: 1px solid #f0c070;
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 0.88rem; color: #7a5500;
+    margin-top: 12px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 28px 20px; text-align: center;
+  }
+  .footer-inner { max-width: 780px; margin: 0 auto; }
+  .footer-logo  { width: 36px; height: 36px; margin: 0 auto 10px; display: block; }
+  .footer p { font-size: 0.82rem; color: var(--text-light); margin-bottom: 4px; }
+  .footer a { color: var(--primary); text-decoration: none; }
+  .footer .updated {
+    display: inline-block; margin-top: 12px;
+    background: var(--primary); color: #fff;
+    border-radius: 20px; padding: 3px 14px;
+    font-size: 0.75rem; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-content">
+    <img class="header-logo" src="https://tirukkural.in/thiruvalluvar-logo.svg" alt="Thiruvalluvar">
+    <div class="header-titles">
+      <a class="header-title" href="https://tirukkural.in">திருக்குறள்</a>
+      <span class="header-sub">Thirukkural App</span>
+    </div>
+    <a class="header-back" href="https://tirukkural.in">← Home</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-icon">🔒</div>
+  <h1>Privacy Policy</h1>
+  <p>We built Thirukkural to share ancient wisdom — not to collect your data.</p>
+  <span class="hero-badge">Last updated: March 2026</span>
+</div>
+
+<!-- Content -->
+<main class="content">
+
+  <!-- Summary cards -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="icon">🚫</div>
+      <div>
+        <h3>No Data Collected</h3>
+        <p>We collect zero personal information about you.</p>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">📵</div>
+      <div>
+        <h3>No Ads</h3>
+        <p>No advertising networks, no tracking pixels, ever.</p>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🔑</div>
+      <div>
+        <h3>No Login Required</h3>
+        <p>No account, no email, no sign-up of any kind.</p>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">📱</div>
+      <div>
+        <h3>Stays on Your Device</h3>
+        <p>Your preferences are stored locally and never shared.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">📋</div>
+      <h2>Information We Do Not Collect</h2>
+    </div>
+    <div class="section-body">
+      <p>The Thirukkural app does not collect, store, transmit, or share any of the following:</p>
+      <ul>
+        <li>Name, email address, phone number or any personal identifiers</li>
+        <li>Location data</li>
+        <li>Device identifiers or advertising IDs</li>
+        <li>Usage analytics or behaviour tracking</li>
+        <li>Crash reports sent to external servers</li>
+        <li>Contacts, camera, microphone or any device permissions</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">📱</div>
+      <h2>Local Storage</h2>
+    </div>
+    <div class="section-body">
+      <p>The app saves the following data <strong>locally on your device only</strong>. This data never leaves your device and is not accessible to us:</p>
+      <ul>
+        <li>Your chosen language preference</li>
+        <li>Your chosen colour theme</li>
+        <li>Cached Thirukkural data for offline reading</li>
+        <li>Today's kural display state</li>
+      </ul>
+      <div class="highlight-box">
+        💡 You can clear all app data at any time via Android Settings → Apps → Thirukkural → Clear Data.
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">🌐</div>
+      <h2>Internet Usage</h2>
+    </div>
+    <div class="section-body">
+      <p>The app uses the internet only for the following optional features:</p>
+      <ul>
+        <li><strong>Google Translate</strong> — only when you tap "Translate" to read a kural meaning in another language. Your query is sent to Google's servers at that moment.</li>
+        <li><strong>Text-to-speech audio</strong> — on some Android devices, the TTS engine may use a network connection for certain languages. This is handled entirely by your device's Android TTS system, not by us.</li>
+      </ul>
+      <p>All 1,330 Thirukkural couplets and their translations are bundled inside the app and work fully offline.</p>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">🤝</div>
+      <h2>Third-Party Services</h2>
+    </div>
+    <div class="section-body">
+      <p>The app uses Google Translate API for optional translation. When this feature is used, text is sent to Google's servers. Google's own privacy policy governs this interaction:</p>
+      <p><a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy →</a></p>
+      <p>No other third-party SDKs, analytics tools, advertising networks, or tracking services are used in this app.</p>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">👶</div>
+      <h2>Children's Privacy</h2>
+    </div>
+    <div class="section-body">
+      <p>The Thirukkural app is suitable for all ages. We do not knowingly collect any personal data from anyone, including children under the age of 13. Since we collect no data at all, there is no risk of children's information being stored or shared.</p>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">🔄</div>
+      <h2>Changes to This Policy</h2>
+    </div>
+    <div class="section-body">
+      <p>If we ever change this Privacy Policy, the updated version will be posted at this URL with a new "Last updated" date. Since we collect no data, meaningful changes are unlikely.</p>
+    </div>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="icon">✉️</div>
+      <h2>Contact</h2>
+    </div>
+    <div class="section-body">
+      <p>If you have any questions about this Privacy Policy, please contact:</p>
+      <ul>
+        <li><strong>Gowdhaman Karthikeyan</strong></li>
+        <li>Email: <a href="/cdn-cgi/l/email-protection#8fe8e0f8ebe7eee2eee1cffbe6fdfae4e4fafdeee3a1e6e1"><span class="__cf_email__" data-cfemail="5e3931293a363f333f301e2a372c2b35352b2c3f32703730">savvygandalf@gmail.com</span></a></li>
+        <li>Website: <a href="https://tirukkural.in" target="_blank">tirukkural.in</a></li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img class="footer-logo" src="https://tirukkural.in/thiruvalluvar-logo.svg" alt="Thiruvalluvar">
+    <p><strong>திருக்குறள் — Thirukkural App</strong></p>
+    <p>Built by <a href="https://tirukkural.in">Gowdhaman Karthikeyan</a></p>
+    <p>

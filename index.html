@@ -164,6 +164,7 @@
                 <a href="index.html" class="nav-link active" data-translate="home">முகப்பு</a>
                 <a href="athikarams.html" class="nav-link" data-translate="chapters">அதிகாரங்கள்</a>
                 <a href="search.html" class="nav-link" data-translate="search">🔍 தேடல்</a>
+                <a href="today.html" class="nav-link nav-today-link" data-translate="today" onclick="if(typeof openTodayOverlay==='function'){event.preventDefault();openTodayOverlay();}">☀️ இன்றைய குறள்</a>
             </div>
             <div class="nav-controls">
                 <select id="languageDropdown" class="language-dropdown">
@@ -378,6 +379,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
+            <div class="footer-app-badge">
+                <a href="https://play.google.com/store/apps/details?id=in.tirukkural.app" target="_blank" rel="noopener">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="play-store-badge">
+                </a>
+            </div>
             <p>&copy; 2026 திருக்குறள் - கௌதமன் கார்த்திகேயன்</p>
         </div>
     </footer>
@@ -388,6 +394,10 @@
     <!-- Language Script -->
     <script src="languages.js?v=2.0"></script>
     <script src="language.js?v=2.0"></script>
+    <script src="athikarams-data.js?v=2.0"></script>
+    <script src="kural-share.js?v=2.0"></script>
+    <script src="today-kural.js?v=2.0"></script>
+    <script src="today-overlay.js?v=2.0"></script>
 
     <!-- Visit count — fetched from GoatCounter public counter API -->
     <!-- NOTE: make sure "Allow adding visitor counts on your website" is ON in

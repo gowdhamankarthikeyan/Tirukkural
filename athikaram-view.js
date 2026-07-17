@@ -51,7 +51,7 @@ async function loadTranslationData(lang) {
 // ============================================================
 const TTS_LANGUAGES = {
     ta: { code: 'ta-IN',                    label: 'தமிழ்',  fields: ['Line1', 'Line2'],                   audioPath: 'ta' },
-    en: { code: 'en-IN', fallback: 'en-US', label: 'English', fields: ['bharati_verse1', 'bharati_verse2'], audioPath: 'en' },
+    en: { code: 'en-IN', fallback: 'en-US', label: 'English', fields: ['ashraf_line1', 'ashraf_line2'], audioPath: 'en' },
 };
 // Auto-register all LANGUAGES entries that have a ttsCode
 LANGUAGES.filter(l => l.ttsCode).forEach(l => {
@@ -59,10 +59,6 @@ LANGUAGES.filter(l => l.ttsCode).forEach(l => {
 });
 
 const AUDIO_BASE = '/audio';
-
-let _currentAudio = null;
-let _currentBtn = null;
-let _currentUtterance = null;
 
 function _ttsHasContent(lang, kural) {
     const cfg = TTS_LANGUAGES[lang];
@@ -84,67 +80,16 @@ function _ttsGetLangs(kural) {
     return langs.filter(l => _ttsHasContent(l, kural));
 }
 
-function _ttsSetState(btn, state) {
-    btn.classList.remove('playing');
-    if (state === 'playing') {
-        btn.classList.add('playing');
-        btn.querySelector('.audio-btn-icon').textContent = '⏹';
-    } else {
-        btn.querySelector('.audio-btn-icon').textContent = '▶';
-    }
-}
-
-function _ttsStop() {
-    if (_currentAudio) { _currentAudio.pause(); _currentAudio.currentTime = 0; _currentAudio = null; }
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
-    _currentUtterance = null;
-    if (_currentBtn) _ttsSetState(_currentBtn, 'idle');
-    _currentBtn = null;
-}
-
 function _ttsPlay(kuralNumber, lang, langConfig, btn) {
-    if (btn.classList.contains('playing')) { _ttsStop(); return; }
-    _ttsStop();
-    _currentBtn = btn;
-    const audio = new Audio(`${AUDIO_BASE}/${langConfig.audioPath}/${kuralNumber}.mp3`);
-    let fallbackCalled = false;
-    const fallback = () => {
-        if (fallbackCalled) return;
-        fallbackCalled = true;
-        _currentAudio = null;
-        _ttsSpeakFallback(langConfig, btn);
-    };
-    audio.onplay  = () => _ttsSetState(btn, 'playing');
-    audio.onended = () => { _currentAudio = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
-    audio.onpause = () => { if (!audio.ended) _ttsSetState(btn, 'idle'); };
-    audio.onerror = fallback;
-    _currentAudio = audio;
-    audio.play().catch(fallback);
-}
-
-function _ttsSpeakFallback(langConfig, btn) {
-    if (!('speechSynthesis' in window)) { _ttsSetState(btn, 'idle'); return; }
-    const text = btn.getAttribute('data-text');
-    if (!text || !text.trim()) { _ttsSetState(btn, 'idle'); return; }
-    _currentBtn = btn;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langConfig.code;
-    utterance.rate = 0.85;
-    const speak = () => {
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(v => v.lang === langConfig.code)
-            || (langConfig.fallback && voices.find(v => v.lang === langConfig.fallback))
-            || voices.find(v => v.lang.startsWith(langConfig.code.split('-')[0]));
-        if (voice) utterance.voice = voice;
-        utterance.onstart = () => _ttsSetState(btn, 'playing');
-        utterance.onend   = () => { _currentUtterance = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
-        utterance.onerror = () => { _currentUtterance = null; _currentBtn = null; _ttsSetState(btn, 'idle'); };
-        _currentUtterance = utterance;
-        window.speechSynthesis.speak(utterance);
-    };
-    if (window.speechSynthesis.getVoices().length === 0) {
-        window.speechSynthesis.onvoiceschanged = speak;
-    } else { speak(); }
+    TTSShared.play({
+        btn: btn,
+        kuralNumber: kuralNumber,
+        langCode: lang,
+        ttsCode: langConfig.code,
+        ttsFallbackCode: langConfig.fallback,
+        text: btn.getAttribute('data-text') || '',
+        audioPath: langConfig.audioPath
+    });
 }
 
 function createAudioHTML(kural) {
