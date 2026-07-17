@@ -75,18 +75,18 @@ const TodayKural = (function () {
         const kural = kuralData[kuralNum - 1];
         const ath   = getAthikaramForKural(kuralNum);
         const coupletLines = await getCoupletLines(kural, lang);
-        const chapterTa = ath.ta;
-        const chapterEn = (window.athikaram_names && window.athikaram_names[lang] && window.athikaram_names[lang][String(ath.id)]) || ath.en;
+        const chapterName = (lang === 'ta')
+            ? ath.ta
+            : (window.athikaram_names && window.athikaram_names[lang] && window.athikaram_names[lang][String(ath.id)]) || ath.en;
 
-        return { kuralNum, kural, ath, lang, tr, coupletLines, chapterTa, chapterEn };
+        return { kuralNum, kural, ath, lang, tr, coupletLines, chapterName };
     }
 
     // Returns the inner HTML for the golden card, given fetchData()'s result.
     function cardHTML(d) {
         return `
             <div class="pill">${d.tr('chapter')} ${d.ath.id} · ${d.tr('kural')} ${d.kural.Number}</div>
-            <div class="chapter-ta">${d.chapterTa}</div>
-            <div class="chapter-en">${d.chapterEn}</div>
+            <div class="chapter-ta">${d.chapterName}</div>
             <hr>
             <div class="tamil">${d.coupletLines.line1}<br>${d.coupletLines.line2}</div>
             <hr>

@@ -85,7 +85,7 @@ async function init() {
     document.documentElement.lang = d.lang === 'ta' ? 'ta' : d.lang === 'ar' ? 'ar' : 'en';
     document.getElementById('pageTitle').textContent = d.tr('site_title') + ' · ' + d.tr('today');
     document.getElementById('shareBtnLabel').textContent = d.tr('share');
-    document.getElementById('openBtnLabel').textContent = '📖 ' + d.tr('read');
+    document.getElementById('openBtnLabel').textContent = d.tr('read');
     document.getElementById('dayLabel').textContent = d.tr('kural') + ' ' + d.kuralNum + ' / 1330';
     document.getElementById('openBtn').href = SITE + '/kural.html?id=' + d.kuralNum;
 
