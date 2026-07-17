@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=2.0">
 </head>
-<body>
+<body data-counter-page="athikaram">
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -119,11 +119,10 @@
                 </a>
             </div>
             <p>&copy; 2026 திருக்குறள் - கௌதமன் கார்த்திகேயன்</p>
+            <p class="page-views" id="pageViewCount"></p>
         </div>
     </footer>
 
-    <!-- GoatCounter: tracks every page visit, filters bots automatically -->
-    <script data-goatcounter="https://tirukkural.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
     <!-- Disqus: loaded once, then reset on athikaram navigation -->
     <script>
@@ -147,5 +146,6 @@
     <script src="kural-share.js?v=2.0"></script>
     <script src="today-kural.js?v=2.0"></script>
     <script src="today-overlay.js?v=2.0"></script>
+    <script src="page-counter.js?v=1.0"></script>
 </body>
 </html>

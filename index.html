@@ -66,7 +66,7 @@
     </script>
     <link rel="stylesheet" href="styles.css?v=2.0">
 </head>
-<body>
+<body data-counter-page="index">
     <!-- Welcome Modal - Flyout Overlay -->
     <div id="welcomeModal" class="modal-overlay hidden">
         <div class="modal-container">
@@ -388,9 +388,6 @@
         </div>
     </footer>
 
-    <!-- GoatCounter -->
-    <script data-goatcounter="https://tirukkural.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-
     <!-- Language Script -->
     <script src="languages.js?v=2.0"></script>
     <script src="language.js?v=2.0"></script>
@@ -398,34 +395,6 @@
     <script src="kural-share.js?v=2.0"></script>
     <script src="today-kural.js?v=2.0"></script>
     <script src="today-overlay.js?v=2.0"></script>
-
-    <!-- Visit count — fetched from GoatCounter public counter API -->
-    <!-- NOTE: make sure "Allow adding visitor counts on your website" is ON in
-         your GoatCounter Settings → Site → Visitor counter, otherwise TOTAL.json
-         returns a 403 and the counter will always show "—". -->
-    <script>
-        (function () {
-            var url = 'https://tirukkural.goatcounter.com/counter/TOTAL.json';
-
-            function fetchCount() {
-                var r = new XMLHttpRequest();
-                r.addEventListener('load', function () {
-                    try {
-                        var d = JSON.parse(this.responseText);
-                        var el = document.getElementById('visitCount');
-                        if (el && d && d.count) {
-                            el.textContent = Number(d.count.replace(/,/g, '')).toLocaleString('en-IN');
-                        }
-                    } catch(e) {}
-                });
-                r.open('GET', url);
-                r.send();
-            }
-
-            // Try immediately; count.js doesn't need to be ready for the
-            // public /counter/ endpoint — it works without the JS library.
-            fetchCount();
-        })();
-    </script>
+    <script src="page-counter.js?v=1.0"></script>
 </body>
 </html>

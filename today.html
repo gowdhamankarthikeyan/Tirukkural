@@ -51,7 +51,7 @@
   .loading { color:#c8964a; text-align:center; padding:40px 0; font-style:italic; }
 </style>
 </head>
-<body>
+<body data-counter-page="today">
 
 <h1 id="pageTitle">திருக்குறள் · Today's Kural</h1>
 <div class="subtitle" id="dayLabel">Loading…</div>
@@ -70,6 +70,7 @@
 </a>
 
 <div class="status" id="statusMsg"></div>
+<div class="status" id="pageViewCount" style="opacity:0.6"></div>
 
 <script>
 const SITE = 'https://tirukkural.in';
@@ -106,5 +107,6 @@ document.getElementById('shareBtn').addEventListener('click', () => {
 init();
 </script>
 <script src="kural-share.js?v=2.0"></script>
+    <script src="page-counter.js?v=1.0"></script>
 </body>
 </html>

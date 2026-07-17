@@ -1460,6 +1460,12 @@ img, iframe, video {
     opacity: 0.9;
 }
 
+.page-views {
+    font-size: 0.8rem;
+    opacity: 0.6 !important;
+    margin-top: 4px;
+}
+
 .footer-app-badge {
     margin-bottom: 16px;
 }
